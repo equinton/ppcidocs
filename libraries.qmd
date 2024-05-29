@@ -1,0 +1,5 @@
+::: {.content-visible when-profile="french"}
+
+# Bibliothèques
+
+:::

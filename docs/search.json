@@ -4,56 +4,70 @@
     "href": "legal_notice.html",
     "title": "PPCI - PrototypePHP for CodeIgniter",
     "section": "",
-    "text": "Nom du site : \nURL complète du site :"
+    "text": "Nom du site : documentation PPCI\nURL complète du site : https://equinton.github.io/ppcidocs/"
   },
   {
     "objectID": "legal_notice.html#identification-du-site",
     "href": "legal_notice.html#identification-du-site",
     "title": "PPCI - PrototypePHP for CodeIgniter",
     "section": "",
-    "text": "Nom du site : \nURL complète du site :"
+    "text": "Nom du site : documentation PPCI\nURL complète du site : https://equinton.github.io/ppcidocs/"
   },
   {
     "objectID": "legal_notice.html#éditeurs-du-site",
     "href": "legal_notice.html#éditeurs-du-site",
     "title": "PPCI - PrototypePHP for CodeIgniter",
     "section": "Éditeur(s) du site",
-    "text": "Éditeur(s) du site\nINRAE - Institut national de recherche pour l’agriculture, l’alimentation et l’environnement INRAE est un établissement public à caractère scientifique et technologique. Il a son siège au 147, rue de l’université – 75338 Paris cedex 07. Ses statuts sont publiés dans le code rural et de la pêche maritime (articles R831-1 et suivants).\nIl est représenté par son Président Directeur général, M. Philippe MAUGUIN. Contact mail: web@inrae.fr - contact téléphonique: 01 42 75 90 00"
+    "text": "Éditeur(s) du site\nINRAE - Institut national de recherche pour l’agriculture, l’alimentation et l’environnement\nINRAE est un établissement public à caractère scientifique et technologique. Il a son siège au 147, rue de l’université – 75338 Paris cedex 07. Ses statuts sont publiés dans le code rural et de la pêche maritime (articles R831-1 et suivants).\nIl est représenté par son Président Directeur général, M. Philippe MAUGUIN.\nContact mail: web@inrae.fr - contact téléphonique: 01 42 75 90 00"
   },
   {
     "objectID": "legal_notice.html#numéros-didentification",
     "href": "legal_notice.html#numéros-didentification",
     "title": "PPCI - PrototypePHP for CodeIgniter",
     "section": "Numéros d’identification",
-    "text": "Numéros d’identification\nINRAE SIREN: 180070039 Code APE: 7219Z Numéro de TVA intracommunautaire: FR 57 1800700039"
+    "text": "Numéros d’identification\nINRAE SIREN: 180070039\nCode APE: 7219Z\nNuméro de TVA intracommunautaire: FR 57 1800700039"
   },
   {
     "objectID": "legal_notice.html#publication-du-site",
     "href": "legal_notice.html#publication-du-site",
     "title": "PPCI - PrototypePHP for CodeIgniter",
     "section": "Publication du site",
-    "text": "Publication du site\nNom du directeur de publication : M. Philippe MAUGUIN Nom du responsable de rédaction : xxxxx Webmaster du site : xxx"
+    "text": "Publication du site\nNom du directeur de publication : M. Philippe MAUGUIN\nNom du responsable de rédaction : Éric Quinton\nWebmaster du site : Éric Quinton"
   },
   {
     "objectID": "legal_notice.html#hébergeur-du-site",
     "href": "legal_notice.html#hébergeur-du-site",
     "title": "PPCI - PrototypePHP for CodeIgniter",
     "section": "Hébergeur du site",
-    "text": "Hébergeur du site\nINRAE Établissement public à caractère scientifique et technologique 147, rue de l’université – 75338 Paris cedex 07 01 42 75 90 00"
+    "text": "Hébergeur du site\nINRAE Établissement public à caractère scientifique et technologique 147, rue de l’université – 75338 Paris cedex 07 01 42 75 90 00\nCopyright © 2024 - All rights reserved. Author: Éric Quinton for EABX-INRAE. Documentation distributed under license  CC-BY"
   },
   {
-    "objectID": "news.html",
-    "href": "news.html",
-    "title": "Events",
+    "objectID": "controllers.html",
+    "href": "controllers.html",
+    "title": "Contrôleurs",
     "section": "",
-    "text": "Newsletter #1\n\n\n\n\n\n\nFirst name, Last name\n\n\n11 mars 2024\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nNewsletter #2\n\n\n\n\n\n\nFirst name, Last name\n\n\n12 mars 2024\n\n\n\n\n\n\n\n\nAucun article correspondant"
+    "text": "Contrôleurs"
   },
   {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "PPCI - PrototypePHP for CodeIgniter",
+    "objectID": "installation.html",
+    "href": "installation.html",
+    "title": "Installation",
     "section": "",
-    "text": "Test de contenu français\n\n\n\n\n\n\n\n\n\n\n\nDate\n\n\nTitre\n\n\nAuteur·rice\n\n\n\n\n\n\n\n\n\n11 mars 2024\n\n\nNewsletter #1\n\n\nFirst name, Last name\n\n\n\n\n\n\n\n12 mars 2024\n\n\nNewsletter #2\n\n\nFirst name, Last name\n\n\n\n\n\nAucun article correspondant"
+    "text": "Installation"
+  },
+  {
+    "objectID": "libraries.html",
+    "href": "libraries.html",
+    "title": "Bibliothèques",
+    "section": "",
+    "text": "Bibliothèques"
+  },
+  {
+    "objectID": "smarty.html",
+    "href": "smarty.html",
+    "title": "Affichage des pages web",
+    "section": "",
+    "text": "Affichage des pages web"
   },
   {
     "objectID": "views.html",
@@ -63,32 +77,60 @@
     "text": "Les vues\nL’envoi d’informations au navigateur fait appel à des vues, chacune étant dédiée à un type d’informations (pages web, fichiers pdf, requêtes Ajax, fichiers binaires, etc.). Elles sont disponibles sous forme de services (décrits dans ppci/Config/Services.php), et sont physiquement stockées dans Ppci/Libraries/Views.\nToutes les vues héritent de la classe Ppci\\Libraries\\Views\\DefaultView, qui comprend les fonctions génériques suivantes :\n\nfunction set($value, $variable = \"\") : affecte un contenu (nommé ou non, si variable est renseigné) à la vue\nfunction get($variable = \"\") : récupère le contenu d’une variable ou le contenu affecté\nfunction encodehtml($data) : fonction récursive d’encodage en HTML des variables\nfunction send($param = \"\") : déclenche l’envoi des informations. Cette fonction est systématiquement réécrite dans chaque vue.\n\n\nAffichage des pages\n$view = service (\"Smarty\");\nLes pages web sont générées avec le moteur de templates Smarty. Les modèles sont stockés :\n\nd’une part dans Ppci/Views/templates/ppci, qui comprend toutes les pages gérées par Ppci, ainsi que la page par défaut (main.html)\nd’autre part dans App/Views/templates, pour les pages spécifiques de l’application.\n\nAu moment du déclenchement de l’affichage, la classe va :\n\nencoder les variables en HTML\ngénérer le jeton CSRF\nafficher les messages stockés dans la classe Message\ngénérer le menu de l’application\nrajouter divers contenus génériques, comme le titre de l’application.\n\n\n\nEnvoi d’un fichier binaire au navigateur\n$view = service (\"BinaryView\");\nLa classe permet d’envoyer le fichier soit “en ligne”, soit en “attachement”. Elle peut soit envoyer un fichier à partir de son adresse dans le serveur, soit un fichier déjà ouvert (handle). Elle va également rechercher le type MIME si celui-ci n’est pas fourni.\nPour fonctionner, il est nécessaire d’indiquer des paramètres particuliers :\n$param = array(\n        \"filename\" =&gt; \"\", /* nom du fichier tel qu'il apparaitra dans le navigateur */\n        \"disposition\" =&gt; \"attachment\", /* attachment : le fichier est telecharge, inline : le fichier est affiche */\n        \"tmp_name\" =&gt; \"\", /* emplacement du fichier dans le serveur */\n        \"content_type\" =&gt; \"\", /* type mime */\n        \"is_reference\" =&gt; false, /* if true, tmp_name contains the handle of the opened file */\n        \"handle\" =&gt; 0;\nsetParam(?array $param);\n\n\nEnvoi d’un fichier\n$view = service (\"FileView\");\nLe fonctionnement est assez semblable à BinaryView, à ceci près que cela ne travaille qu’à partir d’un fichier existant. le type MIME peut également être recherché automatiquement s’il n’est pas indiqué.\n$param = array(\n        \"filename\" =&gt; \"export.txt\", /* nom du fichier tel qu'il apparaitra dans le navigateur */\n        \"disposition\" =&gt; \"attachment\", /* attachment : le fichier est telecharge, inline : le fichier est affiche */\n        \"content_type\" =&gt; \"\", /* type mime */\n        \"tmp_name\" =&gt; \"\", /* Name of the file to send */\n    );\n\n\nRequête Ajax\n$view = service (\"AjaxView\");\nVue utilisée pour répondre à une requête Ajax. Le contenu, qui est fourni par défaut sous forme de tableau (contenu Json possible en positionnant la variable is_json à true, est encodé en html puis transformé en chaîne JSON avant d’être envoyé au navigateur.\n\n\nEnvoi d’un fichier CSV\n$view = service (\"CsvView\");\nCette vue va permettre de générer un fichier CSV à partir d’un tableau ($data[][]). La génération et l’envoi du fichier est réalisé avec la fonction :\nfunction send($filename = \"\", $delimiter = \"\")\nLe nom du fichier peut être généré automatiquement. Le délimiteur peut être le point-virgule, la virgule ou la tabulation (indiquer ). La première ligne d’entête est générée à partir des clés du premier enregistrement du tableau.\n\n\nEnvoi d’un fichier JSON\n$view = service (\"JsonFileView\");\nLa vue génère un fichier dans le navigateur, avec un fonctionnement proche de la vue Ajax. Si les données sont fournies à la classe sous forme de tableau, celles-ci sont encodées en html avant transformation en Json.\n\n\nEnvoi d’un fichier PDF\n$view = service (\"PdfView\");\nTransfert un fichier PDF, soit directement pour être affiché, soit en fichier attaché. Même fonctionnement que la vue FileView.\n\n\nEnvoi un contenu arbitraire au navigateur\n$view = service (\"DisplayView\");\nC’est une vue qui transmet au navigateur un contenu quelconque, sans encodage ni type MIME."
   },
   {
-    "objectID": "about.html",
-    "href": "about.html",
+    "objectID": "model.html",
+    "href": "model.html",
+    "title": "Gestion des accès aux données stockées en base de données",
+    "section": "",
+    "text": "Gestion des accès aux données stockées en base de données"
+  },
+  {
+    "objectID": "rights.html",
+    "href": "rights.html",
+    "title": "Droits d’accès aux modules",
+    "section": "",
+    "text": "Droits d’accès aux modules"
+  },
+  {
+    "objectID": "functions.html",
+    "href": "functions.html",
+    "title": "Fonctions et services",
+    "section": "",
+    "text": "Les services permettent de conserver la même instance d’une classe tout au long de l’exécution du script. Ils sont décrits dans Ppci\\Config\\Services.\nIls s’appellent de la façon suivante :\n$monService = service ('name');\nLa première fois que le code est appelé, la classe est instanciée. Ensuite, l’instance de classe est fournie, ce qui permet de conserver les mêmes paramètres.\nTrois types de services sont configurés : des services génériques, les services fournissant les paramètres de configuration, et les vues.\n\n\n\n\nCode utilisé systématiquement à l’appel d’une page.\n\n\n\nClasse permettant de stocker des messages, puis de les restituer. Deux fonctions sont utilisables pour les enregistrer :\n\nfunction set(string $value, bool $is_error = false) : stocke un message. S’il s’agit d’une erreur, le message sera ensuite affiché en rouge\nfunction setSyslog($message, $is_error = false) : enregistre un message dans les logs du système. En mode développement, le message est affiché également à l’écran\n\n\n\n\nClasse permettant d’enregistrer une information dans la table gacl.log. Une entrée peut être créée avec la fonction $col-&gt;setLog($login, $module, $commentaire = null). La valeur login peut être récupérée à partir de $_SESSION[\"login\"]. $module représente le nom de la fonction ou de l’appel à enregistrer, et $commentaire un contenu particulier à noter.\n\n\n\nClasse permettant de paramétrer la langue à utiliser. Les libellés peuvent être modifiés avec la fonction setLocale($locale). Par défaut, seuls “fr” et “en” sont actuellement supportés.\n\n\n\n\n\n\nClasse contenant l’ensemble des paramètres stockés dans la table dbparam. Les paramètres sont accessibles avec l’attribut $dbparam-&gt;params[\"nom_parametre\"].\nLes paramètres sont également disponibles dans la variable $_SESSION[\"dbparams\"].\n\n\n\nContient les paramètres généraux de l’application (App\\Config\\App).\n\n\n\nContient les paramètres liés à l’identification (Ppci\\Config\\IdentificationConfig).\n\n\n\n\nLa description des vues peut être consultée ici.\n\n\n\n\nLes fonctions sont chargées automatiquement à partir de ppci/Helpers/ppci_helper.php.\n\ndefaultPage() : affiche la page d’accueil de l’application (sans redirection)\ngetLineFeed() : restitue le code de retour à la ligne en fonction du contexte : serveur web ou ligne de commande\nhtmlDecode($content) : fonction récursive permettant de décoder les caractères html (htmlspecialchars_decode())\nprintA($variable) : affiche le contenu d’une variable. Pour les tableaux, affiche le contenu du tableau. Utilisé pour le débogage\nsetlogRequest($request) : écrit dans la table gacl.log la requête demandée\ntest($var = \"\") : affiche le mot “test” et le numéro de l’occurrence où la fonction a été appelée. Si $var est renseigné, affiche son contenu"
+  },
+  {
+    "objectID": "functions.html#services",
+    "href": "functions.html#services",
+    "title": "Fonctions et services",
+    "section": "",
+    "text": "Les services permettent de conserver la même instance d’une classe tout au long de l’exécution du script. Ils sont décrits dans Ppci\\Config\\Services.\nIls s’appellent de la façon suivante :\n$monService = service ('name');\nLa première fois que le code est appelé, la classe est instanciée. Ensuite, l’instance de classe est fournie, ce qui permet de conserver les mêmes paramètres.\nTrois types de services sont configurés : des services génériques, les services fournissant les paramètres de configuration, et les vues.\n\n\n\n\nCode utilisé systématiquement à l’appel d’une page.\n\n\n\nClasse permettant de stocker des messages, puis de les restituer. Deux fonctions sont utilisables pour les enregistrer :\n\nfunction set(string $value, bool $is_error = false) : stocke un message. S’il s’agit d’une erreur, le message sera ensuite affiché en rouge\nfunction setSyslog($message, $is_error = false) : enregistre un message dans les logs du système. En mode développement, le message est affiché également à l’écran\n\n\n\n\nClasse permettant d’enregistrer une information dans la table gacl.log. Une entrée peut être créée avec la fonction $col-&gt;setLog($login, $module, $commentaire = null). La valeur login peut être récupérée à partir de $_SESSION[\"login\"]. $module représente le nom de la fonction ou de l’appel à enregistrer, et $commentaire un contenu particulier à noter.\n\n\n\nClasse permettant de paramétrer la langue à utiliser. Les libellés peuvent être modifiés avec la fonction setLocale($locale). Par défaut, seuls “fr” et “en” sont actuellement supportés.\n\n\n\n\n\n\nClasse contenant l’ensemble des paramètres stockés dans la table dbparam. Les paramètres sont accessibles avec l’attribut $dbparam-&gt;params[\"nom_parametre\"].\nLes paramètres sont également disponibles dans la variable $_SESSION[\"dbparams\"].\n\n\n\nContient les paramètres généraux de l’application (App\\Config\\App).\n\n\n\nContient les paramètres liés à l’identification (Ppci\\Config\\IdentificationConfig).\n\n\n\n\nLa description des vues peut être consultée ici."
+  },
+  {
+    "objectID": "functions.html#fonctions",
+    "href": "functions.html#fonctions",
+    "title": "Fonctions et services",
+    "section": "",
+    "text": "Les fonctions sont chargées automatiquement à partir de ppci/Helpers/ppci_helper.php.\n\ndefaultPage() : affiche la page d’accueil de l’application (sans redirection)\ngetLineFeed() : restitue le code de retour à la ligne en fonction du contexte : serveur web ou ligne de commande\nhtmlDecode($content) : fonction récursive permettant de décoder les caractères html (htmlspecialchars_decode())\nprintA($variable) : affiche le contenu d’une variable. Pour les tableaux, affiche le contenu du tableau. Utilisé pour le débogage\nsetlogRequest($request) : écrit dans la table gacl.log la requête demandée\ntest($var = \"\") : affiche le mot “test” et le numéro de l’occurrence où la fonction a été appelée. Si $var est renseigné, affiche son contenu"
+  },
+  {
+    "objectID": "parameters.html",
+    "href": "parameters.html",
+    "title": "Paramètres de l’application",
+    "section": "",
+    "text": "Paramètres de l’application"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
     "title": "PPCI - PrototypePHP for CodeIgniter",
     "section": "",
-    "text": "PrototypePHP for CodeIgniter (PPCI) est un composant créé par Éric Quinton (INRAE - EABX à Cestas - Gironde, France) permettant de disposer d’un squelette d’application complet, intégrant :\n\nun menu généré en tenant compte des droits de l’utilisateur\nune gestion avancée des droits, avec de multiples mécanismes de connexion possibles\nune traçabilité des opérations effectuées (logs)\ndes utilitaires, comme la possibilité d’exécuter des requêtes SQL, une sauvegarde de la base de données, la visualisation de sa structure, etc.\n\nBasé sur le concept MVC, il utilise le moteur de rendu HTML SMARTY, avec une gestion intégrée de Bootstrap 3, des tableaux générés avec Datatables, etc.\nLe composant est distribué sous licence BSD.\nCopyright © Éric Quinton, pour INRAE - 2024 - tous droits réservés"
+    "text": "PrototypePHP for CodeIgniter (PPCI) est un portage du framework https://github.com/equinton/prototypephp développé à partir des années 2000 pour écrire divers applications web, dont Collec-Science.\nPour faciliter la maintenance des applications web, le portage vers CodeIgniter de PrototypePHP a été entrepris en 2024. Il se présente sous la forme d’un composant additionnel. Il utilise la plupart des fonctionnalités de CodeIgniter (routes, filtres, services, accès aux bases de données, gestion des paramètres, etc.), à l’exception :\n\nde l’affichage des pages web, qui reste dévolu au moteur de templates Smarty\nde la gestion de l’identification et des droits, PPCI étant à cet égard bien plus riche en terme de fonctionnalités, comme le support de multiples mécanismes d’identification (en base de données, LDAP, CAS, OIDC, TOTP, etc.) ou la gestion des droits.\n\nLe composant est distribué sous licence MIT."
   },
   {
-    "objectID": "workpackage2.html",
-    "href": "workpackage2.html",
-    "title": "Description of the workpackage 2",
+    "objectID": "identification.html",
+    "href": "identification.html",
+    "title": "Gestion de l’identification",
     "section": "",
-    "text": "Description of the workpackage 2"
-  },
-  {
-    "objectID": "workpackage1.html",
-    "href": "workpackage1.html",
-    "title": "Description of the workpackage 1",
-    "section": "",
-    "text": "Description of the workpackage 1"
-  },
-  {
-    "objectID": "posts/2024-03-11/newsletter_01.html",
-    "href": "posts/2024-03-11/newsletter_01.html",
-    "title": "Newsletter #1",
-    "section": "",
-    "text": "Example"
+    "text": "Gestion de l’identification"
   },
   {
     "objectID": "partners.html#list-of-financial-partners",

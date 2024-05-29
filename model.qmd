@@ -1,0 +1,5 @@
+::: {.content-visible when-profile="french"}
+
+# Gestion des accès aux données stockées en base de données
+
+:::

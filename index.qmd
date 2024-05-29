@@ -1,42 +1,16 @@
----
-listing:
-  - id: news
-    contents: posts
-    type: table
-    max-items: 5
-    sort-ui: false
-    filter-ui: false
-    sort: "date"
-    image-height: "50px"
-    fields: [image, date,title,author]
----
-
-
 ::: {.content-visible when-profile="french"}
 
-Test de contenu français
+PrototypePHP for CodeIgniter (PPCI) est un portage du _framework_ [https://github.com/equinton/prototypephp](https://github.com/equinton/prototypephp) développé à partir des années 2000 pour écrire divers applications web, dont [Collec-Science](https://www.collec-science.org).
+
+Pour faciliter la maintenance des applications web, le portage vers CodeIgniter de PrototypePHP a été entrepris en 2024.  Il se présente sous la forme d'un composant additionnel. Il utilise la plupart des fonctionnalités de CodeIgniter (routes, filtres, services, accès aux bases de données, gestion des paramètres, etc.), à l'exception :
+
+- de l'affichage des pages web, qui reste dévolu au moteur de templates Smarty
+- de la gestion de l'identification et des droits, PPCI étant à cet égard bien plus riche en terme de fonctionnalités, comme le support de multiples mécanismes d'identification (en base de données, LDAP, CAS, OIDC, TOTP, etc.) ou la gestion des droits.
+
+Le composant est distribué sous licence MIT.
 
 :::
-
 
 ::: {.content-visible when-profile="english"}
-
-This is a Quarto website made with the inrae-project-website extension.
-
-To learn more about Quarto websites visit <https://quarto.org/docs/websites>.
-
-To learn more about this specific extension visit <https://forgemia.inra.fr/sebastien_boutry/inrae-project-website>
-
-Here is how to display some content, such as newsletters, as listings :
-
-<br>
-
-## Recent news
-
-
-:::{#news}
-:::
-
----
 
 :::

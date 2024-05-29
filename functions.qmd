@@ -1,0 +1,71 @@
+::: {.content-visible when-profile="french"}
+
+# Fonctions et services
+
+## Services
+
+Les services permettent de conserver la même instance d'une classe tout au long de l'exécution du script. Ils sont décrits dans  `Ppci\Config\Services`.
+
+Ils s'appellent de la façon suivante :
+
+```
+$monService = service ('name');
+```
+
+La première fois que le code est appelé, la classe est instanciée. Ensuite, l'instance de classe est fournie, ce qui permet de conserver les mêmes paramètres.
+
+Trois types de services sont configurés : des services génériques, les services fournissant les paramètres de configuration, et les vues.
+
+### Services génériques
+
+#### PpciInit
+
+Code utilisé systématiquement à l'appel d'une page.
+
+#### MessagePpci
+
+Classe permettant de stocker des messages, puis de les restituer. Deux fonctions sont utilisables pour les enregistrer :
+
+- `function set(string $value, bool $is_error = false)` : stocke un message. S'il s'agit d'une erreur, le message sera ensuite affiché en rouge
+- `function setSyslog($message, $is_error = false)` : enregistre un message dans les logs du système. En mode développement, le message est affiché également à l'écran
+
+#### Log
+
+Classe permettant d'enregistrer une information dans la table *gacl.log*. Une entrée peut être créée avec la fonction `$col->setLog($login, $module, $commentaire = null)`. La valeur login peut être récupérée à partir de `$_SESSION["login"]`. `$module` représente le nom de la fonction ou de l'appel à enregistrer, et `$commentaire` un contenu particulier à noter.
+
+#### Locale
+
+Classe permettant de paramétrer la langue à utiliser. Les libellés peuvent être modifiés avec la fonction `setLocale($locale)`. Par défaut, seuls "fr" et "en" sont actuellement supportés.
+
+### Configurations
+
+#### Dbparam
+
+Classe contenant l'ensemble des paramètres stockés dans la table *dbparam*. Les paramètres sont accessibles avec l'attribut `$dbparam->params["nom_parametre"]`.
+
+Les paramètres sont également disponibles dans la variable `$_SESSION["dbparams"]`.
+
+#### AppConfig
+
+Contient les paramètres généraux de l'application (`App\Config\App`).
+
+#### IdentificationConfig
+
+Contient les paramètres liés à l'identification (`Ppci\Config\IdentificationConfig`).
+
+### Vues
+
+La description des vues peut être consultée [ici](views.qmd).
+
+## Fonctions
+
+Les fonctions sont chargées automatiquement à partir de `ppci/Helpers/ppci_helper.php`.
+
+- `defaultPage()` : affiche la page d'accueil de l'application (sans redirection)
+- `getLineFeed()` : restitue le code de retour à la ligne en fonction du contexte : serveur web ou ligne de commande
+- `htmlDecode($content)` : fonction récursive permettant de décoder les caractères html (_htmlspecialchars_decode()_)
+- `printA($variable)` : affiche le contenu d'une variable. Pour les tableaux, affiche le contenu du tableau. Utilisé pour le débogage
+- `setlogRequest($request)` : écrit dans la table gacl.log la requête demandée
+- `test($var = "")` : affiche le mot "test" et le numéro de l'occurrence où la fonction a été appelée. Si $var est renseigné, affiche son contenu
+
+:::

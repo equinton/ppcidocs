@@ -19,9 +19,6 @@ website:
       - href: index.qmd
         text: Home
         icon: house-door-fill
-      - text: À propos
-        icon: info-circle
-        href: about.qmd
       - text: installation
         href: installation.qmd
       - text: documentation technique
@@ -44,6 +41,8 @@ website:
             href: model.qmd
           - text: Pages HTML
             href: smarty.qmd
+          - text: Fonctions et services
+            href: functions.qmd
     right:
       - href: ./en
         text: En
@@ -52,8 +51,6 @@ website:
         menu: 
           - text: Quarto
             href: https://quarto.org
-          - text: "INRAE"
-            href: https://www.inrae.fr/
   ## Footer
   page-footer:
     left: |
