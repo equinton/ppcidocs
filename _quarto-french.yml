@@ -1,0 +1,71 @@
+project:
+  output-dir: docs
+  resources: images
+  
+  
+# Set language
+lang: fr
+
+# Set bibliography source
+bibliography: bibliography.bib
+
+# Set website config and logos
+website:
+  title: "PPCI - PrototypePHP for CodeIgniter"
+  ## Navbar menu
+  navbar:
+    logo:  images/ci-logo.png
+    left:
+      - href: index.qmd
+        text: Home
+        icon: house-door-fill
+      - text: À propos
+        icon: info-circle
+        href: about.qmd
+      - text: installation
+        href: installation.qmd
+      - text: documentation technique
+        menu:
+          - text: Principes généraux
+            href: principes.qmd
+          - text: Paramétrage
+            href: parameters.qmd
+          - text: Identification
+            href: identification.qmd
+          - text: Gestion des droits
+            href: rights.qmd
+          - text: Routes et contrôleurs
+            href: controllers.qmd
+          - text: Librairies
+            href: libraries.qmd
+          - text: Vues
+            href: views.qmd
+          - text: Accès à la base de données
+            href: model.qmd
+          - text: Pages HTML
+            href: smarty.qmd
+    right:
+      - href: ./en
+        text: En
+      - text: "Other links"
+        icon: globe
+        menu: 
+          - text: Quarto
+            href: https://quarto.org
+          - text: "INRAE"
+            href: https://www.inrae.fr/
+  ## Footer
+  page-footer:
+    left: |
+        [![](https://www.inrae.fr/themes/custom/inrae_socle/public/images/etat_logo.svg){width=100px}![](https://www.inrae.fr/themes/custom/inrae_socle/logo.svg){width=100px}](https://www.inrae.fr/)
+    right: |
+        [![](https://eabx.bordeaux-aquitaine.hub.inrae.fr/var/hub_internet_c22_eabx/storage/images/_aliases/medium/4/6/5/1/41564-1-fre-FR/c982775f2366-logo-eabx.jpg){width=100px}](https://eabx.bordeaux-aquitaine.hub.inrae.fr/)
+    center: 
+      - text: LEGAL NOTICE
+        icon: book
+        href: legal_notice.qmd
+  ## Margin
+  margin-footer: |
+    Made with [![](https://github.com/SebastienBoutry/inrae-project-website/blob/main/images/extension-logo.png?raw=true){width="50px"}](https://github.com/SebastienBoutry/inrae-project-website)
+      
+ 

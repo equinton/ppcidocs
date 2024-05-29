@@ -1,0 +1,101 @@
+::: {.content-visible when-profile="french"}
+
+# Les vues
+
+L'envoi d'informations au navigateur fait appel à des vues, chacune étant dédiée à un type d'informations (pages web, fichiers pdf, requêtes Ajax, fichiers binaires, etc.). Elles sont disponibles sous forme de services (décrits dans `ppci/Config/Services.php`), et sont physiquement stockées dans `Ppci/Libraries/Views`.
+
+Toutes les vues héritent de la classe `Ppci\Libraries\Views\DefaultView`, qui comprend les fonctions génériques suivantes :
+
+- `function set($value, $variable = "")` : affecte un contenu (nommé ou non, si _variable_ est renseigné) à la vue
+- `function get($variable = "")` : récupère le contenu d'une variable ou le contenu affecté
+- `function encodehtml($data)` : fonction récursive d'encodage en HTML des variables
+- `function send($param = "")` : déclenche l'envoi des informations. Cette fonction est systématiquement réécrite dans chaque vue.
+
+### Affichage des pages
+
+`$view = service ("Smarty");`
+
+Les pages web sont générées avec le moteur de _templates_ Smarty. Les modèles sont stockés :
+
+- d'une part dans `Ppci/Views/templates/ppci`, qui comprend toutes les pages gérées par Ppci, ainsi que la page par défaut (`main.html`)
+- d'autre part dans `App/Views/templates`, pour les pages spécifiques de l'application.
+
+Au moment du déclenchement de l'affichage, la classe va :
+
+- encoder les variables en HTML
+- générer le jeton CSRF
+- afficher les messages stockés dans la classe `Message`
+- générer le menu de l'application
+- rajouter divers contenus génériques, comme le titre de l'application.
+
+### Envoi d'un fichier binaire au navigateur
+
+`$view = service ("BinaryView");`
+
+La classe permet d'envoyer le fichier soit "en ligne", soit en "attachement". Elle peut soit envoyer un fichier à partir de son adresse dans le serveur, soit un fichier déjà ouvert (handle). Elle va également rechercher le type MIME si celui-ci n'est pas fourni.
+
+Pour fonctionner, il est nécessaire d'indiquer des paramètres particuliers :
+
+```
+$param = array(
+        "filename" => "", /* nom du fichier tel qu'il apparaitra dans le navigateur */
+        "disposition" => "attachment", /* attachment : le fichier est telecharge, inline : le fichier est affiche */
+        "tmp_name" => "", /* emplacement du fichier dans le serveur */
+        "content_type" => "", /* type mime */
+        "is_reference" => false, /* if true, tmp_name contains the handle of the opened file */
+        "handle" => 0;
+setParam(?array $param);
+```
+
+### Envoi d'un fichier
+
+`$view = service ("FileView");`
+
+Le fonctionnement est assez semblable à _BinaryView_, à ceci près que cela ne travaille qu'à partir d'un fichier existant. le type MIME peut également être recherché automatiquement s'il n'est pas indiqué.
+
+```
+$param = array(
+        "filename" => "export.txt", /* nom du fichier tel qu'il apparaitra dans le navigateur */
+        "disposition" => "attachment", /* attachment : le fichier est telecharge, inline : le fichier est affiche */
+        "content_type" => "", /* type mime */
+        "tmp_name" => "", /* Name of the file to send */
+    );
+```
+
+### Requête Ajax
+
+`$view = service ("AjaxView");`
+
+Vue utilisée pour répondre à une requête Ajax. Le contenu, qui est fourni par défaut sous forme de tableau (contenu Json possible en positionnant la variable _is_json_ à _true_, est encodé en html puis transformé en chaîne JSON avant d'être envoyé au navigateur.
+
+### Envoi d'un fichier CSV
+
+`$view = service ("CsvView");`
+
+Cette vue va permettre de générer un fichier CSV à partir d'un tableau (`$data[][]`). La génération et l'envoi du fichier est réalisé avec la fonction :
+
+```
+function send($filename = "", $delimiter = "")
+```
+
+Le nom du fichier peut être généré automatiquement. Le délimiteur peut être le point-virgule, la virgule ou la tabulation (indiquer _\t_). La première ligne d'entête est générée à partir des clés du premier enregistrement du tableau.
+
+### Envoi d'un fichier JSON
+
+`$view = service ("JsonFileView");`
+
+La vue génère un fichier dans le navigateur, avec un fonctionnement proche de la vue Ajax. Si les données sont fournies à la classe sous forme de tableau, celles-ci sont encodées en html avant transformation en Json.
+
+### Envoi d'un fichier PDF
+
+`$view = service ("PdfView");`
+
+Transfert un fichier PDF, soit directement pour être affiché, soit en fichier attaché. Même fonctionnement que la vue `FileView`.
+
+### Envoi un contenu arbitraire au navigateur
+
+`$view = service ("DisplayView");`
+
+C'est une vue qui transmet au navigateur un contenu quelconque, sans encodage ni type MIME.
+
+:::

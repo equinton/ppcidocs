@@ -1,0 +1,42 @@
+---
+listing:
+  - id: news
+    contents: posts
+    type: table
+    max-items: 5
+    sort-ui: false
+    filter-ui: false
+    sort: "date"
+    image-height: "50px"
+    fields: [image, date,title,author]
+---
+
+
+::: {.content-visible when-profile="french"}
+
+Test de contenu français
+
+:::
+
+
+::: {.content-visible when-profile="english"}
+
+This is a Quarto website made with the inrae-project-website extension.
+
+To learn more about Quarto websites visit <https://quarto.org/docs/websites>.
+
+To learn more about this specific extension visit <https://forgemia.inra.fr/sebastien_boutry/inrae-project-website>
+
+Here is how to display some content, such as newsletters, as listings :
+
+<br>
+
+## Recent news
+
+
+:::{#news}
+:::
+
+---
+
+:::

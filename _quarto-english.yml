@@ -1,0 +1,64 @@
+project:
+  output-dir: docs/en
+  resources: images
+  
+  
+# Set language
+lang: en
+
+# Set bibliography source
+bibliography: bibliography.bib
+
+# Set website config and logos
+website:
+  title: "inrae-project-website"
+  ## Navbar menu
+  navbar:
+    logo:  images/project-logo.jpg
+    left:
+      - href: index.qmd
+        text: Home
+        icon: house-door-fill
+      - text: About the project
+        icon: info-circle
+        menu: 
+          - text: About the project
+            href: about.qmd
+          - text: "Workpackage 1"
+            href: workpackage1.qmd
+          - text: "Workpackage 2"
+            href: workpackage2.qmd
+      - href: news.qmd
+        text: News
+        icon: newspaper
+      - href: publications.qmd
+        text: Publications
+        icon: book
+      - href: partners.qmd
+        text: Partners & Sponsors
+        icon: link
+    right:
+      - href: ../
+        text: fr
+      - text: "Other links"
+        icon: globe
+        menu: 
+          - text: Quarto
+            href: https://quarto.org
+          - text: "INRAE"
+            href: https://www.inrae.fr/
+  ## Footer
+  page-footer:
+    left: |
+        [![](https://www.inrae.fr/themes/custom/inrae_socle/public/images/etat_logo.svg){width=100px}![](https://www.inrae.fr/themes/custom/inrae_socle/logo.svg){width=100px}](https://www.inrae.fr/)
+    right: |
+        [![](https://eabx.bordeaux-aquitaine.hub.inrae.fr/var/hub_internet_c22_eabx/storage/images/_aliases/medium/4/6/5/1/41564-1-fre-FR/c982775f2366-logo-eabx.jpg){width=100px}](https://eabx.bordeaux-aquitaine.hub.inrae.fr/)
+    center: 
+      - text: LEGAL NOTICE
+        icon: book
+        href: legal_notice.qmd
+  ## Margin
+  margin-footer: |
+    Made with [![](https://github.com/SebastienBoutry/inrae-project-website/blob/main/images/extension-logo.png?raw=true){width="50px"}](https://github.com/SebastienBoutry/inrae-project-website)
+      
+ 

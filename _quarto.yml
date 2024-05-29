@@ -1,0 +1,7 @@
+project:
+  type: inrae-project-website
+
+
+profile:
+  default: french
+  group: [french, english]

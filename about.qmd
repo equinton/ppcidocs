@@ -1,0 +1,33 @@
+::: {.content-visible when-profile="french"}
+
+PrototypePHP for CodeIgniter (PPCI) est un composant créé par Éric Quinton (INRAE - EABX à Cestas - Gironde, France) permettant de disposer d'un squelette d'application complet, intégrant :
+
+- un menu généré en tenant compte des droits de l'utilisateur
+- une gestion avancée des droits, avec de multiples mécanismes de connexion possibles
+- une traçabilité des opérations effectuées (logs)
+- des utilitaires, comme la possibilité d'exécuter des requêtes SQL, une sauvegarde de la base de données, la visualisation de sa structure, etc.
+
+Basé sur le concept MVC, il utilise le moteur de rendu HTML SMARTY, avec une gestion intégrée de Bootstrap 3, des tableaux générés avec Datatables, etc.
+
+Le composant est distribué sous licence BSD.
+
+Copyright © Éric Quinton, pour INRAE - 2024 - tous droits réservés
+
+:::
+
+::: {.content-visible when-profile="english"}
+
+```{mermaid}
+
+flowchart LR
+    DB[(Database)]
+    Workpackage1-->DB
+    Workpackage2-->DB
+    DB-->Workpackage3
+    style DB fill:#275662,stroke-width:2px,color:#fff
+    style Workpackage1 fill:#66C1BF,stroke-width:2px,color:#fff
+    style Workpackage2 fill:#66C1BF,stroke-width:2px,color:#fff
+    style Workpackage3 fill:#66C1BF,stroke-width:2px,color:#fff
+```
+
+:::

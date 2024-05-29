@@ -1,0 +1,75 @@
+::: {.content-visible when-profile="french"}
+
+# Enchaînement lors de l'appel d'une page
+
+## Filtres
+
+### csrf : Filtre CodeIgniter
+
+Vérification du jeton CSRF, présent dans tous les formulaires Smarty
+
+### invalidChar : Filtre CodeIgniter
+
+Vérifie l'encodage des caractères transmis depuis le navigateur
+
+### LegacyRoute : Filtre PPCI
+
+Utilisé pour transformer les adresses de type : `index.php?module=nomModule` (liens dans les pages web) en route _nomModule_. Les variables $_GET et $_REQUEST sont stockées en _flashdata_.
+
+### startCall : Filtre PPCI
+
+Lance PpciInit:init()
+- Avant le démarrage de la session : exécute le script  `App/Libraries/BeforeSession::index()`, pour charger au besoin des classes avant le démarrage de la session
+- démarre la session
+- helper('ppci') : charge les fonctions génériques de PPCI
+- initialise les messages qui ont été transmis avant une redirection
+- lit le fichier de paramétrage param.ini (utilisé pour les instances multi-adresses), et met à jour les paramètres dans App, Database et IdentificationConfig
+- met à jour la locale et le fichier des traductions
+- initialise la connexion à la base de données
+- purge les logs (table gacl.log). Les logs de plus d'un an sont supprimées
+
+### rights : Filtre PPCI
+
+- recherche les droits nécessaires dans :
+  - App/Config/Rights
+  - Ppci/Config/Rights
+- s'il existe des droits demandés, vérifie si le login existe ou non. S'il n'existe pas, déclenche la procédure de connexion (`Ppci/Libraries/Login->getLogin()`)
+- vérifie que l'utilisateur dispose des droits nécessaires
+
+### Admin : Filtre PPCI
+
+- recherche si le module appelé nécessite le droit _admin_ dans `Ppci/Config/Rights`
+- en cas de module d'administration :
+  - vérifie à quand remonte la dernière identification TOTP ou le dernier appel à un module d'administration
+  - si la durée est > 10' :
+    - si le compte n'a pas activé le TOTP, affichage de l'écran de création du code TOTP
+    - déclenche la saisie du code TOTP
+
+L'utilisation du TOTP est désactivable (non conseillé en production) avec le paramètre `IdentificationConfig\disableTotpAdmin=1`
+
+## Appel du contrôleur
+
+Les contrôleurs doivent hériter de `Ppci/Controllers/PpciController`, qui va récupérer depuis _FlashData_ les variables $_GET, $_REQUEST, $_POST et $_SESSION["lastGet"].
+
+## Appel des librairies
+
+Les contrôleurs font appel aux librairies, qui peuvent hériter de Ppci\Libraries\PpciLibrary. Cette classe propose :
+
+- des paramètres pré-positionnés :
+  - `protected PpciModel $dataClass;` : classe permettant de manipuler les informations stockées dans une table
+  - `$this->message = service('MessagePpci');` : classe permettant d'afficher les messages à l'écran ou de les enregistrer dans les logs du serveur
+  - `$this->appConfig = config("App");` : paramètres généraux de l'application
+  - `$this->log = service("Log");` : enregistrement des actions dans la table gacl.log
+- des fonctions génériques pour manipuler les données :
+  - `dataRead($id, $smartyPage, $idParent = 0)` : lit les informations d'un enregistrement dans la classe $dataClass, et génère la vue Smarty
+  - `dataWrite(array $data, bool $isPartOfTransaction = false)` : écrit les informations dans la base de données
+  - `dataDelete($id, bool $isPartOfTransaction = false)` : supprime un enregistrement
+
+## Les différentes vues
+
+L'envoi d'informations au navigateur fait appel à des vues, chacune étant dédiée à un type d'informations (pages web, fichiers pdf, requêtes Ajax, fichiers binaires, etc.). Elles sont disponibles sous forme de services (décrits dans `ppci/Config/Services.php`), et sont physiquement stockées dans `Ppci/Libraries/Views`.
+
+Le détail des vues peut être consulté [ici](views.qmd).
+
+
+:::
