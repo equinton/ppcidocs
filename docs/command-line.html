@@ -131,7 +131,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link active" href="./installation.html" aria-current="page"> 
+    <a class="nav-link" href="./installation.html"> 
 <span class="menu-text">installation</span></a>
   </li>  
   <li class="nav-item dropdown ">
@@ -220,15 +220,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Sur cette page</h2>
    
   <ul>
-  <li><a href="#installation" id="toc-installation" class="nav-link active" data-scroll-target="#installation">Installation</a>
+  <li><a href="#exécution-en-ligne-de-commande" id="toc-exécution-en-ligne-de-commande" class="nav-link active" data-scroll-target="#exécution-en-ligne-de-commande">Exécution en ligne de commande</a>
   <ul class="collapse">
-  <li><a href="#installation-de-codeigniter-et-de-ppci" id="toc-installation-de-codeigniter-et-de-ppci" class="nav-link" data-scroll-target="#installation-de-codeigniter-et-de-ppci">Installation de CodeIgniter et de PPCI</a></li>
-  <li><a href="#configuration-du-support-de-ppci" id="toc-configuration-du-support-de-ppci" class="nav-link" data-scroll-target="#configuration-du-support-de-ppci">Configuration du support de PPCI</a></li>
-  <li><a href="#paramétrage-initial" id="toc-paramétrage-initial" class="nav-link" data-scroll-target="#paramétrage-initial">Paramétrage initial</a>
-  <ul class="collapse">
-  <li><a href="#fichier-.env" id="toc-fichier-.env" class="nav-link" data-scroll-target="#fichier-.env">Fichier .env</a></li>
-  <li><a href="#fichier-appconfigapp" id="toc-fichier-appconfigapp" class="nav-link" data-scroll-target="#fichier-appconfigapp">Fichier app/Config/App</a></li>
-  </ul></li>
+  <li><a href="#transférer-le-nom-du-fichier-.env-à-utiliser" id="toc-transférer-le-nom-du-fichier-.env-à-utiliser" class="nav-link" data-scroll-target="#transférer-le-nom-du-fichier-.env-à-utiliser">Transférer le nom du fichier .env à utiliser</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -241,64 +235,25 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 
-<section id="installation" class="level1">
-<h1>Installation</h1>
-<p>L’installation ne peut s’effectuer que dans un dossier vide. L’exemple est donné ici pour une migration vers <em>otolithe2</em>.</p>
-<section id="installation-de-codeigniter-et-de-ppci" class="level2">
-<h2 class="anchored" data-anchor-id="installation-de-codeigniter-et-de-ppci">Installation de CodeIgniter et de PPCI</h2>
-<p>Dans le dossier de niveau supérieur :</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">composer</span> create-project codeigniter4/appstarter otolithe2  </span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> otolithe2</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="ex">composer</span> require equinton/ppci</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</section>
-<section id="configuration-du-support-de-ppci" class="level2">
-<h2 class="anchored" data-anchor-id="configuration-du-support-de-ppci">Configuration du support de PPCI</h2>
-<p>Différents fichiers fournis par CodeIgniter doivent être adaptés pour le support de PPCI. Dans le dossier de l’application, à la racine, lancez le script :</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vendor/equinton/ppci/install/install.sh</span></span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Le script va :</p>
-<ul>
-<li>recopier les fichiers nécessaires pour le fonctionnement de l’application dans les différents dossiers :
-<ul>
-<li>paramètres dans <code>app/Config</code></li>
-<li>librairies dans <code>app/Libraries</code> (classes par défaut)</li>
-<li>dossier <em>display</em> dans <code>public</code>, et chargement des classes Javascript nécessaires <em>via</em> <code>npm</code></li>
-</ul></li>
-<li>créer le dossier <code>writable/temp</code>, et donner les droits en écriture à <code>www-data</code> sur l’ensemble de <code>writable</code></li>
-<li>générer le fichier <code>.env</code>, comprenant les paramètres par défaut d’instanciation</li>
-<li>créer les clés privée/publique utilisées pour les opérations cryptographiques.</li>
-</ul>
-</section>
-<section id="paramétrage-initial" class="level2">
-<h2 class="anchored" data-anchor-id="paramétrage-initial">Paramétrage initial</h2>
-<section id="fichier-.env" class="level3">
-<h3 class="anchored" data-anchor-id="fichier-.env">Fichier .env</h3>
-<p>Éditez le fichier <code>.env</code>, à la racine de l’application, et renseignez impérativement les entrées suivantes :</p>
-<pre class="env"><code>CI_ENVIRONMENT = development
-app.baseURL = 'https://myapp.mysociety.com'
-
-database.default.DBDriver = Postgre
-database.default.DBPrefix =
-database.default.port = 5432
-database.default.charset = utf8
-database.default.hostname = localhost
-database.default.database = dbname
-database.default.username = login
-database.default.password = password
-database.default.searchpath = public,app,gacl</code></pre>
-</section>
-<section id="fichier-appconfigapp" class="level3">
-<h3 class="anchored" data-anchor-id="fichier-appconfigapp">Fichier app/Config/App</h3>
-<p>C’est le fichier qui contient les paramètres par défaut de l’application. Il s’agit d’une classe PHP, dont les variables suivantes peuvent être modifiées :</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="va">$dbversion</span> <span class="op">=</span> <span class="st">"1.0"</span><span class="ot">;</span> <span class="co">// version de la base de données</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="va">$GACL_aco</span> <span class="op">=</span> <span class="st">"app"</span><span class="ot">;</span> <span class="co">// code de l'application dans la gestion des droits</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="va">$version</span> <span class="op">=</span> <span class="st">"v1.0.0"</span> <span class="ot">;</span> <span class="co">// Version du logiciel. Elle doit correspondre à une des versions créées dans Github ou Gitlab</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="va">$versionDate</span> <span class="op">=</span> <span class="st">"01/01/2024"</span><span class="ot">;</span> <span class="co">//Date de la version</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="va">$APP_help_address</span> <span class="op">=</span><span class="st">""</span><span class="ot">;</span> <span class="co">//lien vers la création de tickets ou vers la page donnant accès à l'aide</span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="va">$copyright</span> <span class="op">=</span> <span class="st">""</span><span class="ot">;</span> <span class="co">//Copyright de l'application</span></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="va">$APPLI_release</span> <span class="op">=</span> []<span class="ot">;</span> <span class="co">// Tableau permettant d'interroger soit Github, soit un serveur Gitlab, pour obtenir les informations concernant la dernière version publiée</span></span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="exécution-en-ligne-de-commande" class="level1">
+<h1>Exécution en ligne de commande</h1>
+<section id="transférer-le-nom-du-fichier-.env-à-utiliser" class="level2">
+<h2 class="anchored" data-anchor-id="transférer-le-nom-du-fichier-.env-à-utiliser">Transférer le nom du fichier .env à utiliser</h2>
+<p>Dans CodeIgniter, avec le module PPCI, le fichier est généré automatiquement avec ce code :</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">is_file</span>(<span class="va">$file</span> <span class="op">=</span> <span class="va">$_SERVER</span>[<span class="st">"envPath"</span>] <span class="op">.</span> <span class="cn">DIRECTORY_SEPARATOR</span> <span class="op">.</span> <span class="st">".env"</span>) <span class="op">&amp;&amp;</span> <span class="fu">is_readable</span>(<span class="va">$file</span>)) {</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    (<span class="kw">new</span> <span class="cn">C</span>odeIgniter\<span class="cn">C</span>onfig\<span class="cn">D</span>otEnv(<span class="va">$_SERVER</span>[<span class="st">"envPath"</span>]<span class="ot">,</span><span class="st">".env"</span>))-&gt;load()<span class="ot">;</span></span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Pour transférer la valeur de <code>envPath</code> dans la variable <code>$_SERVER</code>, dans le script permettant d’exécuter le code :</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">envPath</span><span class="op">=</span><span class="st">"/home/equinton/web/metabo2"</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="ex">php</span> test.php</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="ex">/home/equinton/web/metabo2</span></span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Avec <code>test.php</code> :</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;?php</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="va">$_SERVER</span>[<span class="st">"envPath"</span>]<span class="op">.</span><span class="cn">PHP_EOL</span><span class="ot">;</span></span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 
-</section>
 </section>
 </section>
 

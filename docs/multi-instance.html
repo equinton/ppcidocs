@@ -131,7 +131,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link active" href="./installation.html" aria-current="page"> 
+    <a class="nav-link" href="./installation.html"> 
 <span class="menu-text">installation</span></a>
   </li>  
   <li class="nav-item dropdown ">
@@ -220,15 +220,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Sur cette page</h2>
    
   <ul>
-  <li><a href="#installation" id="toc-installation" class="nav-link active" data-scroll-target="#installation">Installation</a>
+  <li><a href="#gestion-du-multi-instances" id="toc-gestion-du-multi-instances" class="nav-link active" data-scroll-target="#gestion-du-multi-instances">Gestion du multi-instances</a>
   <ul class="collapse">
-  <li><a href="#installation-de-codeigniter-et-de-ppci" id="toc-installation-de-codeigniter-et-de-ppci" class="nav-link" data-scroll-target="#installation-de-codeigniter-et-de-ppci">Installation de CodeIgniter et de PPCI</a></li>
-  <li><a href="#configuration-du-support-de-ppci" id="toc-configuration-du-support-de-ppci" class="nav-link" data-scroll-target="#configuration-du-support-de-ppci">Configuration du support de PPCI</a></li>
-  <li><a href="#paramétrage-initial" id="toc-paramétrage-initial" class="nav-link" data-scroll-target="#paramétrage-initial">Paramétrage initial</a>
-  <ul class="collapse">
-  <li><a href="#fichier-.env" id="toc-fichier-.env" class="nav-link" data-scroll-target="#fichier-.env">Fichier .env</a></li>
-  <li><a href="#fichier-appconfigapp" id="toc-fichier-appconfigapp" class="nav-link" data-scroll-target="#fichier-appconfigapp">Fichier app/Config/App</a></li>
-  </ul></li>
+  <li><a href="#créer-le-dossier-dédié-à-linstance" id="toc-créer-le-dossier-dédié-à-linstance" class="nav-link" data-scroll-target="#créer-le-dossier-dédié-à-linstance">Créer le dossier dédié à l’instance</a></li>
+  <li><a href="#mettre-à-niveau-du-site-virtuel-apache" id="toc-mettre-à-niveau-du-site-virtuel-apache" class="nav-link" data-scroll-target="#mettre-à-niveau-du-site-virtuel-apache">Mettre à niveau du site virtuel Apache</a></li>
+  <li><a href="#modifier-les-paramètres" id="toc-modifier-les-paramètres" class="nav-link" data-scroll-target="#modifier-les-paramètres">Modifier les paramètres</a></li>
+  <li><a href="#adapter-les-scripts-lancés-en-ligne-de-commande" id="toc-adapter-les-scripts-lancés-en-ligne-de-commande" class="nav-link" data-scroll-target="#adapter-les-scripts-lancés-en-ligne-de-commande">Adapter les scripts lancés en ligne de commande</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -241,64 +238,78 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 
-<section id="installation" class="level1">
-<h1>Installation</h1>
-<p>L’installation ne peut s’effectuer que dans un dossier vide. L’exemple est donné ici pour une migration vers <em>otolithe2</em>.</p>
-<section id="installation-de-codeigniter-et-de-ppci" class="level2">
-<h2 class="anchored" data-anchor-id="installation-de-codeigniter-et-de-ppci">Installation de CodeIgniter et de PPCI</h2>
-<p>Dans le dossier de niveau supérieur :</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">composer</span> create-project codeigniter4/appstarter otolithe2  </span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> otolithe2</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="ex">composer</span> require equinton/ppci</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="gestion-du-multi-instances" class="level1">
+<h1>Gestion du multi-instances</h1>
+<section id="créer-le-dossier-dédié-à-linstance" class="level2">
+<h2 class="anchored" data-anchor-id="créer-le-dossier-dédié-à-linstance">Créer le dossier dédié à l’instance</h2>
+<p>Créez un dossier dédié à l’instance dans l’arborescence du serveur, par exemple <code>/var/www/app/instancename</code>, puis créez les fichiers nécessaires pour assurer la séparation des instances :</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Dossier contenant le code de l'application</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="va">APP</span><span class="op">=</span>/var/www/app</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Dossier comprenant les paramètres spécifiques de l'instance</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="va">FOLDER</span><span class="op">=</span><span class="st">"/var/www/instances/instancename"</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-P</span> <span class="va">$FOLDER</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">chmod</span> g+r <span class="va">$FOLDER</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> <span class="va">$FOLDER</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> temp</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Nouvelles cles cryptographiques</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="ex">openssl</span> genpkey <span class="at">-algorithm</span> rsa <span class="at">-out</span> id_app <span class="at">-pkeyopt</span> rsa_keygen_bits:2048</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="ex">openssl</span> rsa <span class="at">-in</span> id_app <span class="at">-pubout</span> <span class="at">-out</span> id_app.pub</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Recopie du fichier de parametrage</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="fu">cp</span> <span class="va">$APP</span>/.env .</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Mise à niveau des droits</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="fu">chmod</span> <span class="at">-R</span> g+r <span class="va">$FOLDER</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="fu">chmod</span> g+w temp</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="fu">chown</span> www-data id_app</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Recopiez le fichier <code>.env</code> de l’application dans ce dossier.</p>
 </section>
-<section id="configuration-du-support-de-ppci" class="level2">
-<h2 class="anchored" data-anchor-id="configuration-du-support-de-ppci">Configuration du support de PPCI</h2>
-<p>Différents fichiers fournis par CodeIgniter doivent être adaptés pour le support de PPCI. Dans le dossier de l’application, à la racine, lancez le script :</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vendor/equinton/ppci/install/install.sh</span></span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Le script va :</p>
-<ul>
-<li>recopier les fichiers nécessaires pour le fonctionnement de l’application dans les différents dossiers :
-<ul>
-<li>paramètres dans <code>app/Config</code></li>
-<li>librairies dans <code>app/Libraries</code> (classes par défaut)</li>
-<li>dossier <em>display</em> dans <code>public</code>, et chargement des classes Javascript nécessaires <em>via</em> <code>npm</code></li>
-</ul></li>
-<li>créer le dossier <code>writable/temp</code>, et donner les droits en écriture à <code>www-data</code> sur l’ensemble de <code>writable</code></li>
-<li>générer le fichier <code>.env</code>, comprenant les paramètres par défaut d’instanciation</li>
-<li>créer les clés privée/publique utilisées pour les opérations cryptographiques.</li>
-</ul>
+<section id="mettre-à-niveau-du-site-virtuel-apache" class="level2">
+<h2 class="anchored" data-anchor-id="mettre-à-niveau-du-site-virtuel-apache">Mettre à niveau du site virtuel Apache</h2>
+<p>Rajoutez, dans la description du site virtuel (fichier <code>moninstance.conf</code>, dans <code>/etc/apache2/sites-available</code>) :</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode apache code-with-copy"><code class="sourceCode apache"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">&lt;VirtualHost</span><span class="at"> *:443</span><span class="fu">&gt;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    (...)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    DocumentRoot<span class="st"> /var/www/app</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    setenv<span class="st"> envPath /var/www/instances/instancename</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    (...)  </span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="paramétrage-initial" class="level2">
-<h2 class="anchored" data-anchor-id="paramétrage-initial">Paramétrage initial</h2>
-<section id="fichier-.env" class="level3">
-<h3 class="anchored" data-anchor-id="fichier-.env">Fichier .env</h3>
-<p>Éditez le fichier <code>.env</code>, à la racine de l’application, et renseignez impérativement les entrées suivantes :</p>
-<pre class="env"><code>CI_ENVIRONMENT = development
-app.baseURL = 'https://myapp.mysociety.com'
-
-database.default.DBDriver = Postgre
-database.default.DBPrefix =
-database.default.port = 5432
-database.default.charset = utf8
+<section id="modifier-les-paramètres" class="level2">
+<h2 class="anchored" data-anchor-id="modifier-les-paramètres">Modifier les paramètres</h2>
+<p>Éditez le fichier <code>/var/www/instances/instancename/.env</code> :</p>
+<pre class="env"><code>app.baseURL = 'https://myinstance.mysociety.com'
+app.BASE_DIR = "/var/www/instances/instancename"
+app.privateKey = ${BASE_DIR}/id_app
+app.pubKey = ${BASE_DIR}/id_app.pub
+app.APP_temp = ${BASE_DIR}/temp
 database.default.hostname = localhost
-database.default.database = dbname
-database.default.username = login
-database.default.password = password
-database.default.searchpath = public,app,gacl</code></pre>
+database.default.database = dbname_instance
+database.default.username = login_instance
+database.default.password = password_instance</code></pre>
+<p>Vérifiez également le mode d’identification par défaut, et adaptez-le le cas échéant.</p>
 </section>
-<section id="fichier-appconfigapp" class="level3">
-<h3 class="anchored" data-anchor-id="fichier-appconfigapp">Fichier app/Config/App</h3>
-<p>C’est le fichier qui contient les paramètres par défaut de l’application. Il s’agit d’une classe PHP, dont les variables suivantes peuvent être modifiées :</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="va">$dbversion</span> <span class="op">=</span> <span class="st">"1.0"</span><span class="ot">;</span> <span class="co">// version de la base de données</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="va">$GACL_aco</span> <span class="op">=</span> <span class="st">"app"</span><span class="ot">;</span> <span class="co">// code de l'application dans la gestion des droits</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="va">$version</span> <span class="op">=</span> <span class="st">"v1.0.0"</span> <span class="ot">;</span> <span class="co">// Version du logiciel. Elle doit correspondre à une des versions créées dans Github ou Gitlab</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="va">$versionDate</span> <span class="op">=</span> <span class="st">"01/01/2024"</span><span class="ot">;</span> <span class="co">//Date de la version</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="va">$APP_help_address</span> <span class="op">=</span><span class="st">""</span><span class="ot">;</span> <span class="co">//lien vers la création de tickets ou vers la page donnant accès à l'aide</span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="va">$copyright</span> <span class="op">=</span> <span class="st">""</span><span class="ot">;</span> <span class="co">//Copyright de l'application</span></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="va">$APPLI_release</span> <span class="op">=</span> []<span class="ot">;</span> <span class="co">// Tableau permettant d'interroger soit Github, soit un serveur Gitlab, pour obtenir les informations concernant la dernière version publiée</span></span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="adapter-les-scripts-lancés-en-ligne-de-commande" class="level2">
+<h2 class="anchored" data-anchor-id="adapter-les-scripts-lancés-en-ligne-de-commande">Adapter les scripts lancés en ligne de commande</h2>
+<p>Si vous utilisez des scripts qui sont exécutés en ligne de commande, par exemple programmés à horaires réguliers (crontab), vous devrez modifier :</p>
+<ul>
+<li>d’une part, le script de lancement :</li>
+</ul>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">envPath</span><span class="op">=</span>/var/www/instances/instancename</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="ex">php</span> commandline.php</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>La variable <code>envPath</code> est disponible dans <code>$_SERVER</code>.</p>
+<p>La fonction <code>loadDotEnv(Paths $paths)</code> de la classe <code>vendor/codeigniter4/framework/system/Boot.php</code> doit être réécrite ainsi :</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>    <span class="co">/**</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co">     * Load environment settings from .env files into $_SERVER and $_ENV</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co">     */</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">protected</span> <span class="kw">static</span> <span class="kw">function</span> loadDotEnv(<span class="cn">P</span>aths <span class="va">$paths</span>)<span class="ot">:</span> <span class="dt">void</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    {</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>        <span class="kw">require_once</span> <span class="va">$paths</span>-&gt;systemDirectory <span class="op">.</span> <span class="st">'/Config/DotEnv.php'</span><span class="ot">;</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (<span class="fu">is_file</span>(<span class="va">$file</span> <span class="op">=</span> <span class="va">$_SERVER</span>[<span class="st">"envPath"</span>] <span class="op">.</span> <span class="cn">DIRECTORY_SEPARATOR</span> <span class="op">.</span> <span class="st">".env"</span>) <span class="op">&amp;&amp;</span> <span class="fu">is_readable</span>(<span class="va">$file</span>)) {</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>        (<span class="kw">new</span> <span class="cn">C</span>odeIgniter\<span class="cn">C</span>onfig\<span class="cn">D</span>otEnv(<span class="va">$_SERVER</span>[<span class="st">"envPath"</span>]<span class="ot">,</span><span class="st">".env"</span>))-&gt;load()<span class="ot">;</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>        } <span class="cf">else</span> {</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>            (<span class="kw">new</span> <span class="cn">C</span>odeIgniter\<span class="cn">C</span>onfig\<span class="cn">D</span>otEnv(<span class="va">$paths</span>-&gt;appDirectory <span class="op">.</span> <span class="st">'/../'</span>))-&gt;load()<span class="ot">;</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>    }</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 
-</section>
 </section>
 </section>
 

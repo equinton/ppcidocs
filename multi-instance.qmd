@@ -1,0 +1,95 @@
+::: {.content-visible when-profile="french"}
+
+# Gestion du multi-instances
+
+## Créer le dossier dédié à l'instance
+
+Créez un dossier dédié à l'instance dans l'arborescence du serveur, par exemple `/var/www/app/instancename`, puis créez les fichiers nécessaires pour assurer la séparation des instances :
+
+```bash
+# Dossier contenant le code de l'application
+APP=/var/www/app
+# Dossier comprenant les paramètres spécifiques de l'instance
+FOLDER="/var/www/instances/instancename"
+mkdir -P $FOLDER
+chmod g+r $FOLDER
+cd $FOLDER
+mkdir temp
+# Nouvelles cles cryptographiques
+openssl genpkey -algorithm rsa -out id_app -pkeyopt rsa_keygen_bits:2048
+openssl rsa -in id_app -pubout -out id_app.pub
+# Recopie du fichier de parametrage
+cp $APP/.env .
+# Mise à niveau des droits
+chmod -R g+r $FOLDER
+chmod g+w temp
+chown www-data id_app
+```
+
+Recopiez le fichier `.env` de l'application dans ce dossier.
+
+## Mettre à niveau du site virtuel Apache
+
+Rajoutez, dans la description du site virtuel (fichier `moninstance.conf`, dans `/etc/apache2/sites-available`) :
+
+```apache
+<VirtualHost *:443>
+    (...)
+    DocumentRoot /var/www/app
+    setenv envPath /var/www/instances/instancename
+    (...)  
+```
+
+## Modifier les paramètres
+
+Éditez le fichier `/var/www/instances/instancename/.env` :
+
+```env
+app.baseURL = 'https://myinstance.mysociety.com'
+app.BASE_DIR = "/var/www/instances/instancename"
+app.privateKey = ${BASE_DIR}/id_app
+app.pubKey = ${BASE_DIR}/id_app.pub
+app.APP_temp = ${BASE_DIR}/temp
+database.default.hostname = localhost
+database.default.database = dbname_instance
+database.default.username = login_instance
+database.default.password = password_instance
+```
+
+Vérifiez également le mode d'identification par défaut, et adaptez-le le cas échéant.
+
+## Adapter les scripts lancés en ligne de commande
+
+Si vous utilisez des scripts qui sont exécutés en ligne de commande, par exemple programmés à horaires réguliers (crontab), vous devrez modifier :
+
+- d'une part, le script de lancement :
+
+```bash
+#!/bin/bash
+export envPath=/var/www/instances/instancename
+php commandline.php
+```
+
+La variable `envPath` est disponible dans `$_SERVER`.
+
+La fonction `loadDotEnv(Paths $paths)` de la classe `vendor/codeigniter4/framework/system/Boot.php`  doit être réécrite ainsi :
+
+```php
+    /**
+     * Load environment settings from .env files into $_SERVER and $_ENV
+     */
+    protected static function loadDotEnv(Paths $paths): void
+    {
+        require_once $paths->systemDirectory . '/Config/DotEnv.php';
+        if (is_file($file = $_SERVER["envPath"] . DIRECTORY_SEPARATOR . ".env") && is_readable($file)) {
+        (new CodeIgniter\Config\DotEnv($_SERVER["envPath"],".env"))->load();
+        } else {
+            (new CodeIgniter\Config\DotEnv($paths->appDirectory . '/../'))->load();
+        }
+    }
+
+```
+
+
+
+:::

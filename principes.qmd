@@ -18,7 +18,8 @@ Utilisé pour transformer les adresses de type : `index.php?module=nomModule` (l
 
 ### startCall : Filtre PPCI
 
-Lance PpciInit:init()
+Lance `PpciInit:init()` :
+
 - Avant le démarrage de la session : exécute le script  `App/Libraries/BeforeSession::index()`, pour charger au besoin des classes avant le démarrage de la session
 - démarre la session
 - helper('ppci') : charge les fonctions génériques de PPCI
@@ -45,7 +46,8 @@ Lance PpciInit:init()
     - si le compte n'a pas activé le TOTP, affichage de l'écran de création du code TOTP
     - déclenche la saisie du code TOTP
 
-L'utilisation du TOTP est désactivable (non conseillé en production) avec le paramètre `IdentificationConfig\disableTotpAdmin=1`
+L'utilisation du TOTP est désactivable (non conseillé en production) avec le paramètre `IdentificationConfig\disableTotpAdmin=1`.
+La durée de la session _admin_ peut être modifiée avec le paramètre `IdentificationConfig\adminSessionDuration=600`. La durée est exprimée en secondes.
 
 ## Appel du contrôleur
 
@@ -53,7 +55,7 @@ Les contrôleurs doivent hériter de `Ppci/Controllers/PpciController`, qui va r
 
 ## Appel des librairies
 
-Les contrôleurs font appel aux librairies, qui peuvent hériter de Ppci\Libraries\PpciLibrary. Cette classe propose :
+Les contrôleurs font appel aux librairies, qui peuvent hériter de `Ppci\Libraries\PpciLibrary`. Cette classe propose :
 
 - des paramètres pré-positionnés :
   - `protected PpciModel $dataClass;` : classe permettant de manipuler les informations stockées dans une table

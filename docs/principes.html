@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="fr" xml:lang="fr"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.4.554">
+<meta name="generator" content="quarto-1.4.555">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -145,6 +145,10 @@ ul.task-list li input[type="checkbox"] {
     <a class="dropdown-item" href="./functions.html">
  <span class="dropdown-text">Fonctions et services</span></a>
   </li>  
+        <li>
+    <a class="dropdown-item" href="./command-line.html">
+ <span class="dropdown-text">Ligne de commande</span></a>
+  </li>  
     </ul>
   </li>
 </ul>
@@ -226,7 +230,17 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="startcall-filtre-ppci" class="level3">
 <h3 class="anchored" data-anchor-id="startcall-filtre-ppci">startCall : Filtre PPCI</h3>
-<p>Lance PpciInit:init() - Avant le démarrage de la session : exécute le script <code>App/Libraries/BeforeSession::index()</code>, pour charger au besoin des classes avant le démarrage de la session - démarre la session - helper(‘ppci’) : charge les fonctions génériques de PPCI - initialise les messages qui ont été transmis avant une redirection - lit le fichier de paramétrage param.ini (utilisé pour les instances multi-adresses), et met à jour les paramètres dans App, Database et IdentificationConfig - met à jour la locale et le fichier des traductions - initialise la connexion à la base de données - purge les logs (table gacl.log). Les logs de plus d’un an sont supprimées</p>
+<p>Lance <code>PpciInit:init()</code> :</p>
+<ul>
+<li>Avant le démarrage de la session : exécute le script <code>App/Libraries/BeforeSession::index()</code>, pour charger au besoin des classes avant le démarrage de la session</li>
+<li>démarre la session</li>
+<li>helper(‘ppci’) : charge les fonctions génériques de PPCI</li>
+<li>initialise les messages qui ont été transmis avant une redirection</li>
+<li>lit le fichier de paramétrage param.ini (utilisé pour les instances multi-adresses), et met à jour les paramètres dans App, Database et IdentificationConfig</li>
+<li>met à jour la locale et le fichier des traductions</li>
+<li>initialise la connexion à la base de données</li>
+<li>purge les logs (table gacl.log). Les logs de plus d’un an sont supprimées</li>
+</ul>
 </section>
 <section id="rights-filtre-ppci" class="level3">
 <h3 class="anchored" data-anchor-id="rights-filtre-ppci">rights : Filtre PPCI</h3>
@@ -254,7 +268,7 @@ ul.task-list li input[type="checkbox"] {
 </ul></li>
 </ul></li>
 </ul>
-<p>L’utilisation du TOTP est désactivable (non conseillé en production) avec le paramètre <code>IdentificationConfig\disableTotpAdmin=1</code></p>
+<p>L’utilisation du TOTP est désactivable (non conseillé en production) avec le paramètre <code>IdentificationConfig\disableTotpAdmin=1</code>. La durée de la session <em>admin</em> peut être modifiée avec le paramètre <code>IdentificationConfig\adminSessionDuration=600</code>. La durée est exprimée en secondes.</p>
 </section>
 </section>
 <section id="appel-du-contrôleur" class="level2">
@@ -263,7 +277,7 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="appel-des-librairies" class="level2">
 <h2 class="anchored" data-anchor-id="appel-des-librairies">Appel des librairies</h2>
-<p>Les contrôleurs font appel aux librairies, qui peuvent hériter de Ppci. Cette classe propose :</p>
+<p>Les contrôleurs font appel aux librairies, qui peuvent hériter de <code>Ppci\Libraries\PpciLibrary</code>. Cette classe propose :</p>
 <ul>
 <li>des paramètres pré-positionnés :
 <ul>

@@ -2,4 +2,69 @@
 
 # Installation
 
+L'installation ne peut s'effectuer que dans un dossier vide. L'exemple est donné ici pour une migration vers *otolithe2*.
+
+## Installation de CodeIgniter et de PPCI
+
+Dans le dossier de niveau supérieur :
+
+```bash
+composer create-project codeigniter4/appstarter otolithe2  
+cd otolithe2
+composer require equinton/ppci
+```
+
+## Configuration du support de PPCI
+
+Différents fichiers fournis par CodeIgniter doivent être adaptés pour le support de PPCI.
+Dans le dossier de l'application, à la racine, lancez le script :
+
+```bash
+vendor/equinton/ppci/install/install.sh
+```
+Le script va :
+
+- recopier les fichiers nécessaires pour le fonctionnement de l'application dans les différents dossiers :
+    - paramètres dans `app/Config`
+    - librairies dans `app/Libraries` (classes par défaut)
+    - dossier _display_ dans `public`, et chargement des classes Javascript nécessaires _via_ `npm`
+- créer le dossier `writable/temp`, et donner les droits en écriture à `www-data` sur l'ensemble de `writable`
+- générer le fichier `.env`, comprenant les paramètres par défaut d'instanciation
+- créer les clés privée/publique utilisées pour les opérations cryptographiques.
+
+## Paramétrage initial
+
+### Fichier .env
+
+Éditez le fichier `.env`, à la racine de l'application, et renseignez impérativement les entrées suivantes :
+
+```env
+CI_ENVIRONMENT = development
+app.baseURL = 'https://myapp.mysociety.com'
+
+database.default.DBDriver = Postgre
+database.default.DBPrefix =
+database.default.port = 5432
+database.default.charset = utf8
+database.default.hostname = localhost
+database.default.database = dbname
+database.default.username = login
+database.default.password = password
+database.default.searchpath = public,app,gacl
+```
+
+### Fichier app/Config/App
+
+C'est le fichier qui contient les paramètres par défaut de l'application. Il s'agit d'une classe PHP, dont les variables suivantes peuvent être modifiées :
+
+```php
+$dbversion = "1.0"; // version de la base de données
+$GACL_aco = "app"; // code de l'application dans la gestion des droits
+$version = "v1.0.0" ; // Version du logiciel. Elle doit correspondre à une des versions créées dans Github ou Gitlab
+$versionDate = "01/01/2024"; //Date de la version
+$APP_help_address =""; //lien vers la création de tickets ou vers la page donnant accès à l'aide
+$copyright = ""; //Copyright de l'application
+$APPLI_release = []; // Tableau permettant d'interroger soit Github, soit un serveur Gitlab, pour obtenir les informations concernant la dernière version publiée
+```
+
 :::

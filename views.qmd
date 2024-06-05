@@ -36,7 +36,7 @@ La classe permet d'envoyer le fichier soit "en ligne", soit en "attachement". El
 
 Pour fonctionner, il est nécessaire d'indiquer des paramètres particuliers :
 
-```
+```php
 $param = array(
         "filename" => "", /* nom du fichier tel qu'il apparaitra dans le navigateur */
         "disposition" => "attachment", /* attachment : le fichier est telecharge, inline : le fichier est affiche */
@@ -53,7 +53,7 @@ setParam(?array $param);
 
 Le fonctionnement est assez semblable à _BinaryView_, à ceci près que cela ne travaille qu'à partir d'un fichier existant. le type MIME peut également être recherché automatiquement s'il n'est pas indiqué.
 
-```
+```php
 $param = array(
         "filename" => "export.txt", /* nom du fichier tel qu'il apparaitra dans le navigateur */
         "disposition" => "attachment", /* attachment : le fichier est telecharge, inline : le fichier est affiche */

@@ -1,0 +1,32 @@
+::: {.content-visible when-profile="french"}
+
+# Exécution en ligne de commande
+
+## Transférer le nom du fichier .env à utiliser
+
+Dans CodeIgniter, avec le module PPCI, le fichier est généré automatiquement avec ce code : 
+
+```php
+if (is_file($file = $_SERVER["envPath"] . DIRECTORY_SEPARATOR . ".env") && is_readable($file)) {
+    (new CodeIgniter\Config\DotEnv($_SERVER["envPath"],".env"))->load();
+```
+
+Pour transférer la valeur de `envPath` dans la variable  `$_SERVER`, dans le script permettant d'exécuter le code :
+
+```bash
+#!/bin/bash
+export envPath="/home/equinton/web/metabo2"
+php test.php
+
+/home/equinton/web/metabo2
+```
+
+Avec `test.php` :
+
+```php
+<?php
+
+echo $_SERVER["envPath"].PHP_EOL;
+```
+
+:::

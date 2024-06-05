@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="fr" xml:lang="fr"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.4.554">
+<meta name="generator" content="quarto-1.4.555">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -19,6 +19,40 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -145,6 +179,10 @@ ul.task-list li input[type="checkbox"] {
     <a class="dropdown-item" href="./functions.html">
  <span class="dropdown-text">Fonctions et services</span></a>
   </li>  
+        <li>
+    <a class="dropdown-item" href="./command-line.html">
+ <span class="dropdown-text">Ligne de commande</span></a>
+  </li>  
     </ul>
   </li>
 </ul>
@@ -236,25 +274,25 @@ ul.task-list li input[type="checkbox"] {
 <p><code>$view = service ("BinaryView");</code></p>
 <p>La classe permet d’envoyer le fichier soit “en ligne”, soit en “attachement”. Elle peut soit envoyer un fichier à partir de son adresse dans le serveur, soit un fichier déjà ouvert (handle). Elle va également rechercher le type MIME si celui-ci n’est pas fourni.</p>
 <p>Pour fonctionner, il est nécessaire d’indiquer des paramètres particuliers :</p>
-<pre><code>$param = array(
-        "filename" =&gt; "", /* nom du fichier tel qu'il apparaitra dans le navigateur */
-        "disposition" =&gt; "attachment", /* attachment : le fichier est telecharge, inline : le fichier est affiche */
-        "tmp_name" =&gt; "", /* emplacement du fichier dans le serveur */
-        "content_type" =&gt; "", /* type mime */
-        "is_reference" =&gt; false, /* if true, tmp_name contains the handle of the opened file */
-        "handle" =&gt; 0;
-setParam(?array $param);</code></pre>
+<div class="sourceCode" id="cb1"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="va">$param</span> <span class="op">=</span> <span class="dt">array</span>(</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>        <span class="st">"filename"</span> =&gt; <span class="st">""</span><span class="ot">,</span> <span class="co">/* nom du fichier tel qu'il apparaitra dans le navigateur */</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>        <span class="st">"disposition"</span> =&gt; <span class="st">"attachment"</span><span class="ot">,</span> <span class="co">/* attachment : le fichier est telecharge, inline : le fichier est affiche */</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>        <span class="st">"tmp_name"</span> =&gt; <span class="st">""</span><span class="ot">,</span> <span class="co">/* emplacement du fichier dans le serveur */</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>        <span class="st">"content_type"</span> =&gt; <span class="st">""</span><span class="ot">,</span> <span class="co">/* type mime */</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>        <span class="st">"is_reference"</span> =&gt; <span class="kw">false</span><span class="ot">,</span> <span class="co">/* if true, tmp_name contains the handle of the opened file */</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>        <span class="st">"handle"</span> =&gt; <span class="dv">0</span><span class="ot">;</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>setParam(<span class="ot">?</span><span class="dt">array</span> <span class="va">$param</span>)<span class="ot">;</span></span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="envoi-dun-fichier" class="level3">
 <h3 class="anchored" data-anchor-id="envoi-dun-fichier">Envoi d’un fichier</h3>
 <p><code>$view = service ("FileView");</code></p>
 <p>Le fonctionnement est assez semblable à <em>BinaryView</em>, à ceci près que cela ne travaille qu’à partir d’un fichier existant. le type MIME peut également être recherché automatiquement s’il n’est pas indiqué.</p>
-<pre><code>$param = array(
-        "filename" =&gt; "export.txt", /* nom du fichier tel qu'il apparaitra dans le navigateur */
-        "disposition" =&gt; "attachment", /* attachment : le fichier est telecharge, inline : le fichier est affiche */
-        "content_type" =&gt; "", /* type mime */
-        "tmp_name" =&gt; "", /* Name of the file to send */
-    );</code></pre>
+<div class="sourceCode" id="cb2"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="va">$param</span> <span class="op">=</span> <span class="dt">array</span>(</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>        <span class="st">"filename"</span> =&gt; <span class="st">"export.txt"</span><span class="ot">,</span> <span class="co">/* nom du fichier tel qu'il apparaitra dans le navigateur */</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>        <span class="st">"disposition"</span> =&gt; <span class="st">"attachment"</span><span class="ot">,</span> <span class="co">/* attachment : le fichier est telecharge, inline : le fichier est affiche */</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>        <span class="st">"content_type"</span> =&gt; <span class="st">""</span><span class="ot">,</span> <span class="co">/* type mime */</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>        <span class="st">"tmp_name"</span> =&gt; <span class="st">""</span><span class="ot">,</span> <span class="co">/* Name of the file to send */</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    )<span class="ot">;</span></span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="requête-ajax" class="level3">
 <h3 class="anchored" data-anchor-id="requête-ajax">Requête Ajax</h3>
