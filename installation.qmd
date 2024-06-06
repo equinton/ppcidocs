@@ -67,4 +67,20 @@ $copyright = ""; //Copyright de l'application
 $APPLI_release = []; // Tableau permettant d'interroger soit Github, soit un serveur Gitlab, pour obtenir les informations concernant la dernière version publiée
 ```
 
+## Création de la base de données
+
+Connectez-vous à votre serveur Postgresql avec `psql`, puis créez votre base de données :
+
+```sql
+create user applogin inherit login password  'appPassword';
+create database app owner applogin;
+\c app applogin
+\i vendor/equinton/ppci/install/create.sql
+```
+
+Le script va créer deux schémas : `app` pour les tables de l'application, et `gacl` pour la gestion des droits.
+Deux tables vont être créées dans le schéma `app`, nécessaires au fonctionnement de Ppci.
+
+La première connexion à l'application utilise le login `admin`, mot de passe `password`.
+
 :::

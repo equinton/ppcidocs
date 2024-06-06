@@ -20,6 +20,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -197,7 +231,24 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Sur cette page</h2>
    
   <ul>
-  <li><a href="#droits-daccès-aux-modules" id="toc-droits-daccès-aux-modules" class="nav-link active" data-scroll-target="#droits-daccès-aux-modules">Droits d’accès aux modules</a></li>
+  <li><a href="#migration-depuis-prototypephp" id="toc-migration-depuis-prototypephp" class="nav-link active" data-scroll-target="#migration-depuis-prototypephp">Migration depuis PrototypePhp</a>
+  <ul class="collapse">
+  <li><a href="#installer-codeigniter-et-ppci" id="toc-installer-codeigniter-et-ppci" class="nav-link" data-scroll-target="#installer-codeigniter-et-ppci">Installer CodeIgniter et Ppci</a></li>
+  <li><a href="#créer-un-nouveau-vhost-dans-apache" id="toc-créer-un-nouveau-vhost-dans-apache" class="nav-link" data-scroll-target="#créer-un-nouveau-vhost-dans-apache">Créer un nouveau vhost dans Apache</a></li>
+  <li><a href="#mettre-à-jour-la-base-de-données" id="toc-mettre-à-jour-la-base-de-données" class="nav-link" data-scroll-target="#mettre-à-jour-la-base-de-données">Mettre à jour la base de données</a></li>
+  <li><a href="#mettre-à-niveau-laffichage" id="toc-mettre-à-niveau-laffichage" class="nav-link" data-scroll-target="#mettre-à-niveau-laffichage">Mettre à niveau l’affichage</a>
+  <ul class="collapse">
+  <li><a href="#menu" id="toc-menu" class="nav-link" data-scroll-target="#menu">Menu</a></li>
+  <li><a href="#ajouter-les-modèles-smarty" id="toc-ajouter-les-modèles-smarty" class="nav-link" data-scroll-target="#ajouter-les-modèles-smarty">Ajouter les modèles Smarty</a></li>
+  </ul></li>
+  <li><a href="#générer-les-routes-et-les-droits-nécessaires-pour-exécuter-les-modules" id="toc-générer-les-routes-et-les-droits-nécessaires-pour-exécuter-les-modules" class="nav-link" data-scroll-target="#générer-les-routes-et-les-droits-nécessaires-pour-exécuter-les-modules">Générer les routes et les droits nécessaires pour exécuter les modules</a></li>
+  <li><a href="#renommer-le-droit-gestion-en-manage" id="toc-renommer-le-droit-gestion-en-manage" class="nav-link" data-scroll-target="#renommer-le-droit-gestion-en-manage">Renommer le droit “gestion” en “manage”</a></li>
+  <li><a href="#réécriture-des-modèles" id="toc-réécriture-des-modèles" class="nav-link" data-scroll-target="#réécriture-des-modèles">Réécriture des modèles</a>
+  <ul class="collapse">
+  <li><a href="#transformations-globales" id="toc-transformations-globales" class="nav-link" data-scroll-target="#transformations-globales">Transformations globales</a></li>
+  <li><a href="#transformations-individuelles" id="toc-transformations-individuelles" class="nav-link" data-scroll-target="#transformations-individuelles">Transformations individuelles</a></li>
+  </ul></li>
+  </ul></li>
   </ul>
 </nav>
     <div class="quarto-margin-footer"><div class="margin-footer-item">
@@ -209,10 +260,110 @@ ul.task-list li input[type="checkbox"] {
 
 
 
-<section id="droits-daccès-aux-modules" class="level1">
-<h1>Droits d’accès aux modules</h1>
+<section id="migration-depuis-prototypephp" class="level1">
+<h1>Migration depuis PrototypePhp</h1>
+<section id="installer-codeigniter-et-ppci" class="level2">
+<h2 class="anchored" data-anchor-id="installer-codeigniter-et-ppci">Installer CodeIgniter et Ppci</h2>
+<p>Créez un dossier différent de celui qui contient le code initial de l’application à migrer, par exemple <code>app2</code>, puis, depuis le répertoire de niveau inférieur :</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">composer</span> create-project codeigniter4/appstarter app2</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> app2</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="ex">composer</span> require app2/ppci</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="ex">vendor/app2/ppci/install/install.sh</span></span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Éditez ensuite le fichier <code>.env</code>, et mettez à jour les paramètres nécessaires (<code>CI_ENVIRONMENT</code>, <code>app.baseURL</code> et les paramètres de connexion à la base de données).</p>
+</section>
+<section id="créer-un-nouveau-vhost-dans-apache" class="level2">
+<h2 class="anchored" data-anchor-id="créer-un-nouveau-vhost-dans-apache">Créer un nouveau vhost dans Apache</h2>
+<p>Voici un exemple de configuration :</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode apache code-with-copy"><code class="sourceCode apache"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">&lt;VirtualHost</span><span class="at"> *:80</span><span class="fu">&gt;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    ServerName<span class="st"> app2.local</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    ServerPath<span class="st"> /app2.local</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="ex">RewriteEngine</span><span class="ch"> </span><span class="kw">On</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    RewriteRule<span class="st"> ^ https://app2.local%{REQUEST_URI} [R]</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="fu">&lt;/VirtualHost&gt;</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="fu">&lt;VirtualHost</span><span class="at"> *:443</span><span class="fu">&gt;</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    ServerName<span class="st"> app2.local</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    ServerPath<span class="st"> /app2.local</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    <span class="ex">SSLEngine</span><span class="ch"> </span><span class="kw">on</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    SSLCertificateFile<span class="st">  /etc/ssl/certs/server.crt</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>    SSLCertificateKeyFile<span class="st"> /etc/ssl/private/server.key</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>    SSLCACertificateFile<span class="st"> /etc/ssl/certs/cacert.crt</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>    DocumentRoot<span class="st"> /var/www/app2/public </span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="fu">&lt;/VirtualHost&gt;</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="fu">&lt;Directory</span><span class="at"> /var/www/app2/public</span><span class="fu">&gt;</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>    <span class="ex">Options</span><span class="ch"> </span><span class="kw">FollowSymLinks</span><span class="ch"> </span><span class="kw">MultiViews</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>    Require<span class="st"> all granted</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>    <span class="ex">AllowOverride</span><span class="ch"> </span><span class="kw">all</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>    <span class="ex">RewriteEngine</span><span class="ch"> </span><span class="kw">On</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>    RewriteBase<span class="st"> /</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>    RewriteCond<span class="st"> "/%{REQUEST_FILENAME}" !-f</span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>    RewriteCond<span class="st"> "/%{REQUEST_FILENAME}" !-d</span></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>    RewriteRule<span class="st"> "(.*)" "/index.php?$1" [PT,QSA]</span></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a><span class="fu">&lt;/Directory&gt;</span></span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="mettre-à-jour-la-base-de-données" class="level2">
+<h2 class="anchored" data-anchor-id="mettre-à-jour-la-base-de-données">Mettre à jour la base de données</h2>
+<p>Éditez le fichier <code>vendor/equinton/ppci/migration/updatedb.sql</code>, et vérifiez la première ligne (<em>set search_path</em>), en remplaçant <em>app</em> par le nom du schéma contenant les données.</p>
+<p>Exécutez ensuite le fichier sql.</p>
+</section>
+<section id="mettre-à-niveau-laffichage" class="level2">
+<h2 class="anchored" data-anchor-id="mettre-à-niveau-laffichage">Mettre à niveau l’affichage</h2>
+<section id="menu" class="level3">
+<h3 class="anchored" data-anchor-id="menu">Menu</h3>
+<p>Éditez le fichier <code>app/Config/menu.xml</code>, et rajoutez les entrées nécessaires.</p>
+</section>
+<section id="ajouter-les-modèles-smarty" class="level3">
+<h3 class="anchored" data-anchor-id="ajouter-les-modèles-smarty">Ajouter les modèles Smarty</h3>
+<p>Recopiez les modèles Smarty depuis <code>display/templates</code> dans <code>app/Views/templates</code> en conservant l’organisation en sous-dossiers, à l’exception des fichiers à la racine et du sous-dossier <em>framework</em>.</p>
+<p>Dans ce dossier, remplacez tous les libellés <code>&lt;/form&gt;</code> par <code>{$csrf}&lt;/form&gt;</code> pour ajouter le jeton CSRF dans les formulaires.</p>
+</section>
+</section>
+<section id="générer-les-routes-et-les-droits-nécessaires-pour-exécuter-les-modules" class="level2">
+<h2 class="anchored" data-anchor-id="générer-les-routes-et-les-droits-nécessaires-pour-exécuter-les-modules">Générer les routes et les droits nécessaires pour exécuter les modules</h2>
+<p>Exécutez la commande suivante :</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">php</span> vendor/equinton/ppci/migration/actionsParse.php ../app/param/actions.xml</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Le script va lire l’ancien fichier <code>actions.xml</code>, et va préparer deux contenus :</p>
+<ul>
+<li>le premier est destiné à être inséré dans la classe <code>app\Config\Rights</code>, et contient la liste des droits nécessaires pour exécuter un module</li>
+<li>le second contient un prototype des routes pour exécuter les modules. Le contenu doit être inséré dans <code>app/Config/Routes.php</code>.</li>
+</ul>
+</section>
+<section id="renommer-le-droit-gestion-en-manage" class="level2">
+<h2 class="anchored" data-anchor-id="renommer-le-droit-gestion-en-manage">Renommer le droit “gestion” en “manage”</h2>
+<p>Utilisez une fonction de recherche automatique pour remplacer “gestion” par “manage”.</p>
+</section>
+<section id="réécriture-des-modèles" class="level2">
+<h2 class="anchored" data-anchor-id="réécriture-des-modèles">Réécriture des modèles</h2>
+<p>Recopier les fichiers depuis <code>modules/classes</code> vers <code>app/Models</code>.</p>
+<section id="transformations-globales" class="level3">
+<h3 class="anchored" data-anchor-id="transformations-globales">Transformations globales</h3>
+<p>Elles peuvent être effectuées par rechercher/remplacer.</p>
+<ul>
+<li>remplacer :
+<ul>
+<li><code>&lt;?php</code> par <code>&lt;?php namespace App\Models;use Ppci\Models\PpciModel;</code>, avec sauts de ligne ;</li>
+<li><code>extends ObjetBDD</code> par <code>extends PpciModel</code> ;</li>
+<li><code>(public function __construct().*)</code> par <code>public function __construct()</code>, en cochant <em>expression régulière</em> ;</li>
+<li><code>$this-&gt;colonnes</code> par <code>$this-&gt;fields</code> ;</li>
+<li><code>(parent::__construct().*)</code> par <code>parent::__construct()</code>, en cochant <em>expression régulière</em> ;</li>
+</ul></li>
+<li>supprimer :
+<ul>
+<li><code>$this-&gt;id_auto = 1;</code></li>
+<li><code>$param["fullDescription"] = 1;</code></li>
+</ul></li>
+</ul>
+</section>
+<section id="transformations-individuelles" class="level3">
+<h3 class="anchored" data-anchor-id="transformations-individuelles">Transformations individuelles</h3>
+<ul>
+<li>renommer le nom du fichier, par exemple <code>espece.class.php</code> en <code>Espece.php</code> ;</li>
+<li>dans les requêtes SQL, modifier les variables en rajoutant : à la fin : <code>:id</code> doit devenir <code>:id:</code> ;</li>
+<li>pour les tables portant des données géographiques (champs avec type=4), modifier les requêtes ou créer les fonctions <code>lire()</code> pour ajouter <code>st_astext()</code> pour les champs concernés ;</li>
+</ul>
 
 
+</section>
+</section>
 </section>
 
 </main> <!-- /main -->

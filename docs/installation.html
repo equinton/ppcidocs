@@ -130,10 +130,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </i> 
 <span class="menu-text">Home</span></a>
   </li>  
-  <li class="nav-item">
-    <a class="nav-link active" href="./installation.html" aria-current="page"> 
-<span class="menu-text">installation</span></a>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-installation" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">installation</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-installation">    
+        <li>
+    <a class="dropdown-item" href="./installation.html">
+ <span class="dropdown-text">installation</span></a>
   </li>  
+        <li>
+    <a class="dropdown-item" href="./migration.html">
+ <span class="dropdown-text">migration depuis PrototypePhp</span></a>
+  </li>  
+    </ul>
+  </li>
   <li class="nav-item dropdown ">
     <a class="nav-link dropdown-toggle" href="#" id="nav-menu-documentation-technique" role="button" data-bs-toggle="dropdown" aria-expanded="false">
  <span class="menu-text">documentation technique</span>
@@ -229,6 +240,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#fichier-.env" id="toc-fichier-.env" class="nav-link" data-scroll-target="#fichier-.env">Fichier .env</a></li>
   <li><a href="#fichier-appconfigapp" id="toc-fichier-appconfigapp" class="nav-link" data-scroll-target="#fichier-appconfigapp">Fichier app/Config/App</a></li>
   </ul></li>
+  <li><a href="#création-de-la-base-de-données" id="toc-création-de-la-base-de-données" class="nav-link" data-scroll-target="#création-de-la-base-de-données">Création de la base de données</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -296,9 +308,19 @@ database.default.searchpath = public,app,gacl</code></pre>
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="va">$APP_help_address</span> <span class="op">=</span><span class="st">""</span><span class="ot">;</span> <span class="co">//lien vers la création de tickets ou vers la page donnant accès à l'aide</span></span>
 <span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="va">$copyright</span> <span class="op">=</span> <span class="st">""</span><span class="ot">;</span> <span class="co">//Copyright de l'application</span></span>
 <span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="va">$APPLI_release</span> <span class="op">=</span> []<span class="ot">;</span> <span class="co">// Tableau permettant d'interroger soit Github, soit un serveur Gitlab, pour obtenir les informations concernant la dernière version publiée</span></span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
-
-
 </section>
+</section>
+<section id="création-de-la-base-de-données" class="level2">
+<h2 class="anchored" data-anchor-id="création-de-la-base-de-données">Création de la base de données</h2>
+<p>Connectez-vous à votre serveur Postgresql avec <code>psql</code>, puis créez votre base de données :</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">create</span> <span class="fu">user</span> applogin inherit login <span class="kw">password</span>  <span class="st">'appPassword'</span>;</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="kw">create</span> <span class="kw">database</span> app owner applogin;</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>\c app applogin</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>\i vendor<span class="op">/</span>equinton<span class="op">/</span>ppci<span class="op">/</span>install<span class="op">/</span><span class="kw">create</span>.sql</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Le script va créer deux schémas : <code>app</code> pour les tables de l’application, et <code>gacl</code> pour la gestion des droits. Deux tables vont être créées dans le schéma <code>app</code>, nécessaires au fonctionnement de Ppci.</p>
+<p>La première connexion à l’application utilise le login <code>admin</code>, mot de passe <code>password</code>.</p>
+
+
 </section>
 </section>
 

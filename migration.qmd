@@ -1,0 +1,111 @@
+::: {.content-visible when-profile="french"}
+
+# Migration depuis PrototypePhp
+
+## Installer CodeIgniter et Ppci
+
+Créez un dossier différent de celui qui contient le code initial de l'application à migrer, par exemple `app2`, puis, depuis le répertoire de niveau inférieur :
+
+```bash
+composer create-project codeigniter4/appstarter app2
+cd app2
+composer require app2/ppci
+vendor/app2/ppci/install/install.sh
+```
+
+Éditez ensuite le fichier `.env`, et mettez à jour les paramètres nécessaires (`CI_ENVIRONMENT`, `app.baseURL` et les paramètres de connexion à la base de données).
+
+## Créer un nouveau vhost dans Apache
+
+Voici un exemple de configuration :
+
+```apache
+<VirtualHost *:80>
+    ServerName app2.local
+    ServerPath /app2.local
+    RewriteEngine On
+    RewriteRule ^ https://app2.local%{REQUEST_URI} [R]
+</VirtualHost>
+<VirtualHost *:443>
+    ServerName app2.local
+    ServerPath /app2.local
+    SSLEngine on
+    SSLCertificateFile	/etc/ssl/certs/server.crt
+    SSLCertificateKeyFile /etc/ssl/private/server.key
+    SSLCACertificateFile /etc/ssl/certs/cacert.crt
+    DocumentRoot /var/www/app2/public 
+</VirtualHost>
+<Directory /var/www/app2/public>
+    Options FollowSymLinks MultiViews
+    Require all granted
+    AllowOverride all
+    RewriteEngine On
+    RewriteBase /
+    RewriteCond "/%{REQUEST_FILENAME}" !-f
+    RewriteCond "/%{REQUEST_FILENAME}" !-d
+    RewriteRule "(.*)" "/index.php?$1" [PT,QSA]
+</Directory>
+```
+
+## Mettre à jour la base de données
+
+Éditez le fichier `vendor/equinton/ppci/migration/updatedb.sql`, et vérifiez la première ligne (_set search\_path_), en remplaçant _app_ par le nom du schéma contenant les données.
+
+Exécutez ensuite le fichier sql.
+
+## Mettre à niveau l'affichage
+
+### Menu
+
+Éditez le fichier `app/Config/menu.xml`, et rajoutez les entrées nécessaires.
+
+### Ajouter les modèles Smarty
+
+Recopiez les modèles Smarty depuis `display/templates` dans `app/Views/templates` en conservant l'organisation en sous-dossiers, à l'exception des fichiers à la racine et du sous-dossier _framework_.
+
+Dans ce dossier, remplacez tous les libellés `</form>` par `{$csrf}</form>` pour ajouter le jeton CSRF dans les formulaires.
+
+## Générer les routes et les droits nécessaires pour exécuter les modules
+
+Exécutez la commande suivante :
+
+```bash
+php vendor/equinton/ppci/migration/actionsParse.php ../app/param/actions.xml
+```
+
+Le script va lire l'ancien fichier `actions.xml`, et va préparer deux contenus :
+
+- le premier est destiné à être inséré dans la classe `app\Config\Rights`, et contient la liste des droits nécessaires pour exécuter un module
+- le second contient un prototype des routes pour exécuter les modules. Le contenu doit être inséré dans `app/Config/Routes.php`.
+
+
+
+## Renommer le droit "gestion" en "manage"
+
+Utilisez une fonction de recherche automatique pour remplacer "gestion" par "manage".
+
+## Réécriture des modèles
+
+Recopier les fichiers depuis `modules/classes` vers `app/Models`.
+
+### Transformations globales
+
+Elles peuvent être effectuées par rechercher/remplacer.
+
+- remplacer :
+    - `<?php` par `<?php namespace App\Models;use Ppci\Models\PpciModel;`, avec sauts de ligne ;
+    - `extends ObjetBDD` par `extends PpciModel` ;
+    - `(public function __construct().*)` par `public function __construct()`, en cochant _expression régulière_ ;
+    - `$this->colonnes` par `$this->fields` ;
+    - `(parent::__construct().*)` par `parent::__construct()`, en cochant _expression régulière_ ;
+- supprimer :
+    - `$this->id_auto = 1;`
+    - `$param["fullDescription"] = 1;`
+
+### Transformations individuelles
+
+- renommer le nom du fichier, par exemple `espece.class.php` en `Espece.php` ;
+- dans les requêtes SQL, modifier les variables en rajoutant : à la fin : `:id` doit devenir `:id:` ;
+- pour les tables portant des données géographiques (champs avec type=4), modifier les requêtes ou créer les fonctions `lire()` pour ajouter `st_astext()` pour les champs concernés ;
+
+:::

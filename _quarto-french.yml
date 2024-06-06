@@ -20,7 +20,11 @@ website:
         text: Home
         icon: house-door-fill
       - text: installation
-        href: installation.qmd
+        menu: 
+          - text: installation
+            href: installation.qmd
+          - text: migration depuis PrototypePhp
+            href: migration.qmd
       - text: documentation technique
         menu:
           - text: Principes généraux
