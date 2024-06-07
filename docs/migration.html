@@ -243,10 +243,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </ul></li>
   <li><a href="#générer-les-routes-et-les-droits-nécessaires-pour-exécuter-les-modules" id="toc-générer-les-routes-et-les-droits-nécessaires-pour-exécuter-les-modules" class="nav-link" data-scroll-target="#générer-les-routes-et-les-droits-nécessaires-pour-exécuter-les-modules">Générer les routes et les droits nécessaires pour exécuter les modules</a></li>
   <li><a href="#renommer-le-droit-gestion-en-manage" id="toc-renommer-le-droit-gestion-en-manage" class="nav-link" data-scroll-target="#renommer-le-droit-gestion-en-manage">Renommer le droit “gestion” en “manage”</a></li>
+  <li><a href="#ajouter-un-filtre-pour-les-opérations-génériques-au-démarrage" id="toc-ajouter-un-filtre-pour-les-opérations-génériques-au-démarrage" class="nav-link" data-scroll-target="#ajouter-un-filtre-pour-les-opérations-génériques-au-démarrage">Ajouter un filtre pour les opérations génériques au démarrage</a></li>
   <li><a href="#réécriture-des-modèles" id="toc-réécriture-des-modèles" class="nav-link" data-scroll-target="#réécriture-des-modèles">Réécriture des modèles</a>
   <ul class="collapse">
   <li><a href="#transformations-globales" id="toc-transformations-globales" class="nav-link" data-scroll-target="#transformations-globales">Transformations globales</a></li>
   <li><a href="#transformations-individuelles" id="toc-transformations-individuelles" class="nav-link" data-scroll-target="#transformations-individuelles">Transformations individuelles</a></li>
+  </ul></li>
+  <li><a href="#réécriture-des-librairies" id="toc-réécriture-des-librairies" class="nav-link" data-scroll-target="#réécriture-des-librairies">Réécriture des librairies</a>
+  <ul class="collapse">
+  <li><a href="#transformations-globales-1" id="toc-transformations-globales-1" class="nav-link" data-scroll-target="#transformations-globales-1">Transformations globales</a></li>
+  <li><a href="#modifications-individuelles" id="toc-modifications-individuelles" class="nav-link" data-scroll-target="#modifications-individuelles">Modifications individuelles</a></li>
   </ul></li>
   </ul></li>
   </ul>
@@ -331,6 +337,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="renommer-le-droit-gestion-en-manage">Renommer le droit “gestion” en “manage”</h2>
 <p>Utilisez une fonction de recherche automatique pour remplacer “gestion” par “manage”.</p>
 </section>
+<section id="ajouter-un-filtre-pour-les-opérations-génériques-au-démarrage" class="level2">
+<h2 class="anchored" data-anchor-id="ajouter-un-filtre-pour-les-opérations-génériques-au-démarrage">Ajouter un filtre pour les opérations génériques au démarrage</h2>
+<ul>
+<li>Ajouter un filtre pour réaliser les opérations décrites dans <code>modules/common.php</code> ;</li>
+<li>renseigner le cas échéant la classe <code>App\Libraries\Postlogin</code>, pour réaliser les opérations spécifiques après connexion.</li>
+</ul>
+</section>
 <section id="réécriture-des-modèles" class="level2">
 <h2 class="anchored" data-anchor-id="réécriture-des-modèles">Réécriture des modèles</h2>
 <p>Recopier les fichiers depuis <code>modules/classes</code> vers <code>app/Models</code>.</p>
@@ -359,6 +372,47 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>renommer le nom du fichier, par exemple <code>espece.class.php</code> en <code>Espece.php</code> ;</li>
 <li>dans les requêtes SQL, modifier les variables en rajoutant : à la fin : <code>:id</code> doit devenir <code>:id:</code> ;</li>
 <li>pour les tables portant des données géographiques (champs avec type=4), modifier les requêtes ou créer les fonctions <code>lire()</code> pour ajouter <code>st_astext()</code> pour les champs concernés ;</li>
+</ul>
+</section>
+</section>
+<section id="réécriture-des-librairies" class="level2">
+<h2 class="anchored" data-anchor-id="réécriture-des-librairies">Réécriture des librairies</h2>
+<p>Recopier l’ensemble des modules dans <code>app/Libraries</code>. Il faut les transformer en classes.</p>
+<section id="transformations-globales-1" class="level3">
+<h3 class="anchored" data-anchor-id="transformations-globales-1">Transformations globales</h3>
+<p>Remplacer :</p>
+<ul>
+<li><code>&lt;?php</code> par :</li>
+</ul>
+<div class="sourceCode" id="cb4"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;?php</span> </span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">namespace</span> <span class="cn">P</span>pci\<span class="cn">L</span>ibraries<span class="ot">;</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> <span class="cn">X</span>x <span class="kw">extends</span> <span class="cn">P</span>pciLibrary { </span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">function</span> <span class="bu">__construct</span>()</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    {</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>        <span class="kw">parent</span>::<span class="bu">__construct</span>()<span class="ot">;</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>        <span class="va">$this</span>-&gt;dataClass <span class="op">=</span> <span class="kw">new</span> \<span class="cn">P</span>pci\<span class="cn">M</span>odels\<span class="cn">XXX</span>()<span class="ot">;</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>        <span class="va">$keyName</span> <span class="op">=</span> <span class="st">"xxx_id"</span><span class="ot">;</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (<span class="kw">isset</span>(<span class="va">$_REQUEST</span>[<span class="va">$keyName</span>])) {</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>            <span class="va">$this</span>-&gt;id <span class="op">=</span> <span class="va">$_REQUEST</span>[<span class="va">$keyName</span>]<span class="ot">;</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    }</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li><code>dataRead($dataClass,</code> par <code>$this-&gt;dataRead(</code></li>
+<li><code>dataWrite($dataClass,</code> par <code>$this-&gt;dataWrite(</code></li>
+<li><code>dataDelete($dataClass,</code> par <code>$this-&gt;dataDelete(</code></li>
+<li><code>case "list":</code> par <code>function list(){</code></li>
+<li><code>case "change":</code> par <code>function change(){</code></li>
+<li><code>case "write":</code> par <code>function write(){</code></li>
+<li><code>case "delete":</code> par <code>function delete(){</code></li>
+<li><code>break;</code> par <code>}</code> : fermeture des fonctions</li>
+</ul>
+<p>et suppression de : <code>switch ($t_module["param"]) {</code></p>
+</section>
+<section id="modifications-individuelles" class="level3">
+<h3 class="anchored" data-anchor-id="modifications-individuelles">Modifications individuelles</h3>
+<ul>
+<li>Modifier la fonction <code>__construct()</code> pour charger la bonne classe et le bon identifiant</li>
 </ul>
 
 

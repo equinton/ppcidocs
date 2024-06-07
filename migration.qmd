@@ -78,11 +78,14 @@ Le script va lire l'ancien fichier `actions.xml`, et va préparer deux contenus 
 - le premier est destiné à être inséré dans la classe `app\Config\Rights`, et contient la liste des droits nécessaires pour exécuter un module
 - le second contient un prototype des routes pour exécuter les modules. Le contenu doit être inséré dans `app/Config/Routes.php`.
 
-
-
 ## Renommer le droit "gestion" en "manage"
 
 Utilisez une fonction de recherche automatique pour remplacer "gestion" par "manage".
+
+## Ajouter un filtre pour les opérations génériques au démarrage
+
+- Ajouter un filtre pour réaliser les opérations décrites dans `modules/common.php` ;
+- renseigner le cas échéant la classe `App\Libraries\Postlogin`, pour réaliser les opérations spécifiques après connexion. 
 
 ## Réécriture des modèles
 
@@ -107,5 +110,46 @@ Elles peuvent être effectuées par rechercher/remplacer.
 - renommer le nom du fichier, par exemple `espece.class.php` en `Espece.php` ;
 - dans les requêtes SQL, modifier les variables en rajoutant : à la fin : `:id` doit devenir `:id:` ;
 - pour les tables portant des données géographiques (champs avec type=4), modifier les requêtes ou créer les fonctions `lire()` pour ajouter `st_astext()` pour les champs concernés ;
+
+## Réécriture des librairies
+
+Recopier l'ensemble des modules dans `app/Libraries`. Il faut les transformer en classes.
+
+### Transformations globales
+
+Remplacer :
+
+- `<?php` par :
+
+```php
+<?php 
+namespace Ppci\Libraries;
+
+class Xx extends PpciLibrary { 
+    function __construct()
+    {
+        parent::__construct();
+        $this->dataClass = new \Ppci\Models\XXX();
+        $keyName = "xxx_id";
+        if (isset($_REQUEST[$keyName])) {
+            $this->id = $_REQUEST[$keyName];
+        }
+    }
+```
+
+- `dataRead($dataClass,` par `$this->dataRead(`
+- `dataWrite($dataClass,` par `$this->dataWrite(`
+- `dataDelete($dataClass,` par `$this->dataDelete(`
+- `case "list":` par `function list(){`
+- `case "change":` par `function change(){`
+- `case "write":` par `function write(){`
+- `case "delete":` par `function delete(){`
+- `break;` par `}` : fermeture des fonctions
+
+et suppression de : `switch ($t_module["param"]) {` 
+
+### Modifications individuelles
+
+- Modifier la fonction `__construct()` pour charger la bonne classe et le bon identifiant
 
 :::
