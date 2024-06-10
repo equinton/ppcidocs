@@ -321,12 +321,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h3 class="anchored" data-anchor-id="ajouter-les-modèles-smarty">Ajouter les modèles Smarty</h3>
 <p>Recopiez les modèles Smarty depuis <code>display/templates</code> dans <code>app/Views/templates</code> en conservant l’organisation en sous-dossiers, à l’exception des fichiers à la racine et du sous-dossier <em>framework</em>.</p>
 <p>Dans ce dossier, remplacez tous les libellés <code>&lt;/form&gt;</code> par <code>{$csrf}&lt;/form&gt;</code> pour ajouter le jeton CSRF dans les formulaires.</p>
+<p>Modifiez également toutes les actions des formulaires, pour qu’ils aient cette forme :</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode html code-with-copy"><code class="sourceCode html"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">form</span><span class="ot"> class</span><span class="op">=</span><span class="st">"form-horizontal"</span><span class="ot"> id</span><span class="op">=</span><span class="st">"formName"</span><span class="ot"> method</span><span class="op">=</span><span class="st">"post"</span><span class="ot"> action</span><span class="op">=</span><span class="st">"moduleWrite"</span><span class="dt">&gt;</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">input</span><span class="ot"> type</span><span class="op">=</span><span class="st">"hidden"</span><span class="ot"> name</span><span class="op">=</span><span class="st">"moduleBase"</span><span class="ot"> value</span><span class="op">=</span><span class="st">"module"</span><span class="dt">&gt;</span></span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Le champ <code>action</code> peut être supprimé. Par contre, le champ <code>moduleBase</code> doit être conservé : il est utilisé pour créer l’action <code>moduleDelete</code> par l’intermédiaire du script javascript dans <code>main_js.tpl</code>. Toutefois, si les modifications ne sont pas réalisées, le script créera automatiquement la bonne action à partir des champs <code>moduleBase</code> et <code>action</code> lors de l’envoi du formulaire.</p>
 </section>
 </section>
 <section id="générer-les-routes-et-les-droits-nécessaires-pour-exécuter-les-modules" class="level2">
 <h2 class="anchored" data-anchor-id="générer-les-routes-et-les-droits-nécessaires-pour-exécuter-les-modules">Générer les routes et les droits nécessaires pour exécuter les modules</h2>
 <p>Exécutez la commande suivante :</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">php</span> vendor/equinton/ppci/migration/actionsParse.php ../app/param/actions.xml</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">php</span> vendor/equinton/ppci/migration/actionsParse.php ../app/param/actions.xml</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Le script va lire l’ancien fichier <code>actions.xml</code>, et va préparer deux contenus :</p>
 <ul>
 <li>le premier est destiné à être inséré dans la classe <code>app\Config\Rights</code>, et contient la liste des droits nécessaires pour exécuter un module</li>
@@ -384,35 +388,71 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <ul>
 <li><code>&lt;?php</code> par :</li>
 </ul>
-<div class="sourceCode" id="cb4"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;?php</span> </span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">namespace</span> <span class="cn">P</span>pci\<span class="cn">L</span>ibraries<span class="ot">;</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> <span class="cn">X</span>x <span class="kw">extends</span> <span class="cn">P</span>pciLibrary { </span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">function</span> <span class="bu">__construct</span>()</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    {</span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>        <span class="kw">parent</span>::<span class="bu">__construct</span>()<span class="ot">;</span></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>        <span class="va">$this</span>-&gt;dataClass <span class="op">=</span> <span class="kw">new</span> \<span class="cn">P</span>pci\<span class="cn">M</span>odels\<span class="cn">XXX</span>()<span class="ot">;</span></span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>        <span class="va">$keyName</span> <span class="op">=</span> <span class="st">"xxx_id"</span><span class="ot">;</span></span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (<span class="kw">isset</span>(<span class="va">$_REQUEST</span>[<span class="va">$keyName</span>])) {</span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>            <span class="va">$this</span>-&gt;id <span class="op">=</span> <span class="va">$_REQUEST</span>[<span class="va">$keyName</span>]<span class="ot">;</span></span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>        }</span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    }</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;?php</span> </span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="kw">namespace</span> <span class="cn">A</span>pp\<span class="cn">L</span>ibraries<span class="ot">;</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="cn">P</span>pci\<span class="cn">L</span>ibraries\<span class="cn">P</span>pciException<span class="ot">;</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="cn">P</span>pci\<span class="cn">L</span>ibraries\<span class="cn">P</span>pciLibrary<span class="ot">;</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> <span class="cn">X</span>x <span class="kw">extends</span> <span class="cn">P</span>pciLibrary { </span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    <span class="co">/**</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co">     * </span><span class="an">@var</span><span class="co"> </span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="co">     */</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    <span class="kw">protected</span> <span class="va">$dataclass</span><span class="ot">;</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>    <span class="kw">function</span> <span class="bu">__construct</span>()</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>    {</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>        <span class="kw">parent</span>::<span class="bu">__construct</span>()<span class="ot">;</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>        <span class="va">$this</span>-&gt;dataClass <span class="op">=</span> <span class="kw">new</span> \<span class="cn">A</span>pp\<span class="cn">M</span>odels\<span class="cn">XXX</span>()<span class="ot">;</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>        <span class="va">$keyName</span> <span class="op">=</span> <span class="st">"xxx_id"</span><span class="ot">;</span></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (<span class="kw">isset</span>(<span class="va">$_REQUEST</span>[<span class="va">$keyName</span>])) {</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>            <span class="va">$this</span>-&gt;id <span class="op">=</span> <span class="va">$_REQUEST</span>[<span class="va">$keyName</span>]<span class="ot">;</span></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>    }</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <ul>
 <li><code>dataRead($dataClass,</code> par <code>$this-&gt;dataRead(</code></li>
 <li><code>dataWrite($dataClass,</code> par <code>$this-&gt;dataWrite(</code></li>
 <li><code>dataDelete($dataClass,</code> par <code>$this-&gt;dataDelete(</code></li>
-<li><code>case "list":</code> par <code>function list(){</code></li>
-<li><code>case "change":</code> par <code>function change(){</code></li>
+<li><code>case "list":</code> par <code>function list(){$vue=service('Smarty');</code> (saut de ligne)</li>
+<li><code>case "display":</code> par <code>function display(){$vue=service('Smarty');</code> (saut de ligne)</li>
+<li><code>case "change":</code> par <code>function change(){$vue=service('Smarty');</code> (saut de ligne)</li>
 <li><code>case "write":</code> par <code>function write(){</code></li>
 <li><code>case "delete":</code> par <code>function delete(){</code></li>
+<li><code>case "</code> par <code>function</code></li>
+<li><code>":</code> par <code>() {</code></li>
 <li><code>break;</code> par <code>}</code> : fermeture des fonctions</li>
+<li><code>$dataclass</code> par <code>$this-&gt;dataClass</code></li>
+<li><code>$id</code> par <code>$this-&gt;id</code></li>
+<li><code>$vue</code> par <code>$this-&gt;vue</code></li>
+<li><code>$this-&gt;dataDelete($this-&gt;id);</code> par</li>
 </ul>
-<p>et suppression de : <code>switch ($t_module["param"]) {</code></p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>        <span class="cf">try</span> {</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>            <span class="va">$this</span>-&gt;dataDelete(<span class="va">$this</span>-&gt;id)<span class="ot">;</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> <span class="va">$this</span>-&gt;<span class="kw">list</span>()<span class="ot">;</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>        } <span class="cf">catch</span> (<span class="cn">P</span>pciException <span class="va">$e</span>) {</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> <span class="va">$this</span>-&gt;change()<span class="ot">;</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>        }</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li><code>$message-&gt;</code> par <code>$this-&gt;message-&gt;</code></li>
+</ul>
+<p>et suppression de :</p>
+<ul>
+<li><code>switch ($t_module["param"]) {</code></li>
+<li><code>$bdd, $ObjetBDDParam</code></li>
+</ul>
 </section>
 <section id="modifications-individuelles" class="level3">
 <h3 class="anchored" data-anchor-id="modifications-individuelles">Modifications individuelles</h3>
 <ul>
+<li>renommer le fichier en le commençant par une majuscule</li>
 <li>Modifier la fonction <code>__construct()</code> pour charger la bonne classe et le bon identifiant</li>
+<li>définir les vues autres que Smarty dans les fonctions</li>
+<li>définir le retour attendu de chaque fonction :
+<ul>
+<li>soit ajouter la commande <code>return $this-&gt;vue-&gt;send();</code> pour déclencher l’affichage</li>
+<li>soit renvoyer vers une des fonctions de la classe : <code>return $this-&gt;display();</code></li>
+<li>soit renvoyer vers la page d’accueil : <code>defaultPage();</code></li>
+</ul></li>
 </ul>
 
 

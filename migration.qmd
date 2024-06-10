@@ -65,6 +65,15 @@ Recopiez les modèles Smarty depuis `display/templates` dans `app/Views/template
 
 Dans ce dossier, remplacez tous les libellés `</form>` par `{$csrf}</form>` pour ajouter le jeton CSRF dans les formulaires.
 
+Modifiez également toutes les actions des formulaires, pour qu'ils aient cette forme :
+
+```html
+<form class="form-horizontal" id="formName" method="post" action="moduleWrite">
+<input type="hidden" name="moduleBase" value="module">
+```
+Le champ `action` peut être supprimé. Par contre, le champ `moduleBase` doit être conservé : il est utilisé pour créer l'action `moduleDelete` par l'intermédiaire du script javascript dans `main_js.tpl`. 
+Toutefois, si les modifications ne sont pas réalisées, le script créera automatiquement la bonne action à partir des champs `moduleBase` et `action` lors de l'envoi du formulaire.
+
 ## Générer les routes et les droits nécessaires pour exécuter les modules
 
 Exécutez la commande suivante :
@@ -123,13 +132,21 @@ Remplacer :
 
 ```php
 <?php 
-namespace Ppci\Libraries;
+namespace App\Libraries;
+
+use Ppci\Libraries\PpciException;
+use Ppci\Libraries\PpciLibrary;
 
 class Xx extends PpciLibrary { 
+    /**
+	 * @var 
+	 */
+	protected $dataclass;
+
     function __construct()
     {
         parent::__construct();
-        $this->dataClass = new \Ppci\Models\XXX();
+        $this->dataClass = new \App\Models\XXX();
         $keyName = "xxx_id";
         if (isset($_REQUEST[$keyName])) {
             $this->id = $_REQUEST[$keyName];
@@ -140,16 +157,43 @@ class Xx extends PpciLibrary {
 - `dataRead($dataClass,` par `$this->dataRead(`
 - `dataWrite($dataClass,` par `$this->dataWrite(`
 - `dataDelete($dataClass,` par `$this->dataDelete(`
-- `case "list":` par `function list(){`
-- `case "change":` par `function change(){`
+- `case "list":` par `function list(){$vue=service('Smarty');` (saut de ligne)
+- `case "display":` par `function display(){$vue=service('Smarty');` (saut de ligne)
+- `case "change":` par `function change(){$vue=service('Smarty');` (saut de ligne)
 - `case "write":` par `function write(){`
 - `case "delete":` par `function delete(){`
+- `case "` par `function `
+- `":` par `() {`
 - `break;` par `}` : fermeture des fonctions
+- `$dataclass` par `$this->dataClass`
+- `$id` par `$this->id`
+- `$vue` par `$this->vue`
+- `$this->dataDelete($this->id);` par 
 
-et suppression de : `switch ($t_module["param"]) {` 
+```php
+        try {
+            $this->dataDelete($this->id);
+            return $this->list();
+        } catch (PpciException $e) {
+            return $this->change();
+        }
+```
+
+- `$message->` par `$this->message->`
+
+et suppression de : 
+
+- `switch ($t_module["param"]) {` 
+- `$bdd, $ObjetBDDParam`
 
 ### Modifications individuelles
 
+- renommer le fichier en le commençant par une majuscule
 - Modifier la fonction `__construct()` pour charger la bonne classe et le bon identifiant
+- définir les vues autres que Smarty dans les fonctions
+- définir le retour attendu de chaque fonction :
+    - soit ajouter la commande `return $this->vue->send();` pour déclencher l'affichage
+    - soit renvoyer vers une des fonctions de la classe : `return $this->display();`
+    - soit renvoyer vers la page d'accueil : `defaultPage();`
 
 :::
