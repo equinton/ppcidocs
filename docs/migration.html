@@ -236,10 +236,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#installer-codeigniter-et-ppci" id="toc-installer-codeigniter-et-ppci" class="nav-link" data-scroll-target="#installer-codeigniter-et-ppci">Installer CodeIgniter et Ppci</a></li>
   <li><a href="#créer-un-nouveau-vhost-dans-apache" id="toc-créer-un-nouveau-vhost-dans-apache" class="nav-link" data-scroll-target="#créer-un-nouveau-vhost-dans-apache">Créer un nouveau vhost dans Apache</a></li>
   <li><a href="#mettre-à-jour-la-base-de-données" id="toc-mettre-à-jour-la-base-de-données" class="nav-link" data-scroll-target="#mettre-à-jour-la-base-de-données">Mettre à jour la base de données</a></li>
-  <li><a href="#mettre-à-niveau-laffichage" id="toc-mettre-à-niveau-laffichage" class="nav-link" data-scroll-target="#mettre-à-niveau-laffichage">Mettre à niveau l’affichage</a>
+  <li><a href="#mettre-à-niveau-le-menu" id="toc-mettre-à-niveau-le-menu" class="nav-link" data-scroll-target="#mettre-à-niveau-le-menu">Mettre à niveau le menu</a></li>
+  <li><a href="#ajouter-les-modèles-smarty" id="toc-ajouter-les-modèles-smarty" class="nav-link" data-scroll-target="#ajouter-les-modèles-smarty">Ajouter les modèles Smarty</a>
   <ul class="collapse">
-  <li><a href="#menu" id="toc-menu" class="nav-link" data-scroll-target="#menu">Menu</a></li>
-  <li><a href="#ajouter-les-modèles-smarty" id="toc-ajouter-les-modèles-smarty" class="nav-link" data-scroll-target="#ajouter-les-modèles-smarty">Ajouter les modèles Smarty</a></li>
+  <li><a href="#modifications-globales" id="toc-modifications-globales" class="nav-link" data-scroll-target="#modifications-globales">Modifications globales</a></li>
+  <li><a href="#modifications-dans-chaque-formulaire" id="toc-modifications-dans-chaque-formulaire" class="nav-link" data-scroll-target="#modifications-dans-chaque-formulaire">Modifications dans chaque formulaire</a></li>
   </ul></li>
   <li><a href="#ajouter-un-filtre-pour-les-opérations-génériques-au-démarrage" id="toc-ajouter-un-filtre-pour-les-opérations-génériques-au-démarrage" class="nav-link" data-scroll-target="#ajouter-un-filtre-pour-les-opérations-génériques-au-démarrage">Ajouter un filtre pour les opérations génériques au démarrage</a></li>
   <li><a href="#réécriture-des-modèles" id="toc-réécriture-des-modèles" class="nav-link" data-scroll-target="#réécriture-des-modèles">Réécriture des modèles</a>
@@ -312,17 +313,25 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Éditez le fichier <code>vendor/equinton/ppci/migration/updatedb.sql</code>, et vérifiez la première ligne (<em>set search_path</em>), en remplaçant <em>app</em> par le nom du schéma contenant les données.</p>
 <p>Exécutez ensuite le fichier sql.</p>
 </section>
-<section id="mettre-à-niveau-laffichage" class="level2">
-<h2 class="anchored" data-anchor-id="mettre-à-niveau-laffichage">Mettre à niveau l’affichage</h2>
-<section id="menu" class="level3">
-<h3 class="anchored" data-anchor-id="menu">Menu</h3>
+<section id="mettre-à-niveau-le-menu" class="level2">
+<h2 class="anchored" data-anchor-id="mettre-à-niveau-le-menu">Mettre à niveau le menu</h2>
 <p>Éditez le fichier <code>app/Config/menu.xml</code>, et rajoutez les entrées nécessaires.</p>
 </section>
-<section id="ajouter-les-modèles-smarty" class="level3">
-<h3 class="anchored" data-anchor-id="ajouter-les-modèles-smarty">Ajouter les modèles Smarty</h3>
+<section id="ajouter-les-modèles-smarty" class="level2">
+<h2 class="anchored" data-anchor-id="ajouter-les-modèles-smarty">Ajouter les modèles Smarty</h2>
 <p>Recopiez les modèles Smarty depuis <code>display/templates</code> dans <code>app/Views/templates</code> en conservant l’organisation en sous-dossiers, à l’exception des fichiers à la racine et du sous-dossier <em>framework</em>.</p>
-<p>Dans ce dossier, remplacez tous les libellés <code>&lt;/form&gt;</code> par <code>{$csrf}&lt;/form&gt;</code> pour ajouter le jeton CSRF dans les formulaires.</p>
-<p>Modifiez également toutes les actions des formulaires, pour qu’ils aient cette forme :</p>
+<section id="modifications-globales" class="level3">
+<h3 class="anchored" data-anchor-id="modifications-globales">Modifications globales</h3>
+<p>Dans ce dossier, remplacez tous les libellés : - <code>&lt;/form&gt;</code> par <code>{$csrf}&lt;/form&gt;</code> pour ajouter le jeton CSRF dans les formulaires - <code>droits</code> par <code>rights</code> - <code>.gestion</code> par <code>.manage</code></p>
+<p>Supprimez</p>
+<ul>
+<li><code>index.php?module=</code></li>
+</ul>
+</section>
+<section id="modifications-dans-chaque-formulaire" class="level3">
+<h3 class="anchored" data-anchor-id="modifications-dans-chaque-formulaire">Modifications dans chaque formulaire</h3>
+<p>Reprenez tous les liens (recherchez les balises <code>&lt;a href&gt;</code>) et remplacez le premier <code>&amp;</code> par <code>?</code></p>
+<p>Modifiez toutes les actions des formulaires, pour qu’ils aient cette forme :</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode html code-with-copy"><code class="sourceCode html"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">form</span><span class="ot"> class</span><span class="op">=</span><span class="st">"form-horizontal"</span><span class="ot"> id</span><span class="op">=</span><span class="st">"formName"</span><span class="ot"> method</span><span class="op">=</span><span class="st">"post"</span><span class="ot"> action</span><span class="op">=</span><span class="st">"moduleWrite"</span><span class="dt">&gt;</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">input</span><span class="ot"> type</span><span class="op">=</span><span class="st">"hidden"</span><span class="ot"> name</span><span class="op">=</span><span class="st">"moduleBase"</span><span class="ot"> value</span><span class="op">=</span><span class="st">"module"</span><span class="dt">&gt;</span></span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Le champ <code>action</code> peut être supprimé. Par contre, le champ <code>moduleBase</code> doit être conservé : il est utilisé pour créer l’action <code>moduleDelete</code> par l’intermédiaire du script javascript dans <code>main_js.tpl</code>. Toutefois, si les modifications ne sont pas réalisées, le script créera automatiquement la bonne action à partir des champs <code>moduleBase</code> et <code>action</code> lors de l’envoi du formulaire.</p>

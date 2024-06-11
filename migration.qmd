@@ -53,19 +53,30 @@ Voici un exemple de configuration :
 
 Exécutez ensuite le fichier sql.
 
-## Mettre à niveau l'affichage
-
-### Menu
+## Mettre à niveau le menu
 
 Éditez le fichier `app/Config/menu.xml`, et rajoutez les entrées nécessaires.
 
-### Ajouter les modèles Smarty
+## Ajouter les modèles Smarty
 
 Recopiez les modèles Smarty depuis `display/templates` dans `app/Views/templates` en conservant l'organisation en sous-dossiers, à l'exception des fichiers à la racine et du sous-dossier _framework_.
 
-Dans ce dossier, remplacez tous les libellés `</form>` par `{$csrf}</form>` pour ajouter le jeton CSRF dans les formulaires.
+### Modifications globales
 
-Modifiez également toutes les actions des formulaires, pour qu'ils aient cette forme :
+Dans ce dossier, remplacez tous les libellés :
+- `</form>` par `{$csrf}</form>` pour ajouter le jeton CSRF dans les formulaires
+- `droits` par `rights`
+- `.gestion` par `.manage`
+
+Supprimez 
+
+- `index.php?module=`
+
+### Modifications dans chaque formulaire
+
+Reprenez tous les liens (recherchez les balises `<a href>`) et remplacez le premier `&` par `?`
+
+Modifiez toutes les actions des formulaires, pour qu'ils aient cette forme :
 
 ```html
 <form class="form-horizontal" id="formName" method="post" action="moduleWrite">
