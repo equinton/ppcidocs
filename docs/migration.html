@@ -380,22 +380,23 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="cn">P</span>pci\<span class="cn">L</span>ibraries\<span class="cn">P</span>pciException<span class="ot">;</span></span>
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="cn">P</span>pci\<span class="cn">L</span>ibraries\<span class="cn">P</span>pciLibrary<span class="ot">;</span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> <span class="cn">X</span>x <span class="kw">extends</span> <span class="cn">P</span>pciLibrary { </span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    <span class="co">/**</span></span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="co">     * </span><span class="an">@var</span><span class="co"> </span></span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="co">     */</span></span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    <span class="kw">protected</span> <span class="va">$dataclass</span><span class="ot">;</span></span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    <span class="kw">function</span> <span class="bu">__construct</span>()</span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>    {</span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>        <span class="kw">parent</span>::<span class="bu">__construct</span>()<span class="ot">;</span></span>
-<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>        <span class="va">$this</span>-&gt;dataClass <span class="op">=</span> <span class="kw">new</span> \<span class="cn">A</span>pp\<span class="cn">M</span>odels\<span class="cn">XXX</span>()<span class="ot">;</span></span>
-<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>        <span class="va">$keyName</span> <span class="op">=</span> <span class="st">"xxx_id"</span><span class="ot">;</span></span>
-<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (<span class="kw">isset</span>(<span class="va">$_REQUEST</span>[<span class="va">$keyName</span>])) {</span>
-<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>            <span class="va">$this</span>-&gt;id <span class="op">=</span> <span class="va">$_REQUEST</span>[<span class="va">$keyName</span>]<span class="ot">;</span></span>
-<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>        }</span>
-<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>    }</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="cn">P</span>pci\<span class="cn">M</span>odels\<span class="cn">P</span>pciModel<span class="ot">;</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> <span class="cn">X</span>x <span class="kw">extends</span> <span class="cn">P</span>pciLibrary { </span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    <span class="co">/**</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="co">     * </span><span class="an">@var</span><span class="co"> </span><span class="do">xx</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="co">     */</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    <span class="kw">protected</span> <span class="cn">P</span>pciModel <span class="va">$dataclass</span><span class="ot">;</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>    <span class="kw">function</span> <span class="bu">__construct</span>()</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>    {</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>        <span class="kw">parent</span>::<span class="bu">__construct</span>()<span class="ot">;</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>        <span class="va">$this</span>-&gt;dataClass <span class="op">=</span> <span class="kw">new</span> \<span class="cn">A</span>pp\<span class="cn">M</span>odels\<span class="cn">XXX</span>()<span class="ot">;</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>        <span class="va">$keyName</span> <span class="op">=</span> <span class="st">"xxx_id"</span><span class="ot">;</span></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (<span class="kw">isset</span>(<span class="va">$_REQUEST</span>[<span class="va">$keyName</span>])) {</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>            <span class="va">$this</span>-&gt;id <span class="op">=</span> <span class="va">$_REQUEST</span>[<span class="va">$keyName</span>]<span class="ot">;</span></span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>    }</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <ul>
 <li><code>dataRead($dataClass,</code> par <code>$this-&gt;dataRead(</code></li>
 <li><code>dataWrite($dataClass,</code> par <code>$this-&gt;dataWrite(</code></li>

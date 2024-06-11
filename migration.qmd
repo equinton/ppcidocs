@@ -119,12 +119,13 @@ namespace App\Libraries;
 
 use Ppci\Libraries\PpciException;
 use Ppci\Libraries\PpciLibrary;
+use Ppci\Models\PpciModel;
 
 class Xx extends PpciLibrary { 
     /**
-	 * @var 
+	 * @var xx
 	 */
-	protected $dataclass;
+	protected PpciModel $dataclass;
 
     function __construct()
     {
