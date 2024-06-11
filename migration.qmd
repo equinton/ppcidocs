@@ -74,23 +74,6 @@ Modifiez également toutes les actions des formulaires, pour qu'ils aient cette 
 Le champ `action` peut être supprimé. Par contre, le champ `moduleBase` doit être conservé : il est utilisé pour créer l'action `moduleDelete` par l'intermédiaire du script javascript dans `main_js.tpl`. 
 Toutefois, si les modifications ne sont pas réalisées, le script créera automatiquement la bonne action à partir des champs `moduleBase` et `action` lors de l'envoi du formulaire.
 
-## Générer les routes et les droits nécessaires pour exécuter les modules
-
-Exécutez la commande suivante :
-
-```bash
-php vendor/equinton/ppci/migration/actionsParse.php ../app/param/actions.xml
-```
-
-Le script va lire l'ancien fichier `actions.xml`, et va préparer deux contenus :
-
-- le premier est destiné à être inséré dans la classe `app\Config\Rights`, et contient la liste des droits nécessaires pour exécuter un module
-- le second contient un prototype des routes pour exécuter les modules. Le contenu doit être inséré dans `app/Config/Routes.php`.
-
-## Renommer le droit "gestion" en "manage"
-
-Utilisez une fonction de recherche automatique pour remplacer "gestion" par "manage".
-
 ## Ajouter un filtre pour les opérations génériques au démarrage
 
 - Ajouter un filtre pour réaliser les opérations décrites dans `modules/common.php` ;
@@ -195,5 +178,35 @@ et suppression de :
     - soit ajouter la commande `return $this->vue->send();` pour déclencher l'affichage
     - soit renvoyer vers une des fonctions de la classe : `return $this->display();`
     - soit renvoyer vers la page d'accueil : `defaultPage();`
+
+## Générer les routes et les droits nécessaires pour exécuter les modules
+
+Exécutez la commande suivante :
+
+```bash
+php vendor/equinton/ppci/migration/actionsParse.php ../app/param/actions.xml
+```
+
+Le script va lire l'ancien fichier `actions.xml`, et va préparer deux contenus :
+
+- le premier est destiné à être inséré dans la classe `app\Config\Rights`, et contient la liste des droits nécessaires pour exécuter un module
+- le second contient un prototype des routes pour exécuter les modules. Le contenu doit être inséré dans `app/Config/Routes.php`.
+
+## Renommer le droit "gestion" en "manage"
+
+Utilisez une fonction de recherche automatique pour remplacer "gestion" par "manage".
+
+## Ajouter les contrôleurs
+
+Lancez le script :
+
+```bash
+php vendor/equinton/ppci/migration/generateController.php app/Config/Routes.php app/Controllers/
+```
+
+Le programme va lire les routes définies, puis créer les contrôleurs correspondants, en regroupant les routes par module. 
+Les contrôleurs intègrent lles appels aux fonctions de la librairie correspondante (même nom).
+
+
 
 :::
