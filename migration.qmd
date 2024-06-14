@@ -103,7 +103,10 @@ Elles peuvent être effectuées par rechercher/remplacer.
     - `extends ObjetBDD` par `extends PpciModel` ;
     - `(public function __construct().*)` par `public function __construct()`, en cochant _expression régulière_ ;
     - `$this->colonnes` par `$this->fields` ;
+    - `function ecrire` par `function write`
+    - `parent::ecrire` par `parent::write`
     - `(parent::__construct().*)` par `parent::__construct()`, en cochant _expression régulière_ ;
+    - `$this->id_auto = 0` par `$this->useAutoIncrement = false`
 - supprimer :
     - `$this->id_auto = 1;`
     - `$param["fullDescription"] = 1;`

@@ -357,7 +357,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><code>extends ObjetBDD</code> par <code>extends PpciModel</code> ;</li>
 <li><code>(public function __construct().*)</code> par <code>public function __construct()</code>, en cochant <em>expression régulière</em> ;</li>
 <li><code>$this-&gt;colonnes</code> par <code>$this-&gt;fields</code> ;</li>
+<li><code>function ecrire</code> par <code>function write</code></li>
+<li><code>parent::ecrire</code> par <code>parent::write</code></li>
 <li><code>(parent::__construct().*)</code> par <code>parent::__construct()</code>, en cochant <em>expression régulière</em> ;</li>
+<li><code>$this-&gt;id_auto = 0</code> par <code>$this-&gt;useAutoIncrement = false</code></li>
 </ul></li>
 <li>supprimer :
 <ul>
