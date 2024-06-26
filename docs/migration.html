@@ -256,6 +256,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#générer-les-routes-et-les-droits-nécessaires-pour-exécuter-les-modules" id="toc-générer-les-routes-et-les-droits-nécessaires-pour-exécuter-les-modules" class="nav-link" data-scroll-target="#générer-les-routes-et-les-droits-nécessaires-pour-exécuter-les-modules">Générer les routes et les droits nécessaires pour exécuter les modules</a></li>
   <li><a href="#renommer-le-droit-gestion-en-manage" id="toc-renommer-le-droit-gestion-en-manage" class="nav-link" data-scroll-target="#renommer-le-droit-gestion-en-manage">Renommer le droit “gestion” en “manage”</a></li>
   <li><a href="#ajouter-les-contrôleurs" id="toc-ajouter-les-contrôleurs" class="nav-link" data-scroll-target="#ajouter-les-contrôleurs">Ajouter les contrôleurs</a></li>
+  <li><a href="#mettre-à-jour-le-menu" id="toc-mettre-à-jour-le-menu" class="nav-link" data-scroll-target="#mettre-à-jour-le-menu">Mettre à jour le menu</a></li>
+  <li><a href="#mettre-à-niveau-le-readme-et-le-à-propos" id="toc-mettre-à-niveau-le-readme-et-le-à-propos" class="nav-link" data-scroll-target="#mettre-à-niveau-le-readme-et-le-à-propos">Mettre à niveau le readme et le À propos</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -322,7 +324,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Recopiez les modèles Smarty depuis <code>display/templates</code> dans <code>app/Views/templates</code> en conservant l’organisation en sous-dossiers, à l’exception des fichiers à la racine et du sous-dossier <em>framework</em>.</p>
 <section id="modifications-globales" class="level3">
 <h3 class="anchored" data-anchor-id="modifications-globales">Modifications globales</h3>
-<p>Dans ce dossier, remplacez tous les libellés : - <code>&lt;/form&gt;</code> par <code>{$csrf}&lt;/form&gt;</code> pour ajouter le jeton CSRF dans les formulaires - <code>droits</code> par <code>rights</code> - <code>.gestion</code> par <code>.manage</code></p>
+<p>Dans ce dossier, remplacez tous les libellés (filtre sur *tpl) : - <code>&lt;/form&gt;</code> par <code>{$csrf}&lt;/form&gt;</code> pour ajouter le jeton CSRF dans les formulaires - <code>droits</code> par <code>rights</code> - <code>.gestion</code> par <code>.manage</code> - <code>&lt;script&gt;</code> par <code>&lt;script {$csp_script_nonce}&gt;</code></p>
 <p>Supprimez</p>
 <ul>
 <li><code>index.php?module=</code></li>
@@ -358,9 +360,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><code>(public function __construct().*)</code> par <code>public function __construct()</code>, en cochant <em>expression régulière</em> ;</li>
 <li><code>$this-&gt;colonnes</code> par <code>$this-&gt;fields</code> ;</li>
 <li><code>function ecrire</code> par <code>function write</code></li>
+<li><code>function lire</code> par <code>function read</code></li>
 <li><code>parent::ecrire</code> par <code>parent::write</code></li>
 <li><code>(parent::__construct().*)</code> par <code>parent::__construct()</code>, en cochant <em>expression régulière</em> ;</li>
 <li><code>$this-&gt;id_auto = 0</code> par <code>$this-&gt;useAutoIncrement = false</code></li>
+<li><code>auto_date = 0</code> par <code>autoFormatDate = false</code></li>
 </ul></li>
 <li>supprimer :
 <ul>
@@ -375,7 +379,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>renommer le nom du fichier, par exemple <code>espece.class.php</code> en <code>Espece.php</code> ;</li>
 <li>dans les requêtes SQL, modifier les variables en rajoutant : à la fin : <code>:id</code> doit devenir <code>:id:</code> ;</li>
 <li>pour les tables portant des données géographiques (champs avec type=4), modifier les requêtes ou créer les fonctions <code>lire()</code> pour ajouter <code>st_astext()</code> pour les champs concernés ;</li>
+<li>les transformations de dates pour les champs non présents dans la table doivent être réécrites selon ce schéma :</li>
 </ul>
+<div class="sourceCode" id="cb4"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="va">$this</span>-&gt;dateFields[] <span class="op">=</span> <span class="st">"peche_date"</span><span class="ot">;</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="va">$this</span>-&gt;datetimeFields[] <span class="op">=</span> <span class="st">"peche_datetime"</span><span class="ot">;</span></span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 </section>
 <section id="réécriture-des-librairies" class="level2">
@@ -387,28 +394,28 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <ul>
 <li><code>&lt;?php</code> par :</li>
 </ul>
-<div class="sourceCode" id="cb4"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;?php</span> </span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">namespace</span> <span class="cn">A</span>pp\<span class="cn">L</span>ibraries<span class="ot">;</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="cn">P</span>pci\<span class="cn">L</span>ibraries\<span class="cn">P</span>pciException<span class="ot">;</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="cn">P</span>pci\<span class="cn">L</span>ibraries\<span class="cn">P</span>pciLibrary<span class="ot">;</span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="cn">P</span>pci\<span class="cn">M</span>odels\<span class="cn">P</span>pciModel<span class="ot">;</span></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> <span class="cn">X</span>x <span class="kw">extends</span> <span class="cn">P</span>pciLibrary { </span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    <span class="co">/**</span></span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="co">     * </span><span class="an">@var</span><span class="co"> </span><span class="do">xx</span></span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="co">     */</span></span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    <span class="kw">protected</span> <span class="cn">P</span>pciModel <span class="va">$dataclass</span><span class="ot">;</span></span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>    <span class="kw">function</span> <span class="bu">__construct</span>()</span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>    {</span>
-<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>        <span class="kw">parent</span>::<span class="bu">__construct</span>()<span class="ot">;</span></span>
-<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>        <span class="va">$this</span>-&gt;dataClass <span class="op">=</span> <span class="kw">new</span> \<span class="cn">A</span>pp\<span class="cn">M</span>odels\<span class="cn">XXX</span>()<span class="ot">;</span></span>
-<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>        <span class="va">$keyName</span> <span class="op">=</span> <span class="st">"xxx_id"</span><span class="ot">;</span></span>
-<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (<span class="kw">isset</span>(<span class="va">$_REQUEST</span>[<span class="va">$keyName</span>])) {</span>
-<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>            <span class="va">$this</span>-&gt;id <span class="op">=</span> <span class="va">$_REQUEST</span>[<span class="va">$keyName</span>]<span class="ot">;</span></span>
-<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>        }</span>
-<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>    }</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;?php</span> </span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="kw">namespace</span> <span class="cn">A</span>pp\<span class="cn">L</span>ibraries<span class="ot">;</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="cn">P</span>pci\<span class="cn">L</span>ibraries\<span class="cn">P</span>pciException<span class="ot">;</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="cn">P</span>pci\<span class="cn">L</span>ibraries\<span class="cn">P</span>pciLibrary<span class="ot">;</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="cn">P</span>pci\<span class="cn">M</span>odels\<span class="cn">P</span>pciModel<span class="ot">;</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> <span class="cn">X</span>x <span class="kw">extends</span> <span class="cn">P</span>pciLibrary { </span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    <span class="co">/**</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="co">     * </span><span class="an">@var</span><span class="co"> </span><span class="do">xx</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="co">     */</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>    <span class="kw">protected</span> <span class="cn">P</span>pciModel <span class="va">$dataclass</span><span class="ot">;</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>    <span class="kw">function</span> <span class="bu">__construct</span>()</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>    {</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>        <span class="kw">parent</span>::<span class="bu">__construct</span>()<span class="ot">;</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>        <span class="va">$this</span>-&gt;dataClass <span class="op">=</span> <span class="kw">new</span> \<span class="cn">A</span>pp\<span class="cn">M</span>odels\<span class="cn">XXX</span>()<span class="ot">;</span></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>        <span class="va">$keyName</span> <span class="op">=</span> <span class="st">"xxx_id"</span><span class="ot">;</span></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (<span class="kw">isset</span>(<span class="va">$_REQUEST</span>[<span class="va">$keyName</span>])) {</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>            <span class="va">$this</span>-&gt;id <span class="op">=</span> <span class="va">$_REQUEST</span>[<span class="va">$keyName</span>]<span class="ot">;</span></span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>    }</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <ul>
 <li><code>dataRead($dataClass,</code> par <code>$this-&gt;dataRead(</code></li>
 <li><code>dataWrite($dataClass,</code> par <code>$this-&gt;dataWrite(</code></li>
@@ -426,12 +433,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><code>$vue</code> par <code>$this-&gt;vue</code></li>
 <li><code>$this-&gt;dataDelete($this-&gt;id);</code> par</li>
 </ul>
-<div class="sourceCode" id="cb5"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>        <span class="cf">try</span> {</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>            <span class="va">$this</span>-&gt;dataDelete(<span class="va">$this</span>-&gt;id)<span class="ot">;</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> <span class="va">$this</span>-&gt;<span class="kw">list</span>()<span class="ot">;</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>        } <span class="cf">catch</span> (<span class="cn">P</span>pciException <span class="va">$e</span>) {</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> <span class="va">$this</span>-&gt;change()<span class="ot">;</span></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>        }</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>        <span class="cf">try</span> {</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>            <span class="va">$this</span>-&gt;dataDelete(<span class="va">$this</span>-&gt;id)<span class="ot">;</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> <span class="va">$this</span>-&gt;<span class="kw">list</span>()<span class="ot">;</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>        } <span class="cf">catch</span> (<span class="cn">P</span>pciException <span class="va">$e</span>) {</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> <span class="va">$this</span>-&gt;change()<span class="ot">;</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>        }</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <ul>
 <li><code>$message-&gt;</code> par <code>$this-&gt;message-&gt;</code></li>
 </ul>
@@ -459,7 +466,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="générer-les-routes-et-les-droits-nécessaires-pour-exécuter-les-modules" class="level2">
 <h2 class="anchored" data-anchor-id="générer-les-routes-et-les-droits-nécessaires-pour-exécuter-les-modules">Générer les routes et les droits nécessaires pour exécuter les modules</h2>
 <p>Exécutez la commande suivante :</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">php</span> vendor/equinton/ppci/migration/actionsParse.php ../app/param/actions.xml</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">php</span> vendor/equinton/ppci/migration/actionsParse.php ../app/param/actions.xml</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Le script va lire l’ancien fichier <code>actions.xml</code>, et va préparer deux contenus :</p>
 <ul>
 <li>le premier est destiné à être inséré dans la classe <code>app\Config\Rights</code>, et contient la liste des droits nécessaires pour exécuter un module</li>
@@ -473,8 +480,25 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="ajouter-les-contrôleurs" class="level2">
 <h2 class="anchored" data-anchor-id="ajouter-les-contrôleurs">Ajouter les contrôleurs</h2>
 <p>Lancez le script :</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">php</span> vendor/equinton/ppci/migration/generateController.php app/Config/Routes.php app/Controllers/</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">php</span> vendor/equinton/ppci/migration/generateController.php app/Config/Routes.php app/Controllers/</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Le programme va lire les routes définies, puis créer les contrôleurs correspondants, en regroupant les routes par module. Les contrôleurs intègrent lles appels aux fonctions de la librairie correspondante (même nom).</p>
+</section>
+<section id="mettre-à-jour-le-menu" class="level2">
+<h2 class="anchored" data-anchor-id="mettre-à-jour-le-menu">Mettre à jour le menu</h2>
+<p>Éditez le fichier <code>app/Config/menu.xml</code>, pour ajouter les entrées nécessaires à l’application et supprimer celles qui n’ont pas lieu d’être présentes.</p>
+</section>
+<section id="mettre-à-niveau-le-readme-et-le-à-propos" class="level2">
+<h2 class="anchored" data-anchor-id="mettre-à-niveau-le-readme-et-le-à-propos">Mettre à niveau le readme et le À propos</h2>
+<p>Éditez les fichiers suivants :</p>
+<ul>
+<li><code>app/Config/news.txt</code> pour les nouveautés en français</li>
+<li><code>app/Config/newsen.txt</code> pour les nouveautés en anglais</li>
+</ul>
+<p>Éditez également les templates suivants :</p>
+<ul>
+<li><code>app/Views/templates/about_fr.tpl</code></li>
+<li><code>app/Views/templates/about_en.tpl</code></li>
+</ul>
 
 
 </section>

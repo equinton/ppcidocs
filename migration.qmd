@@ -63,10 +63,11 @@ Recopiez les modèles Smarty depuis `display/templates` dans `app/Views/template
 
 ### Modifications globales
 
-Dans ce dossier, remplacez tous les libellés :
+Dans ce dossier, remplacez tous les libellés (filtre sur *tpl) :
 - `</form>` par `{$csrf}</form>` pour ajouter le jeton CSRF dans les formulaires
 - `droits` par `rights`
 - `.gestion` par `.manage`
+- `<script>` par `<script {$csp_script_nonce}>`
 
 Supprimez 
 
@@ -104,9 +105,11 @@ Elles peuvent être effectuées par rechercher/remplacer.
     - `(public function __construct().*)` par `public function __construct()`, en cochant _expression régulière_ ;
     - `$this->colonnes` par `$this->fields` ;
     - `function ecrire` par `function write`
+    - `function lire` par `function read`
     - `parent::ecrire` par `parent::write`
     - `(parent::__construct().*)` par `parent::__construct()`, en cochant _expression régulière_ ;
     - `$this->id_auto = 0` par `$this->useAutoIncrement = false`
+    - `auto_date = 0` par `autoFormatDate = false`
 - supprimer :
     - `$this->id_auto = 1;`
     - `$param["fullDescription"] = 1;`
@@ -116,6 +119,12 @@ Elles peuvent être effectuées par rechercher/remplacer.
 - renommer le nom du fichier, par exemple `espece.class.php` en `Espece.php` ;
 - dans les requêtes SQL, modifier les variables en rajoutant : à la fin : `:id` doit devenir `:id:` ;
 - pour les tables portant des données géographiques (champs avec type=4), modifier les requêtes ou créer les fonctions `lire()` pour ajouter `st_astext()` pour les champs concernés ;
+- les transformations de dates pour les champs non présents dans la table doivent être réécrites selon ce schéma :
+
+```php
+$this->dateFields[] = "peche_date";
+$this->datetimeFields[] = "peche_datetime";
+```
 
 ## Réécriture des librairies
 
@@ -222,6 +231,21 @@ php vendor/equinton/ppci/migration/generateController.php app/Config/Routes.php 
 Le programme va lire les routes définies, puis créer les contrôleurs correspondants, en regroupant les routes par module. 
 Les contrôleurs intègrent lles appels aux fonctions de la librairie correspondante (même nom).
 
+## Mettre à jour le menu
+
+Éditez le fichier `app/Config/menu.xml`, pour ajouter les entrées nécessaires à l'application et supprimer celles qui n'ont pas lieu d'être présentes.
+
+## Mettre à niveau le readme et le À propos
+
+Éditez les fichiers suivants :
+
+- `app/Config/news.txt` pour les nouveautés en français
+- `app/Config/newsen.txt` pour les nouveautés en anglais
+
+Éditez également les templates suivants :
+
+- `app/Views/templates/about_fr.tpl`
+- `app/Views/templates/about_en.tpl`
 
 
 :::
