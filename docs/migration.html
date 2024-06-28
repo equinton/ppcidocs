@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="fr" xml:lang="fr"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.4.555">
+<meta name="generator" content="quarto-1.4.556">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -143,6 +143,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <a class="dropdown-item" href="./migration.html">
  <span class="dropdown-text">migration depuis PrototypePhp</span></a>
   </li>  
+        <li>
+    <a class="dropdown-item" href="./multi-instance.html">
+ <span class="dropdown-text">multi-instances</span></a>
+  </li>  
     </ul>
   </li>
   <li class="nav-item dropdown ">
@@ -242,7 +246,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#modifications-globales" id="toc-modifications-globales" class="nav-link" data-scroll-target="#modifications-globales">Modifications globales</a></li>
   <li><a href="#modifications-dans-chaque-formulaire" id="toc-modifications-dans-chaque-formulaire" class="nav-link" data-scroll-target="#modifications-dans-chaque-formulaire">Modifications dans chaque formulaire</a></li>
   </ul></li>
-  <li><a href="#ajouter-un-filtre-pour-les-opérations-génériques-au-démarrage" id="toc-ajouter-un-filtre-pour-les-opérations-génériques-au-démarrage" class="nav-link" data-scroll-target="#ajouter-un-filtre-pour-les-opérations-génériques-au-démarrage">Ajouter un filtre pour les opérations génériques au démarrage</a></li>
   <li><a href="#réécriture-des-modèles" id="toc-réécriture-des-modèles" class="nav-link" data-scroll-target="#réécriture-des-modèles">Réécriture des modèles</a>
   <ul class="collapse">
   <li><a href="#transformations-globales" id="toc-transformations-globales" class="nav-link" data-scroll-target="#transformations-globales">Transformations globales</a></li>
@@ -256,7 +259,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#générer-les-routes-et-les-droits-nécessaires-pour-exécuter-les-modules" id="toc-générer-les-routes-et-les-droits-nécessaires-pour-exécuter-les-modules" class="nav-link" data-scroll-target="#générer-les-routes-et-les-droits-nécessaires-pour-exécuter-les-modules">Générer les routes et les droits nécessaires pour exécuter les modules</a></li>
   <li><a href="#renommer-le-droit-gestion-en-manage" id="toc-renommer-le-droit-gestion-en-manage" class="nav-link" data-scroll-target="#renommer-le-droit-gestion-en-manage">Renommer le droit “gestion” en “manage”</a></li>
   <li><a href="#ajouter-les-contrôleurs" id="toc-ajouter-les-contrôleurs" class="nav-link" data-scroll-target="#ajouter-les-contrôleurs">Ajouter les contrôleurs</a></li>
-  <li><a href="#mettre-à-jour-le-menu" id="toc-mettre-à-jour-le-menu" class="nav-link" data-scroll-target="#mettre-à-jour-le-menu">Mettre à jour le menu</a></li>
+  <li><a href="#ajouter-un-filtre-pour-les-opérations-génériques-au-démarrage" id="toc-ajouter-un-filtre-pour-les-opérations-génériques-au-démarrage" class="nav-link" data-scroll-target="#ajouter-un-filtre-pour-les-opérations-génériques-au-démarrage">Ajouter un filtre pour les opérations génériques au démarrage</a></li>
   <li><a href="#mettre-à-niveau-le-readme-et-le-à-propos" id="toc-mettre-à-niveau-le-readme-et-le-à-propos" class="nav-link" data-scroll-target="#mettre-à-niveau-le-readme-et-le-à-propos">Mettre à niveau le readme et le À propos</a></li>
   </ul></li>
   </ul>
@@ -300,15 +303,32 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>    DocumentRoot<span class="st"> /var/www/app2/public </span></span>
 <span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="fu">&lt;/VirtualHost&gt;</span></span>
 <span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="fu">&lt;Directory</span><span class="at"> /var/www/app2/public</span><span class="fu">&gt;</span></span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>    <span class="ex">Options</span><span class="ch"> </span><span class="kw">FollowSymLinks</span><span class="ch"> </span><span class="kw">MultiViews</span></span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>    Require<span class="st"> all granted</span></span>
-<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>    <span class="ex">AllowOverride</span><span class="ch"> </span><span class="kw">all</span></span>
-<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>    <span class="ex">RewriteEngine</span><span class="ch"> </span><span class="kw">On</span></span>
-<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>    RewriteBase<span class="st"> /</span></span>
-<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>    RewriteCond<span class="st"> "/%{REQUEST_FILENAME}" !-f</span></span>
-<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>    RewriteCond<span class="st"> "/%{REQUEST_FILENAME}" !-d</span></span>
-<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>    RewriteRule<span class="st"> "(.*)" "/index.php?$1" [PT,QSA]</span></span>
-<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a><span class="fu">&lt;/Directory&gt;</span></span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">&lt;LimitExcept</span><span class="at"> GET POST</span><span class="fu">&gt;</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>        Deny<span class="st"> from all</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">&lt;/LimitExcept&gt;</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>    <span class="ex">Options</span><span class="ch"> </span><span class="kw">-Indexes</span><span class="ch"> </span><span class="kw">FollowSymLinks</span><span class="ch"> </span><span class="kw">MultiViews</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>    Header<span class="st"> unset ETag</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>    Header<span class="st"> set Cache-Control "max-age=0, no-cache, no-store, must-revalidate, private"</span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>    Header<span class="st"> set Pragma "no-cache"</span></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>    Header<span class="st"> set X-Frame-Options "DENY"</span></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>    Header<span class="st"> set X-XSS-Protection "1; mode=block"</span></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>    Header<span class="st"> set X-Content-Type-Options "nosniff"</span></span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>    Header<span class="st"> always set Strict-Transport-Security "max-age=63072000; includeSubdomains;"</span></span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>    Header<span class="st"> always set Content-Security-Policy "default-src 'self' ; script-src blob: * 'self' 'unsafe-inline' 'unsafe-eval'; connect-src data: blob: filesystem: *.tile.openstreetmap.org 'self' ; img-src 'self' data: blob: *.openstreetmap.org ; style-src 'self' 'unsafe-inline' ;"</span></span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>    <span class="fu">&lt;FilesMatch</span><span class="at"> "\.(ico|flv|jpg|jpeg|png|gif|js|css|svg)$"</span><span class="fu">&gt;</span></span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>        Header<span class="st"> set Cache-Control "max-age=604800, private"</span></span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>    <span class="fu">&lt;/FilesMatch&gt;</span></span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a><span class="fu">&lt;FilesMatch</span><span class="at"> ".*openstreetmap.*\.png$"</span><span class="fu">&gt;</span></span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>    Header<span class="st"> set Cache-Control "max-age=2592000, public"</span></span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a><span class="fu">&lt;/FilesMatch&gt;</span></span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>    Require<span class="st"> all granted</span></span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>    <span class="ex">AllowOverride</span><span class="ch"> </span><span class="kw">all</span></span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>    <span class="ex">RewriteEngine</span><span class="ch"> </span><span class="kw">On</span></span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>    RewriteBase<span class="st"> /</span></span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>    RewriteCond<span class="st"> "/%{REQUEST_FILENAME}" !-f</span></span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>    RewriteCond<span class="st"> "/%{REQUEST_FILENAME}" !-d</span></span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>    RewriteRule<span class="st"> "(.*)" "/index.php?$1" [PT,QSA]</span></span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a><span class="fu">&lt;/Directory&gt;</span></span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="mettre-à-jour-la-base-de-données" class="level2">
 <h2 class="anchored" data-anchor-id="mettre-à-jour-la-base-de-données">Mettre à jour la base de données</h2>
@@ -324,7 +344,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Recopiez les modèles Smarty depuis <code>display/templates</code> dans <code>app/Views/templates</code> en conservant l’organisation en sous-dossiers, à l’exception des fichiers à la racine et du sous-dossier <em>framework</em>.</p>
 <section id="modifications-globales" class="level3">
 <h3 class="anchored" data-anchor-id="modifications-globales">Modifications globales</h3>
-<p>Dans ce dossier, remplacez tous les libellés (filtre sur *tpl) : - <code>&lt;/form&gt;</code> par <code>{$csrf}&lt;/form&gt;</code> pour ajouter le jeton CSRF dans les formulaires - <code>droits</code> par <code>rights</code> - <code>.gestion</code> par <code>.manage</code> - <code>&lt;script&gt;</code> par <code>&lt;script {$csp_script_nonce}&gt;</code></p>
+<p>Dans ce dossier, remplacez tous les libellés (filtre sur *tpl) :</p>
+<ul>
+<li><code>&lt;/form&gt;</code> par <code>{$csrf}&lt;/form&gt;</code> pour ajouter le jeton CSRF dans les formulaires</li>
+<li><code>droits</code> par <code>rights</code></li>
+<li><code>.gestion</code> par <code>.manage</code></li>
+</ul>
 <p>Supprimez</p>
 <ul>
 <li><code>index.php?module=</code></li>
@@ -332,19 +357,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="modifications-dans-chaque-formulaire" class="level3">
 <h3 class="anchored" data-anchor-id="modifications-dans-chaque-formulaire">Modifications dans chaque formulaire</h3>
-<p>Reprenez tous les liens (recherchez les balises <code>&lt;a href&gt;</code>) et remplacez le premier <code>&amp;</code> par <code>?</code></p>
+<p>Reprenez tous les liens (recherchez les balises <code>a href</code>) et remplacez le premier <code>&amp;</code> par <code>?</code></p>
 <p>Modifiez toutes les actions des formulaires, pour qu’ils aient cette forme :</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode html code-with-copy"><code class="sourceCode html"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">form</span><span class="ot"> class</span><span class="op">=</span><span class="st">"form-horizontal"</span><span class="ot"> id</span><span class="op">=</span><span class="st">"formName"</span><span class="ot"> method</span><span class="op">=</span><span class="st">"post"</span><span class="ot"> action</span><span class="op">=</span><span class="st">"moduleWrite"</span><span class="dt">&gt;</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">input</span><span class="ot"> type</span><span class="op">=</span><span class="st">"hidden"</span><span class="ot"> name</span><span class="op">=</span><span class="st">"moduleBase"</span><span class="ot"> value</span><span class="op">=</span><span class="st">"module"</span><span class="dt">&gt;</span></span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Le champ <code>action</code> peut être supprimé. Par contre, le champ <code>moduleBase</code> doit être conservé : il est utilisé pour créer l’action <code>moduleDelete</code> par l’intermédiaire du script javascript dans <code>main_js.tpl</code>. Toutefois, si les modifications ne sont pas réalisées, le script créera automatiquement la bonne action à partir des champs <code>moduleBase</code> et <code>action</code> lors de l’envoi du formulaire.</p>
 </section>
-</section>
-<section id="ajouter-un-filtre-pour-les-opérations-génériques-au-démarrage" class="level2">
-<h2 class="anchored" data-anchor-id="ajouter-un-filtre-pour-les-opérations-génériques-au-démarrage">Ajouter un filtre pour les opérations génériques au démarrage</h2>
-<ul>
-<li>Ajouter un filtre pour réaliser les opérations décrites dans <code>modules/common.php</code> ;</li>
-<li>renseigner le cas échéant la classe <code>App\Libraries\Postlogin</code>, pour réaliser les opérations spécifiques après connexion.</li>
-</ul>
 </section>
 <section id="réécriture-des-modèles" class="level2">
 <h2 class="anchored" data-anchor-id="réécriture-des-modèles">Réécriture des modèles</h2>
@@ -483,9 +501,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="sourceCode" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">php</span> vendor/equinton/ppci/migration/generateController.php app/Config/Routes.php app/Controllers/</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Le programme va lire les routes définies, puis créer les contrôleurs correspondants, en regroupant les routes par module. Les contrôleurs intègrent lles appels aux fonctions de la librairie correspondante (même nom).</p>
 </section>
-<section id="mettre-à-jour-le-menu" class="level2">
-<h2 class="anchored" data-anchor-id="mettre-à-jour-le-menu">Mettre à jour le menu</h2>
-<p>Éditez le fichier <code>app/Config/menu.xml</code>, pour ajouter les entrées nécessaires à l’application et supprimer celles qui n’ont pas lieu d’être présentes.</p>
+<section id="ajouter-un-filtre-pour-les-opérations-génériques-au-démarrage" class="level2">
+<h2 class="anchored" data-anchor-id="ajouter-un-filtre-pour-les-opérations-génériques-au-démarrage">Ajouter un filtre pour les opérations génériques au démarrage</h2>
+<ul>
+<li>Ajouter un filtre pour réaliser les opérations décrites dans <code>modules/common.php</code> ;</li>
+<li>renseigner le cas échéant la classe <code>App\Libraries\Postlogin</code>, pour réaliser les opérations spécifiques après connexion.</li>
+</ul>
 </section>
 <section id="mettre-à-niveau-le-readme-et-le-à-propos" class="level2">
 <h2 class="anchored" data-anchor-id="mettre-à-niveau-le-readme-et-le-à-propos">Mettre à niveau le readme et le À propos</h2>

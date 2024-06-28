@@ -25,6 +25,8 @@ website:
             href: installation.qmd
           - text: migration depuis PrototypePhp
             href: migration.qmd
+          - text: multi-instances
+            href: multi-instance.qmd
       - text: documentation technique
         menu:
           - text: Principes généraux

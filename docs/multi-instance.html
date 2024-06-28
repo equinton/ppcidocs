@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="fr" xml:lang="fr"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.4.555">
+<meta name="generator" content="quarto-1.4.556">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -143,6 +143,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <a class="dropdown-item" href="./migration.html">
  <span class="dropdown-text">migration depuis PrototypePhp</span></a>
   </li>  
+        <li>
+    <a class="dropdown-item" href="./multi-instance.html">
+ <span class="dropdown-text">multi-instances</span></a>
+  </li>  
     </ul>
   </li>
   <li class="nav-item dropdown ">
@@ -237,6 +241,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#mettre-à-niveau-du-site-virtuel-apache" id="toc-mettre-à-niveau-du-site-virtuel-apache" class="nav-link" data-scroll-target="#mettre-à-niveau-du-site-virtuel-apache">Mettre à niveau du site virtuel Apache</a></li>
   <li><a href="#modifier-les-paramètres" id="toc-modifier-les-paramètres" class="nav-link" data-scroll-target="#modifier-les-paramètres">Modifier les paramètres</a></li>
   <li><a href="#adapter-les-scripts-lancés-en-ligne-de-commande" id="toc-adapter-les-scripts-lancés-en-ligne-de-commande" class="nav-link" data-scroll-target="#adapter-les-scripts-lancés-en-ligne-de-commande">Adapter les scripts lancés en ligne de commande</a></li>
+  <li><a href="#technique-modifications-apportées-au-code-pour-gérer-le-multi-instances" id="toc-technique-modifications-apportées-au-code-pour-gérer-le-multi-instances" class="nav-link" data-scroll-target="#technique-modifications-apportées-au-code-pour-gérer-le-multi-instances">Technique : modifications apportées au code pour gérer le multi-instances</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -306,19 +311,35 @@ database.default.password = password_instance</code></pre>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">envPath</span><span class="op">=</span>/var/www/instances/instancename</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="ex">php</span> commandline.php</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>La variable <code>envPath</code> est disponible dans <code>$_SERVER</code>.</p>
-<p>La fonction <code>loadDotEnv(Paths $paths)</code> de la classe <code>vendor/codeigniter4/framework/system/Boot.php</code> doit être réécrite ainsi :</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>    <span class="co">/**</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co">     * Load environment settings from .env files into $_SERVER and $_ENV</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co">     */</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">protected</span> <span class="kw">static</span> <span class="kw">function</span> loadDotEnv(<span class="cn">P</span>aths <span class="va">$paths</span>)<span class="ot">:</span> <span class="dt">void</span></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    {</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>        <span class="kw">require_once</span> <span class="va">$paths</span>-&gt;systemDirectory <span class="op">.</span> <span class="st">'/Config/DotEnv.php'</span><span class="ot">;</span></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (<span class="fu">is_file</span>(<span class="va">$file</span> <span class="op">=</span> <span class="va">$_SERVER</span>[<span class="st">"envPath"</span>] <span class="op">.</span> <span class="cn">DIRECTORY_SEPARATOR</span> <span class="op">.</span> <span class="st">".env"</span>) <span class="op">&amp;&amp;</span> <span class="fu">is_readable</span>(<span class="va">$file</span>)) {</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>        (<span class="kw">new</span> <span class="cn">C</span>odeIgniter\<span class="cn">C</span>onfig\<span class="cn">D</span>otEnv(<span class="va">$_SERVER</span>[<span class="st">"envPath"</span>]<span class="ot">,</span><span class="st">".env"</span>))-&gt;load()<span class="ot">;</span></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>        } <span class="cf">else</span> {</span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>            (<span class="kw">new</span> <span class="cn">C</span>odeIgniter\<span class="cn">C</span>onfig\<span class="cn">D</span>otEnv(<span class="va">$paths</span>-&gt;appDirectory <span class="op">.</span> <span class="st">'/../'</span>))-&gt;load()<span class="ot">;</span></span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>        }</span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>    }</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="technique-modifications-apportées-au-code-pour-gérer-le-multi-instances" class="level2">
+<h2 class="anchored" data-anchor-id="technique-modifications-apportées-au-code-pour-gérer-le-multi-instances">Technique : modifications apportées au code pour gérer le multi-instances</h2>
+<p>La fin du fichier index.php est modifié ainsi :</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">//exit(CodeIgniter\Boot::bootWeb($paths));</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="kw">require</span> <span class="cn">FCPATH</span><span class="op">.</span> <span class="st">'../vendor/equinton/ppci/src/BootApp.php'</span><span class="ot">;</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="cf">exit</span> (<span class="cn">C</span>odeIgniter\<span class="cn">B</span>ootApp::bootweb(<span class="va">$paths</span>))<span class="ot">;</span></span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Et la classe <code>BootApp</code> contient ce code :</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;?php</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="kw">namespace</span> <span class="cn">C</span>odeIgniter<span class="ot">;</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="cn">C</span>odeIgniter\<span class="cn">B</span>oot<span class="ot">;</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="cn">C</span>onfig\<span class="cn">P</span>aths<span class="ot">;</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="cn">C</span>odeIgniter\<span class="cn">C</span>onfig\<span class="cn">D</span>otEnv<span class="ot">;</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> <span class="cn">B</span>ootApp <span class="kw">extends</span> <span class="cn">B</span>oot {</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    <span class="kw">protected</span> <span class="kw">static</span> <span class="kw">function</span> loadDotEnv(<span class="cn">P</span>aths <span class="va">$paths</span>)<span class="ot">:</span> <span class="dt">void</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    {</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>        <span class="kw">require_once</span> <span class="va">$paths</span>-&gt;systemDirectory <span class="op">.</span> <span class="st">'/Config/DotEnv.php'</span><span class="ot">;</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (<span class="fu">is_file</span>(<span class="va">$file</span> <span class="op">=</span> <span class="va">$_SERVER</span>[<span class="st">"envPath"</span>] <span class="op">.</span> <span class="cn">DIRECTORY_SEPARATOR</span> <span class="op">.</span> <span class="st">".env"</span>) <span class="op">&amp;&amp;</span> <span class="fu">is_readable</span>(<span class="va">$file</span>)) {</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>            (<span class="kw">new</span> <span class="cn">D</span>otEnv(<span class="va">$_SERVER</span>[<span class="st">"envPath"</span>]<span class="ot">,</span><span class="st">".env"</span>))-&gt;load()<span class="ot">;</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>        } <span class="cf">else</span> {</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>            (<span class="kw">new</span> <span class="cn">D</span>otEnv(<span class="va">$paths</span>-&gt;appDirectory <span class="op">.</span> <span class="st">'/../'</span>))-&gt;load()<span class="ot">;</span></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Attention :</strong> l’utilisation d’un fichier .env placé ailleurs qu’à la racine de l’application empêche le fonctionnement des outils de débogage de CodeIgniter (mode développement).</p>
 
 
 </section>

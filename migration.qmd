@@ -36,7 +36,24 @@ Voici un exemple de configuration :
     DocumentRoot /var/www/app2/public 
 </VirtualHost>
 <Directory /var/www/app2/public>
-    Options FollowSymLinks MultiViews
+    <LimitExcept GET POST>
+        Deny from all
+    </LimitExcept>
+    Options -Indexes FollowSymLinks MultiViews
+    Header unset ETag
+    Header set Cache-Control "max-age=0, no-cache, no-store, must-revalidate, private"
+    Header set Pragma "no-cache"
+    Header set X-Frame-Options "DENY"
+    Header set X-XSS-Protection "1; mode=block"
+    Header set X-Content-Type-Options "nosniff"
+    Header always set Strict-Transport-Security "max-age=63072000; includeSubdomains;"
+    Header always set Content-Security-Policy "default-src 'self' ; script-src blob: * 'self' 'unsafe-inline' 'unsafe-eval'; connect-src data: blob: filesystem: *.tile.openstreetmap.org 'self' ; img-src 'self' data: blob: *.openstreetmap.org ; style-src 'self' 'unsafe-inline' ;"
+    <FilesMatch "\.(ico|flv|jpg|jpeg|png|gif|js|css|svg)$">
+        Header set Cache-Control "max-age=604800, private"
+    </FilesMatch>
+<FilesMatch ".*openstreetmap.*\.png$">
+    Header set Cache-Control "max-age=2592000, public"
+</FilesMatch>
     Require all granted
     AllowOverride all
     RewriteEngine On
@@ -64,10 +81,10 @@ Recopiez les modèles Smarty depuis `display/templates` dans `app/Views/template
 ### Modifications globales
 
 Dans ce dossier, remplacez tous les libellés (filtre sur *tpl) :
+
 - `</form>` par `{$csrf}</form>` pour ajouter le jeton CSRF dans les formulaires
 - `droits` par `rights`
 - `.gestion` par `.manage`
-- `<script>` par `<script {$csp_script_nonce}>`
 
 Supprimez 
 
@@ -75,7 +92,7 @@ Supprimez
 
 ### Modifications dans chaque formulaire
 
-Reprenez tous les liens (recherchez les balises `<a href>`) et remplacez le premier `&` par `?`
+Reprenez tous les liens (recherchez les balises `a href`) et remplacez le premier `&` par `?`
 
 Modifiez toutes les actions des formulaires, pour qu'ils aient cette forme :
 
@@ -85,11 +102,6 @@ Modifiez toutes les actions des formulaires, pour qu'ils aient cette forme :
 ```
 Le champ `action` peut être supprimé. Par contre, le champ `moduleBase` doit être conservé : il est utilisé pour créer l'action `moduleDelete` par l'intermédiaire du script javascript dans `main_js.tpl`. 
 Toutefois, si les modifications ne sont pas réalisées, le script créera automatiquement la bonne action à partir des champs `moduleBase` et `action` lors de l'envoi du formulaire.
-
-## Ajouter un filtre pour les opérations génériques au démarrage
-
-- Ajouter un filtre pour réaliser les opérations décrites dans `modules/common.php` ;
-- renseigner le cas échéant la classe `App\Libraries\Postlogin`, pour réaliser les opérations spécifiques après connexion. 
 
 ## Réécriture des modèles
 
@@ -231,9 +243,10 @@ php vendor/equinton/ppci/migration/generateController.php app/Config/Routes.php 
 Le programme va lire les routes définies, puis créer les contrôleurs correspondants, en regroupant les routes par module. 
 Les contrôleurs intègrent lles appels aux fonctions de la librairie correspondante (même nom).
 
-## Mettre à jour le menu
+## Ajouter un filtre pour les opérations génériques au démarrage
 
-Éditez le fichier `app/Config/menu.xml`, pour ajouter les entrées nécessaires à l'application et supprimer celles qui n'ont pas lieu d'être présentes.
+- Ajouter un filtre pour réaliser les opérations décrites dans `modules/common.php` ;
+- renseigner le cas échéant la classe `App\Libraries\Postlogin`, pour réaliser les opérations spécifiques après connexion. 
 
 ## Mettre à niveau le readme et le À propos
 

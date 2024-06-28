@@ -72,24 +72,42 @@ php commandline.php
 
 La variable `envPath` est disponible dans `$_SERVER`.
 
-La fonction `loadDotEnv(Paths $paths)` de la classe `vendor/codeigniter4/framework/system/Boot.php`  doit être réécrite ainsi :
+## Technique : modifications apportées au code pour gérer le multi-instances
+
+La fin du fichier index.php est modifié ainsi : 
 
 ```php
-    /**
-     * Load environment settings from .env files into $_SERVER and $_ENV
-     */
+//exit(CodeIgniter\Boot::bootWeb($paths));
+require FCPATH. '../vendor/equinton/ppci/src/BootApp.php';
+exit (CodeIgniter\BootApp::bootweb($paths));
+```
+
+Et la classe `BootApp` contient ce code :
+
+```php
+<?php
+
+namespace CodeIgniter;
+
+use CodeIgniter\Boot;
+use Config\Paths;
+use CodeIgniter\Config\DotEnv;
+
+class BootApp extends Boot {
+
     protected static function loadDotEnv(Paths $paths): void
     {
         require_once $paths->systemDirectory . '/Config/DotEnv.php';
         if (is_file($file = $_SERVER["envPath"] . DIRECTORY_SEPARATOR . ".env") && is_readable($file)) {
-        (new CodeIgniter\Config\DotEnv($_SERVER["envPath"],".env"))->load();
+            (new DotEnv($_SERVER["envPath"],".env"))->load();
         } else {
-            (new CodeIgniter\Config\DotEnv($paths->appDirectory . '/../'))->load();
+            (new DotEnv($paths->appDirectory . '/../'))->load();
         }
     }
-
+}
 ```
 
+**Attention :** l'utilisation d'un fichier .env placé ailleurs qu'à la racine de l'application empêche le fonctionnement des outils de débogage de CodeIgniter (mode développement).
 
 
 :::
