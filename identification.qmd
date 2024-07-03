@@ -2,4 +2,101 @@
 
 # Gestion de l'identification
 
+PPCI propose plusieurs mécanismes pour gérer l'identification des utilisateurs :
+
+- stockage des comptes dans la base de données (BDD)
+- identification auprès d'un serveur LDAP (LDAP)
+- identification auprès d'un serveur *Common Access Service* (CAS)
+- identification auprès d'un serveur *OpenID Connect* (OIDC)
+- identification fournie par le serveur web, pour utiliser des mécanismes Shibboleth (mode *Mellon* d'Apache par exemple) (HEADER)
+- des mécanismes mixtes, avec utilisation de serveurs tiers et stockage en base de données pour les comptes non gérés autrement :
+  - LDAP-BDD : test de l'identification auprès de l'annuaire LDAP, et en cas d'échec, auprès de la base de données
+  - CAS-BDD et OIDC-BDD : un bouton permet de sélectionner l'identification auprès du serveur considéré
+
+En outre, les utilisateurs peuvent activer une double identification TOTP. Celle-ci est d'ailleurs obligatoire pour accéder aux modules d'administration.
+
+À noter que **l'identification LDAP est aujourd'hui considérée comme obsolète**. Il vaut mieux se tourner vers des services OIDC ou CAS, quand ceux-ci sont disponibles.
+
+## Paramètres spécifiques pour chaque type d'identification
+
+### Identification en base de données
+
+Les paramètres sont définis dans `Ppci\Config\IdentificationConfig`.
+
+- CONNECTION_max_attempts : en cas d'échec de connexion (par défaut 5), le compte sera bloqué pendant la durée spécifiée dans :
+  - *CONNECTION_blocking_duration* (par défaut, 600 secondes). À noter que la tentative de connexion pendant cette durée réinitialise le compteur à zéro
+- *APP_passwordMinLength* : longueur minimum du mot de passe
+- *APPLI_lostPassword* : si positionné par 1 (défaut), l'utilisateur pourra demander à réinitialiser son mot de passe, sous réserve que son email soit renseigné
+- *tokenIdentityValidity* : durée de validité du jeton généré lors de la connexion BDD ou LDAP, pour éviter d'avoir à se réidentifier pendant la journée. Par défaut, 10 heures.
+
+### Identification LDAP
+
+Les variables sont définies dans `Ppci\Config\IdentificationConfig.LDAP`.
+
+- *address* : adresse du serveur LDAP
+- *port* : port de connexion
+- *rdn* : compte de connexion pour interroger l'annuaire, si nécessaire
+- *basedn* : base de recherche des comptes
+- *user_attrib* : attribut contenant l'identifiant de l'utilisateur (uid)
+- *v3* : version 3 de l'annuaire, positionné par défaut *true*
+- *tls* : mettre à *true* pour activer la connexion *tls*
+- *upn_suffix* : suffixe upn, nécessaire dans certains cas pour Active Directory
+- *groupSupport* : si positionné à *true*, les groupes seront récupérés depuis l'annuaire pour alimenter le module de gestion des droits
+- *groupAttrib* : nom de l'attribut comprenant les groupes de l'utilisateurs
+- *commonNameAttrib* : nom de l'attribut comprenant le nom complet de l'utilisateur
+- *mailAttrib* : nom de l'attribut comprenant l'email de l'utilisateur
+- *attributgroupname* : nom de l'attribut comprenant le nom du groupe
+- *attributloginname* : nom de l'attribut comprenant l'uid du membre
+- *basedngroup* : chemin de recherche des groupes
+- *timeout* : time-out de recherche dans l'annuaire (positionné à 2 secondes par défaut)
+- *ldapnoanonymous* : si positionné à *true*, l'interrogation de l'annuaire pour récupérer les groupes impose une connexion
+  - *ldaplogin* : login de connexion
+  - *ldappassword* : mot de passe associé
+
+### Icône pour le bouton d'identification (CAS-BDD ou OIDC-BDD)
+
+Une icône est rajoutée sur le bouton permettant d'activer l'identification auprès du serveur CAS ou OIDC : `Ppci\Config\IdentificationConfig.identificationLogo = "${FRONT_DIR}/favicon.png"`
+
+## Identification auprès de serveurs dédiés (HEADER, CAS, OIDC)
+
+Les paramètres sont définis dans `Ppci\Config\IdentificationConfig.XX`, où XX doit être remplacé par CAS, OIDC ou HEADER.
+
+Paramètres généraux :
+
+- *mail* : attribut comprenant l'email
+- *firstname* : attribut comprenant le prénom
+- *lastname* : attribut comprenant le nom de famille
+- *name* : attribut comprenant le nom complet
+- *groups* : attribut comprenant les groupes d'appartenance des utilisateurs
+- *getGroups* : si positionné à 1 (défaut), les groupes de l'utilisateur fournis par le serveur d'identification sont traités
+
+### Paramètres spécifiques de l'identification CAS
+
+- *address* : adresse du serveur CAS, par exemple : *monserveur.society.com*
+- *uri* : dossier d'accès à l'identification. Par défaut : */cas*
+- *port* : par défaut, 443
+- *debug* : si positionné à *true* ou *1*, les traces sont stockées dans le fichier `writable/logs/cas.log`
+- *CApath* : chemin d'accès au certificat permettant de valider le serveur CAS. S'il n'est pas renseigné, le serveur CAS ne sera pas vérifié (déconseillé en production)
+
+### Identification OIDC
+
+- *name* : code du provider
+- *provider* : adresse web du provider (doit commencer par *https://*)
+- *clientId* : code fourni par le provider
+- *clientSecret* : clé secrète fournie par le provider
+- *scopeGroup* : nom du *scope* OIDC qui contient les attributs secondaires (par défaut : *affectation*)
+
+### Identification HEADER
+
+- *login* : nom de l'attribut de `$_SERVER` contenant le login, renvoyé par le serveur Apache
+- *organizationGranted* : tableau contenant le code ou le nom des organismes autorisés. Si ce tableau est renseigné, et si un nouvel utilisateur n'appartient pas à une des organisations indiquées (attribut *organization*), la création de son compte ne sera pas effectuée
+- *groupsGranted* : tableau contenant la liste des groupes autorisés. Si un utilisateur se connecte pour la première fois et que son groupe (ou un de ses groupes) appartient à la liste des groupes autorisés, son compte sera activé automatiquement. Dans le cas contraire, son compte sera désactivé, et un email est envoyé aux administrateurs pour les inviter à activer le compte.
+
+## Gestion de l'accès aux modules d'administration
+
+Les paramètres sont accessibles depuis `Ppci\Config\IdentificationConfig`.
+
+- *adminSessionDuration* : durée pendant laquelle l'identification reste valide pour accéder aux modules d'administration. Par défaut, 10'.
+- *disableTotpToAdmin* : si positionné à 1, désactive la double-identification pour accéder aux modules d'administration. Ne devrait pas être utilisé en production !
+
 :::

@@ -27,6 +27,18 @@ h1,h2,h3,h4,h5 {
   font-weight: bold;
 }
 
+h2 {
+  font-size: larger;
+}
+
+h3 {
+  font-size: medium;
+}
+
+h4 {
+  font-size: small;
+}
+
 .header-section-number {
   color: #00a3a6;
 }

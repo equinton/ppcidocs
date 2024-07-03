@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="fr" xml:lang="fr"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.4.556">
+<meta name="generator" content="quarto-1.5.53">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>PPCI - PrototypePHP for CodeIgniter</title>
+<title>identification – PPCI - PrototypePHP for CodeIgniter</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -86,7 +86,7 @@ ul.task-list li input[type="checkbox"] {
     </a>
   </div>
             <div id="quarto-search" class="" title="Recherche"></div>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Basculer la navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Basculer la navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
@@ -97,7 +97,7 @@ ul.task-list li input[type="checkbox"] {
 <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-installation" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-installation" role="link" data-bs-toggle="dropdown" aria-expanded="false">
  <span class="menu-text">installation</span>
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-installation">    
@@ -116,7 +116,7 @@ ul.task-list li input[type="checkbox"] {
     </ul>
   </li>
   <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-documentation-technique" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-documentation-technique" role="link" data-bs-toggle="dropdown" aria-expanded="false">
  <span class="menu-text">documentation technique</span>
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-documentation-technique">    
@@ -173,7 +173,7 @@ ul.task-list li input[type="checkbox"] {
 <span class="menu-text">En</span></a>
   </li>  
   <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-other-links" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-other-links" role="link" data-bs-toggle="dropdown" aria-expanded="false">
       <i class="bi bi-globe" role="img">
 </i> 
  <span class="menu-text">Other links</span>
@@ -187,7 +187,7 @@ ul.task-list li input[type="checkbox"] {
   </li>
 </ul>
           </div> <!-- /navcollapse -->
-          <div class="quarto-navbar-tools">
+            <div class="quarto-navbar-tools">
 </div>
       </div> <!-- /container-fluid -->
     </nav>
@@ -201,7 +201,22 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Sur cette page</h2>
    
   <ul>
-  <li><a href="#gestion-de-lidentification" id="toc-gestion-de-lidentification" class="nav-link active" data-scroll-target="#gestion-de-lidentification">Gestion de l’identification</a></li>
+  <li><a href="#gestion-de-lidentification" id="toc-gestion-de-lidentification" class="nav-link active" data-scroll-target="#gestion-de-lidentification">Gestion de l’identification</a>
+  <ul class="collapse">
+  <li><a href="#paramètres-spécifiques-pour-chaque-type-didentification" id="toc-paramètres-spécifiques-pour-chaque-type-didentification" class="nav-link" data-scroll-target="#paramètres-spécifiques-pour-chaque-type-didentification">Paramètres spécifiques pour chaque type d’identification</a>
+  <ul class="collapse">
+  <li><a href="#identification-en-base-de-données" id="toc-identification-en-base-de-données" class="nav-link" data-scroll-target="#identification-en-base-de-données">Identification en base de données</a></li>
+  <li><a href="#identification-ldap" id="toc-identification-ldap" class="nav-link" data-scroll-target="#identification-ldap">Identification LDAP</a></li>
+  <li><a href="#icône-pour-le-bouton-didentification-cas-bdd-ou-oidc-bdd" id="toc-icône-pour-le-bouton-didentification-cas-bdd-ou-oidc-bdd" class="nav-link" data-scroll-target="#icône-pour-le-bouton-didentification-cas-bdd-ou-oidc-bdd">Icône pour le bouton d’identification (CAS-BDD ou OIDC-BDD)</a></li>
+  </ul></li>
+  <li><a href="#identification-auprès-de-serveurs-dédiés-header-cas-oidc" id="toc-identification-auprès-de-serveurs-dédiés-header-cas-oidc" class="nav-link" data-scroll-target="#identification-auprès-de-serveurs-dédiés-header-cas-oidc">Identification auprès de serveurs dédiés (HEADER, CAS, OIDC)</a>
+  <ul class="collapse">
+  <li><a href="#paramètres-spécifiques-de-lidentification-cas" id="toc-paramètres-spécifiques-de-lidentification-cas" class="nav-link" data-scroll-target="#paramètres-spécifiques-de-lidentification-cas">Paramètres spécifiques de l’identification CAS</a></li>
+  <li><a href="#identification-oidc" id="toc-identification-oidc" class="nav-link" data-scroll-target="#identification-oidc">Identification OIDC</a></li>
+  <li><a href="#identification-header" id="toc-identification-header" class="nav-link" data-scroll-target="#identification-header">Identification HEADER</a></li>
+  </ul></li>
+  <li><a href="#gestion-de-laccès-aux-modules-dadministration" id="toc-gestion-de-laccès-aux-modules-dadministration" class="nav-link" data-scroll-target="#gestion-de-laccès-aux-modules-dadministration">Gestion de l’accès aux modules d’administration</a></li>
+  </ul></li>
   </ul>
 </nav>
     <div class="quarto-margin-footer"><div class="margin-footer-item">
@@ -215,8 +230,119 @@ ul.task-list li input[type="checkbox"] {
 
 <section id="gestion-de-lidentification" class="level1">
 <h1>Gestion de l’identification</h1>
+<p>PPCI propose plusieurs mécanismes pour gérer l’identification des utilisateurs :</p>
+<ul>
+<li>stockage des comptes dans la base de données (BDD)</li>
+<li>identification auprès d’un serveur LDAP (LDAP)</li>
+<li>identification auprès d’un serveur <em>Common Access Service</em> (CAS)</li>
+<li>identification auprès d’un serveur <em>OpenID Connect</em> (OIDC)</li>
+<li>identification fournie par le serveur web, pour utiliser des mécanismes Shibboleth (mode <em>Mellon</em> d’Apache par exemple) (HEADER)</li>
+<li>des mécanismes mixtes, avec utilisation de serveurs tiers et stockage en base de données pour les comptes non gérés autrement :
+<ul>
+<li>LDAP-BDD : test de l’identification auprès de l’annuaire LDAP, et en cas d’échec, auprès de la base de données</li>
+<li>CAS-BDD et OIDC-BDD : un bouton permet de sélectionner l’identification auprès du serveur considéré</li>
+</ul></li>
+</ul>
+<p>En outre, les utilisateurs peuvent activer une double identification TOTP. Celle-ci est d’ailleurs obligatoire pour accéder aux modules d’administration.</p>
+<p>À noter que <strong>l’identification LDAP est aujourd’hui considérée comme obsolète</strong>. Il vaut mieux se tourner vers des services OIDC ou CAS, quand ceux-ci sont disponibles.</p>
+<section id="paramètres-spécifiques-pour-chaque-type-didentification" class="level2">
+<h2 class="anchored" data-anchor-id="paramètres-spécifiques-pour-chaque-type-didentification">Paramètres spécifiques pour chaque type d’identification</h2>
+<section id="identification-en-base-de-données" class="level3">
+<h3 class="anchored" data-anchor-id="identification-en-base-de-données">Identification en base de données</h3>
+<p>Les paramètres sont définis dans <code>Ppci\Config\IdentificationConfig</code>.</p>
+<ul>
+<li>CONNECTION_max_attempts : en cas d’échec de connexion (par défaut 5), le compte sera bloqué pendant la durée spécifiée dans :
+<ul>
+<li><em>CONNECTION_blocking_duration</em> (par défaut, 600 secondes). À noter que la tentative de connexion pendant cette durée réinitialise le compteur à zéro</li>
+</ul></li>
+<li><em>APP_passwordMinLength</em> : longueur minimum du mot de passe</li>
+<li><em>APPLI_lostPassword</em> : si positionné par 1 (défaut), l’utilisateur pourra demander à réinitialiser son mot de passe, sous réserve que son email soit renseigné</li>
+<li><em>tokenIdentityValidity</em> : durée de validité du jeton généré lors de la connexion BDD ou LDAP, pour éviter d’avoir à se réidentifier pendant la journée. Par défaut, 10 heures.</li>
+</ul>
+</section>
+<section id="identification-ldap" class="level3">
+<h3 class="anchored" data-anchor-id="identification-ldap">Identification LDAP</h3>
+<p>Les variables sont définies dans <code>Ppci\Config\IdentificationConfig.LDAP</code>.</p>
+<ul>
+<li><em>address</em> : adresse du serveur LDAP</li>
+<li><em>port</em> : port de connexion</li>
+<li><em>rdn</em> : compte de connexion pour interroger l’annuaire, si nécessaire</li>
+<li><em>basedn</em> : base de recherche des comptes</li>
+<li><em>user_attrib</em> : attribut contenant l’identifiant de l’utilisateur (uid)</li>
+<li><em>v3</em> : version 3 de l’annuaire, positionné par défaut <em>true</em></li>
+<li><em>tls</em> : mettre à <em>true</em> pour activer la connexion <em>tls</em></li>
+<li><em>upn_suffix</em> : suffixe upn, nécessaire dans certains cas pour Active Directory</li>
+<li><em>groupSupport</em> : si positionné à <em>true</em>, les groupes seront récupérés depuis l’annuaire pour alimenter le module de gestion des droits</li>
+<li><em>groupAttrib</em> : nom de l’attribut comprenant les groupes de l’utilisateurs</li>
+<li><em>commonNameAttrib</em> : nom de l’attribut comprenant le nom complet de l’utilisateur</li>
+<li><em>mailAttrib</em> : nom de l’attribut comprenant l’email de l’utilisateur</li>
+<li><em>attributgroupname</em> : nom de l’attribut comprenant le nom du groupe</li>
+<li><em>attributloginname</em> : nom de l’attribut comprenant l’uid du membre</li>
+<li><em>basedngroup</em> : chemin de recherche des groupes</li>
+<li><em>timeout</em> : time-out de recherche dans l’annuaire (positionné à 2 secondes par défaut)</li>
+<li><em>ldapnoanonymous</em> : si positionné à <em>true</em>, l’interrogation de l’annuaire pour récupérer les groupes impose une connexion
+<ul>
+<li><em>ldaplogin</em> : login de connexion</li>
+<li><em>ldappassword</em> : mot de passe associé</li>
+</ul></li>
+</ul>
+</section>
+<section id="icône-pour-le-bouton-didentification-cas-bdd-ou-oidc-bdd" class="level3">
+<h3 class="anchored" data-anchor-id="icône-pour-le-bouton-didentification-cas-bdd-ou-oidc-bdd">Icône pour le bouton d’identification (CAS-BDD ou OIDC-BDD)</h3>
+<p>Une icône est rajoutée sur le bouton permettant d’activer l’identification auprès du serveur CAS ou OIDC : <code>Ppci\Config\IdentificationConfig.identificationLogo = "${FRONT_DIR}/favicon.png"</code></p>
+</section>
+</section>
+<section id="identification-auprès-de-serveurs-dédiés-header-cas-oidc" class="level2">
+<h2 class="anchored" data-anchor-id="identification-auprès-de-serveurs-dédiés-header-cas-oidc">Identification auprès de serveurs dédiés (HEADER, CAS, OIDC)</h2>
+<p>Les paramètres sont définis dans <code>Ppci\Config\IdentificationConfig.XX</code>, où XX doit être remplacé par CAS, OIDC ou HEADER.</p>
+<p>Paramètres généraux :</p>
+<ul>
+<li><em>mail</em> : attribut comprenant l’email</li>
+<li><em>firstname</em> : attribut comprenant le prénom</li>
+<li><em>lastname</em> : attribut comprenant le nom de famille</li>
+<li><em>name</em> : attribut comprenant le nom complet</li>
+<li><em>groups</em> : attribut comprenant les groupes d’appartenance des utilisateurs</li>
+<li><em>getGroups</em> : si positionné à 1 (défaut), les groupes de l’utilisateur fournis par le serveur d’identification sont traités</li>
+</ul>
+<section id="paramètres-spécifiques-de-lidentification-cas" class="level3">
+<h3 class="anchored" data-anchor-id="paramètres-spécifiques-de-lidentification-cas">Paramètres spécifiques de l’identification CAS</h3>
+<ul>
+<li><em>address</em> : adresse du serveur CAS, par exemple : <em>monserveur.society.com</em></li>
+<li><em>uri</em> : dossier d’accès à l’identification. Par défaut : <em>/cas</em></li>
+<li><em>port</em> : par défaut, 443</li>
+<li><em>debug</em> : si positionné à <em>true</em> ou <em>1</em>, les traces sont stockées dans le fichier <code>writable/logs/cas.log</code></li>
+<li><em>CApath</em> : chemin d’accès au certificat permettant de valider le serveur CAS. S’il n’est pas renseigné, le serveur CAS ne sera pas vérifié (déconseillé en production)</li>
+</ul>
+</section>
+<section id="identification-oidc" class="level3">
+<h3 class="anchored" data-anchor-id="identification-oidc">Identification OIDC</h3>
+<ul>
+<li><em>name</em> : code du provider</li>
+<li><em>provider</em> : adresse web du provider (doit commencer par <em>https://</em>)</li>
+<li><em>clientId</em> : code fourni par le provider</li>
+<li><em>clientSecret</em> : clé secrète fournie par le provider</li>
+<li><em>scopeGroup</em> : nom du <em>scope</em> OIDC qui contient les attributs secondaires (par défaut : <em>affectation</em>)</li>
+</ul>
+</section>
+<section id="identification-header" class="level3">
+<h3 class="anchored" data-anchor-id="identification-header">Identification HEADER</h3>
+<ul>
+<li><em>login</em> : nom de l’attribut de <code>$_SERVER</code> contenant le login, renvoyé par le serveur Apache</li>
+<li><em>organizationGranted</em> : tableau contenant le code ou le nom des organismes autorisés. Si ce tableau est renseigné, et si un nouvel utilisateur n’appartient pas à une des organisations indiquées (attribut <em>organization</em>), la création de son compte ne sera pas effectuée</li>
+<li><em>groupsGranted</em> : tableau contenant la liste des groupes autorisés. Si un utilisateur se connecte pour la première fois et que son groupe (ou un de ses groupes) appartient à la liste des groupes autorisés, son compte sera activé automatiquement. Dans le cas contraire, son compte sera désactivé, et un email est envoyé aux administrateurs pour les inviter à activer le compte.</li>
+</ul>
+</section>
+</section>
+<section id="gestion-de-laccès-aux-modules-dadministration" class="level2">
+<h2 class="anchored" data-anchor-id="gestion-de-laccès-aux-modules-dadministration">Gestion de l’accès aux modules d’administration</h2>
+<p>Les paramètres sont accessibles depuis <code>Ppci\Config\IdentificationConfig</code>.</p>
+<ul>
+<li><em>adminSessionDuration</em> : durée pendant laquelle l’identification reste valide pour accéder aux modules d’administration. Par défaut, 10’.</li>
+<li><em>disableTotpToAdmin</em> : si positionné à 1, désactive la double-identification pour accéder aux modules d’administration. Ne devrait pas être utilisé en production !</li>
+</ul>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->
@@ -255,18 +381,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
     return false;
   }
-  const clipboard = new window.ClipboardJS('.code-copy-button', {
-    text: function(trigger) {
-      const codeEl = trigger.previousElementSibling.cloneNode(true);
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
-        }
-      }
-      return codeEl.innerText;
-    }
-  });
-  clipboard.on('success', function(e) {
+  const onCopySuccess = function(e) {
     // button target
     const button = e.trigger;
     // don't keep focus
@@ -298,7 +413,29 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }, 1000);
     // clear code selection
     e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
   });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
     var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
     var mailtoRegex = new RegExp(/^mailto:/);
       var filterRegex = new RegExp('/' + window.location.host + '/');
@@ -306,7 +443,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
     }
     // Inspect non-navigation links and adorn them if external
- 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
     for (var i=0; i<links.length; i++) {
       const link = links[i];
       if (!isInternal(link.href)) {
