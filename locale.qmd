@@ -1,0 +1,36 @@
+::: {.content-visible when-profile="french"}
+
+# Support des langues
+
+Actuellement, le moteur ne gère que le français (langue par défaut) et l'anglais.
+
+Les traductions sont réalisées avec *gettext*. Elles sont stockées dans `app/Language/locales`, avec :
+
+- à la racine :
+  - *lang.po* : fichier brut contenant les traductions
+  - *generate_po.sh* : script récupérant les libellés à traduire dans les fichiers php, les templates Smarty et dans le menu (fichier xml) et créant le fichier *lang.po*
+  - compile.sh : script créant le fichier lang.mo (compilé) à partir des traductions présentes dans *lang.po*, et recopiant ce fichier dans le sous-dossier suivant
+- *en/LC_MESSAGES* : dossier correspondant à la langue à afficher, qui contient le fichier *lang.mo*.
+
+## Mettre en place les traductions
+
+Le serveur doit être configuré pour supporter la langue à afficher. Pour cela :
+
+- éditez le fichier `/etc/locale.gen`
+- décommentez la ligne `en_GB.UTF-8`
+- lancez ces commandes :
+
+```bash
+locale-gen
+systemctl restart apache2
+```
+
+Cette opération n'est à réaliser qu'une seule fois.
+
+Pour créer les traductions :
+
+- lancez le script `generate_po.sh` pour créer le fichier *lang.po*. Les anciennes traductions sont conservées.
+- éditez le fichier *lang.po* avec le programme *poedit*
+- compilez le fichier avec le script `compile.sh`. Le script va générer le fichier *lang.mo*, puis le recopier dans le dossier *en/LC_MESSAGES*
+
+:::

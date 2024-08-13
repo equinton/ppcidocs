@@ -49,6 +49,8 @@ website:
             href: smarty.qmd
           - text: Fonctions et services
             href: functions.qmd
+          - text: support des langues
+            href: locale.qmd
           - text: Ligne de commande
             href: command-line.qmd
     right:

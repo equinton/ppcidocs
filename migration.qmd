@@ -86,7 +86,7 @@ Dans ce dossier, remplacez tous les libellés (filtre sur *tpl) :
 - `droits` par `rights`
 - `.gestion` par `.manage`
 
-Supprimez 
+Supprimez
 
 - `index.php?module=`
 
@@ -100,7 +100,8 @@ Modifiez toutes les actions des formulaires, pour qu'ils aient cette forme :
 <form class="form-horizontal" id="formName" method="post" action="moduleWrite">
 <input type="hidden" name="moduleBase" value="module">
 ```
-Le champ `action` peut être supprimé. Par contre, le champ `moduleBase` doit être conservé : il est utilisé pour créer l'action `moduleDelete` par l'intermédiaire du script javascript dans `main_js.tpl`. 
+
+Le champ `action` peut être supprimé. Par contre, le champ `moduleBase` doit être conservé : il est utilisé pour créer l'action `moduleDelete` par l'intermédiaire du script javascript dans `main_js.tpl`.
 Toutefois, si les modifications ne sont pas réalisées, le script créera automatiquement la bonne action à partir des champs `moduleBase` et `action` lors de l'envoi du formulaire.
 
 ## Réécriture des modèles
@@ -112,19 +113,19 @@ Recopier les fichiers depuis `modules/classes` vers `app/Models`.
 Elles peuvent être effectuées par rechercher/remplacer.
 
 - remplacer :
-    - `<?php` par `<?php namespace App\Models;use Ppci\Models\PpciModel;`, avec sauts de ligne ;
-    - `extends ObjetBDD` par `extends PpciModel` ;
-    - `(public function __construct().*)` par `public function __construct()`, en cochant _expression régulière_ ;
-    - `$this->colonnes` par `$this->fields` ;
-    - `function ecrire` par `function write`
-    - `function lire` par `function read`
-    - `parent::ecrire` par `parent::write`
-    - `(parent::__construct().*)` par `parent::__construct()`, en cochant _expression régulière_ ;
-    - `$this->id_auto = 0` par `$this->useAutoIncrement = false`
-    - `auto_date = 0` par `autoFormatDate = false`
+  - `<?php` par `<?php namespace App\Models;use Ppci\Models\PpciModel;`, avec sauts de ligne ;
+  - `extends ObjetBDD` par `extends PpciModel` ;
+  - `(public function __construct().*)` par `public function __construct()`, en cochant _expression régulière_ ;
+  - `$this->colonnes` par `$this->fields` ;
+  - `function ecrire` par `function write`
+  - `function lire` par `function read`
+  - `parent::ecrire` par `parent::write`
+  - `(parent::__construct().*)` par `parent::__construct()`, en cochant _expression régulière_ ;
+  - `$this->id_auto = 0` par `$this->useAutoIncrement = false`
+  - `auto_date = 0` par `autoFormatDate = false`
 - supprimer :
-    - `$this->id_auto = 1;`
-    - `$param["fullDescription"] = 1;`
+  - `$this->id_auto = 1;`
+  - `$param["fullDescription"] = 1;`
 
 ### Transformations individuelles
 
@@ -165,7 +166,7 @@ class Xx extends PpciLibrary {
     function __construct()
     {
         parent::__construct();
-        $this->dataClass = new \App\Models\XXX();
+        $this->dataClass = new XXX();
         $keyName = "xxx_id";
         if (isset($_REQUEST[$keyName])) {
             $this->id = $_REQUEST[$keyName];
@@ -187,7 +188,7 @@ class Xx extends PpciLibrary {
 - `$dataclass` par `$this->dataClass`
 - `$id` par `$this->id`
 - `$vue` par `$this->vue`
-- `$this->dataDelete($this->id);` par 
+- `$this->dataDelete($this->id);` par
 
 ```php
         try {
@@ -198,11 +199,23 @@ class Xx extends PpciLibrary {
         }
 ```
 
+- `$this->dataWrite( $_REQUEST );` par
+
+```php
+        try {
+			$this->id = $this->dataWrite($_REQUEST);
+            $_REQUEST["xx_id"] = $this->id;
+			return $this->list();
+		} catch (PpciException $e) {
+			return $this->change();
+		}
+```
+
 - `$message->` par `$this->message->`
 
-et suppression de : 
+et suppression de :
 
-- `switch ($t_module["param"]) {` 
+- `switch ($t_module["param"]) {`
 - `$bdd, $ObjetBDDParam`
 
 ### Modifications individuelles
@@ -211,9 +224,9 @@ et suppression de :
 - Modifier la fonction `__construct()` pour charger la bonne classe et le bon identifiant
 - définir les vues autres que Smarty dans les fonctions
 - définir le retour attendu de chaque fonction :
-    - soit ajouter la commande `return $this->vue->send();` pour déclencher l'affichage
-    - soit renvoyer vers une des fonctions de la classe : `return $this->display();`
-    - soit renvoyer vers la page d'accueil : `defaultPage();`
+  - soit ajouter la commande `return $this->vue->send();` pour déclencher l'affichage
+  - soit renvoyer vers une des fonctions de la classe : `return $this->display();`
+  - soit renvoyer vers la page d'accueil : `defaultPage();`
 
 ## Générer les routes et les droits nécessaires pour exécuter les modules
 
@@ -240,13 +253,26 @@ Lancez le script :
 php vendor/equinton/ppci/migration/generateController.php app/Config/Routes.php app/Controllers/
 ```
 
-Le programme va lire les routes définies, puis créer les contrôleurs correspondants, en regroupant les routes par module. 
+Le programme va lire les routes définies, puis créer les contrôleurs correspondants, en regroupant les routes par module.
 Les contrôleurs intègrent lles appels aux fonctions de la librairie correspondante (même nom).
 
 ## Ajouter un filtre pour les opérations génériques au démarrage
 
 - Ajouter un filtre pour réaliser les opérations décrites dans `modules/common.php` ;
-- renseigner le cas échéant la classe `App\Libraries\Postlogin`, pour réaliser les opérations spécifiques après connexion. 
+- renseigner le cas échéant la classe `App\Libraries\Postlogin`, pour réaliser les opérations spécifiques après connexion.
+
+## Récupérer les traductions
+
+Les traductions de Ppci sont fournies par défaut. Pour éviter de tout perdre, il faut les fusionner avec les anciennes traductions :
+
+```bash
+msgmerge app/Language/locales/lang.po ../oldapp/locales/en.po -o app/Language/locales/lang.po
+cd app/Language/locales
+./generate_po.sh
+./compile.sh
+```
+
+
 
 ## Mettre à niveau le readme et le À propos
 
@@ -259,6 +285,5 @@ Les contrôleurs intègrent lles appels aux fonctions de la librairie correspond
 
 - `app/Views/templates/about_fr.tpl`
 - `app/Views/templates/about_en.tpl`
-
 
 :::
