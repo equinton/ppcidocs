@@ -9,8 +9,8 @@ Créez un dossier différent de celui qui contient le code initial de l'applicat
 ```bash
 composer create-project codeigniter4/appstarter app2
 cd app2
-composer require app2/ppci
-vendor/app2/ppci/install/install.sh
+composer require equinton/ppci
+vendor/equinton/ppci/install/install.sh
 ```
 
 Éditez ensuite le fichier `.env`, et mettez à jour les paramètres nécessaires (`CI_ENVIRONMENT`, `app.baseURL` et les paramètres de connexion à la base de données).
