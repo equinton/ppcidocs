@@ -139,6 +139,14 @@ $this->dateFields[] = "peche_date";
 $this->datetimeFields[] = "peche_datetime";
 ```
 
+- si la fonction `utf8_encode` est utilisée, elle doit être remplacée par : 
+
+```php
+$data = mb_convert_encoding($data, 'UTF-8', 'ISO-8859-15, ISO-8859-1, Windows-1252');
+```
+
+La fonction traite indistinctement les chaînes ou les tableaux.
+
 ## Réécriture des librairies
 
 Recopier l'ensemble des modules dans `app/Libraries`. Il faut les transformer en classes.
@@ -162,25 +170,45 @@ class Xx extends PpciLibrary {
 	 * @var xx
 	 */
 	protected PpciModel $dataclass;
+    private $keyName;
 
     function __construct()
     {
         parent::__construct();
         $this->dataClass = new XXX();
         $keyName = "xxx_id";
-        if (isset($_REQUEST[$keyName])) {
-            $this->id = $_REQUEST[$keyName];
+        if (isset($_REQUEST[$this->keyName])) {
+            $this->id = $_REQUEST[$this->keyName];
         }
     }
 ```
 
 - `dataRead($dataClass,` par `$this->dataRead(`
-- `dataWrite($dataClass,` par `$this->dataWrite(`
 - `dataDelete($dataClass,` par `$this->dataDelete(`
 - `case "list":` par `function list(){$vue=service('Smarty');` (saut de ligne)
 - `case "display":` par `function display(){$vue=service('Smarty');` (saut de ligne)
 - `case "change":` par `function change(){$vue=service('Smarty');` (saut de ligne)
-- `case "write":` par `function write(){`
+- `case "write":` par 
+
+`function write(){` par :
+
+```php
+    function write() {
+    try {
+            $this->id = $this->dataWrite($_REQUEST);
+            if ($this->id > 0) {
+                $_REQUEST[$this->keyName] = $this->id;
+                return $this->display();
+            } else {
+                return $this->change();
+            }
+        } catch (PpciException) {
+            return $this->change();
+        }
+    }
+```
+
+
 - `case "delete":` par `function delete(){`
 - `case "` par `function `
 - `":` par `() {`
@@ -227,6 +255,26 @@ et suppression de :
   - soit ajouter la commande `return $this->vue->send();` pour déclencher l'affichage
   - soit renvoyer vers une des fonctions de la classe : `return $this->display();`
   - soit renvoyer vers la page d'accueil : `defaultPage();`
+
+### Traitement des transactions
+
+Remplacer :
+
+- `$bdd->beginTransaction();` par :
+
+```php
+$db = $this->dataClass->db;
+$db->transBegin();
+```
+
+- supprimer `$bdd->commit();` (automatique)
+- remplacer `$bdd->rollback();` par :
+
+```php
+if ($db->transEnabled) {
+    $db->transRollback();
+}
+```
 
 ## Générer les routes et les droits nécessaires pour exécuter les modules
 

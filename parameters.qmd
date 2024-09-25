@@ -2,6 +2,52 @@
 
 # Paramètres de l'application
 
+Les paramètres sont définis dans deux fichiers : _app/Config/App.php_ et _vendor/equinton/ppci/src/Config/IdentificationConfig.php_.
 
+S'ils peuvent tous être modifiés lors de chaque implémentation en utilisant le fichier .env, à la racine de l'application, certains ne devraient pas être modifiés par ce mécanisme.
+
+Les paramètres dans le fichier .env sont préfixés soit par _app._, soit par _Ppci\\Config\\IdentificationConfig._, en fonction de leur origine. Le fichier _env_ contient l'ensemble des variables pouvant être modifiées lors de l'implémentation d'une instance du logiciel.
+
+## Paramètres génériques
+
+| Paramètre (avec le radical utilisé dans le fichier .env) | Description | Valeur par défaut | Modifiable dans .env |
+| --- | --- | --- | --- |
+| app.baseURL | Adresse de l'instance |   | obligatoire |
+| BASE\_DIR | variable utilisée dans .env, pour indiquer le chemin d'accès à l'application | p. e. "/var/www/collec2" | obligatoire |
+| FRONT\_DIR | variable utilisée dans .env, pour indiquer le chemin d'accès au dossier public, la base des pages web | ${BASE\_DIR}/public | en principe, non |
+| app.defaultLocale | Langue par défaut dans l'instance | fr | possible |
+| app.supportedLocales | Langues gérées par l'application | \['fr','en'\] | possible, sous réserve que d'autres langues soient intégrées dans le framework |
+| app.version | Version de l'application |   | jamais |
+| app.versionDate | Date de création de la version |   | jamais |
+| app.dbversion | Version de la base de données. La version doit également exister dans la table dbversion de la base de données |   | jamais |
+| databaseSchemaFile | Chemin où est placé le png décrivant les tables de la base de données | p. e. : ROOTPATH . "documentation/collec-schema.png" | jamais |
+| app.logDuration | Durée, en jours, de conservation des logs dans la table logs | 365 | possible |
+| app.privateKey | emplacement de la clé privée utilisée pour les opérations de chiffrement ou déchiffrement | p. e., ${BASE\_DIR}/id\_collec | possible |
+| app.pubKey | emplacement de la clé publique utilisée pour les opérations de chiffrement ou déchiffrement | p. e. ${BASE\_DIR}/id\_collec.pub | possible |
+| session.expiration | Durée de la session, en secondes | 14400 (4 heures) | possible |
+| app.APPLI\_absolute\_session | Durée maxi de la session, en secondes | 36000 (10 heures) | possible |
+| logger.threshold | Seuil de déclenchement des erreurs | 4 | jamais |
+| app.APP\_mail | email de l'application | mail@mysociety.com | obligatoire |
+| app.MAIL\_enabled | Si à 1, l'envoi de mails est activé | 1 | possible |
+| app.MAIL\_param.from | idem APP\_mail | mail@mysociety.com | obligatoire |
+| app.MAIL\_param.mailDebug | Si à 1, affiche le contenu du mail à l'écran plutôt que de l'envoyer | 0 | en développement uniquement |
+| app.checkRelease | Si à 1, interroge le serveur GIT (Github ou Gitlab) pour connaître la dernière version disponible, et si la version est différente de celle enregistrée (app.version), affiche un message à l'écran. Les paramètres spécifiques pour l'interrogation sont décrits dans le fichier App.php | 0 | possible |
+
+## Paramètres de connexion à la base de données
+
+| Paramètre | Description | Valeur par défaut | Modifiable dans .env |
+| --- | --- | --- | --- |
+| database.default.hostname | nom ou adresse du serveur | localhost | oui |
+| database.default.database | nom de la base de données |   | oui |
+| database.default.username | nom du compte de connexion |   | oui |
+| database.default.password | mot de passe associé |   | oui |
+| database.default.DBDriver | Nom du pilote | Postgre | non |
+| database.default.port | port de connexion | 5432 | oui |
+| database.default.searchpath | liste des schémas utilisés dans la base de données, séparés par une virgule | p. e. col,gacl,public | en principe, non |
+| database.default.charset | jeu de caractères utilisé dans la base de données | utf8 | jamais |
+
+## Paramètres liés à l'identification des utilisateurs
+
+Voir la page [identification](identification.qmd).
 
 :::
