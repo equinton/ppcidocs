@@ -20,6 +20,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -211,8 +245,9 @@ ul.task-list li input[type="checkbox"] {
   <ul class="collapse">
   <li><a href="#csrf-filtre-codeigniter" id="toc-csrf-filtre-codeigniter" class="nav-link" data-scroll-target="#csrf-filtre-codeigniter">csrf : Filtre CodeIgniter</a></li>
   <li><a href="#invalidchar-filtre-codeigniter" id="toc-invalidchar-filtre-codeigniter" class="nav-link" data-scroll-target="#invalidchar-filtre-codeigniter">invalidChar : Filtre CodeIgniter</a></li>
-  <li><a href="#legacyroute-filtre-ppci" id="toc-legacyroute-filtre-ppci" class="nav-link" data-scroll-target="#legacyroute-filtre-ppci">LegacyRoute : Filtre PPCI</a></li>
   <li><a href="#startcall-filtre-ppci" id="toc-startcall-filtre-ppci" class="nav-link" data-scroll-target="#startcall-filtre-ppci">startCall : Filtre PPCI</a></li>
+  <li><a href="#dbversioncheck-filtre-ppci" id="toc-dbversioncheck-filtre-ppci" class="nav-link" data-scroll-target="#dbversioncheck-filtre-ppci">dbversionCheck : Filtre PPCI</a></li>
+  <li><a href="#versioncheck-filtre-ppci" id="toc-versioncheck-filtre-ppci" class="nav-link" data-scroll-target="#versioncheck-filtre-ppci">versionCheck: Filtre PPCI</a></li>
   <li><a href="#rights-filtre-ppci" id="toc-rights-filtre-ppci" class="nav-link" data-scroll-target="#rights-filtre-ppci">rights : Filtre PPCI</a></li>
   <li><a href="#admin-filtre-ppci" id="toc-admin-filtre-ppci" class="nav-link" data-scroll-target="#admin-filtre-ppci">Admin : Filtre PPCI</a></li>
   </ul></li>
@@ -235,31 +270,41 @@ ul.task-list li input[type="checkbox"] {
 <h1>Enchaînement lors de l’appel d’une page</h1>
 <section id="filtres" class="level2">
 <h2 class="anchored" data-anchor-id="filtres">Filtres</h2>
+<p>Les filtres sont déclarés dans le fichier <em>app/Config/Filters.php</em>.</p>
 <section id="csrf-filtre-codeigniter" class="level3">
 <h3 class="anchored" data-anchor-id="csrf-filtre-codeigniter">csrf : Filtre CodeIgniter</h3>
-<p>Vérification du jeton CSRF, présent dans tous les formulaires Smarty</p>
+<p>Vérification du jeton CSRF, présent dans tous les formulaires Smarty. Le filtre doit être inactivé pour les appels des API, par exemple ainsi :</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="st">'csrf'</span> =&gt; [<span class="st">'except'</span> =&gt; [</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>                <span class="st">'apiv1sampleWrite'</span><span class="ot">,</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>                <span class="st">'apiv1sampleDelete'</span><span class="ot">,</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>                <span class="st">'apiv1movementWrite'</span><span class="ot">,</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>                <span class="st">'apiv1sampleList'</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>            ]]<span class="ot">,</span></span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="invalidchar-filtre-codeigniter" class="level3">
 <h3 class="anchored" data-anchor-id="invalidchar-filtre-codeigniter">invalidChar : Filtre CodeIgniter</h3>
 <p>Vérifie l’encodage des caractères transmis depuis le navigateur</p>
 </section>
-<section id="legacyroute-filtre-ppci" class="level3">
-<h3 class="anchored" data-anchor-id="legacyroute-filtre-ppci">LegacyRoute : Filtre PPCI</h3>
-<p>Utilisé pour transformer les adresses de type : <code>index.php?module=nomModule</code> (liens dans les pages web) en route <em>nomModule</em>. Les variables $_GET et $_REQUEST sont stockées en <em>flashdata</em>.</p>
-</section>
 <section id="startcall-filtre-ppci" class="level3">
 <h3 class="anchored" data-anchor-id="startcall-filtre-ppci">startCall : Filtre PPCI</h3>
 <p>Lance <code>PpciInit:init()</code> :</p>
 <ul>
-<li>Avant le démarrage de la session : exécute le script <code>App/Libraries/BeforeSession::index()</code>, pour charger au besoin des classes avant le démarrage de la session</li>
+<li>Avant le démarrage de la session : exécute le script <code>App/Libraries/BeforeSession::index()</code>, pour charger au besoin des classes avant le démarrage de la session. En principe, c’est obsolète pour CodeIgniter.</li>
 <li>démarre la session</li>
 <li>helper(‘ppci’) : charge les fonctions génériques de PPCI</li>
 <li>initialise les messages qui ont été transmis avant une redirection</li>
-<li>lit le fichier de paramétrage param.ini (utilisé pour les instances multi-adresses), et met à jour les paramètres dans App, Database et IdentificationConfig</li>
 <li>met à jour la locale et le fichier des traductions</li>
 <li>initialise la connexion à la base de données</li>
-<li>purge les logs (table gacl.log). Les logs de plus d’un an sont supprimées</li>
+<li>purge les logs (table gacl.log). Les logs de plus d’un an sont supprimées (paramètres <em>app.logDuration</em>)</li>
 </ul>
+</section>
+<section id="dbversioncheck-filtre-ppci" class="level3">
+<h3 class="anchored" data-anchor-id="dbversioncheck-filtre-ppci">dbversionCheck : Filtre PPCI</h3>
+<p>Vérifie la version de la base de données (table <em>dbversion</em>). Si la version déclarée dans la variable <em>app.dbversion</em> n’est pas présente dans la table, , le filtre renvoie vers la page d’accueil (appel de la fonction <em>defaultPage()</em>) et affiche un message d’erreur. Le filtre devrait être désactivé pour les appels des API et pour les scripts lancés en ligne de commande.</p>
+</section>
+<section id="versioncheck-filtre-ppci" class="level3">
+<h3 class="anchored" data-anchor-id="versioncheck-filtre-ppci">versionCheck: Filtre PPCI</h3>
+<p>Filtre optionnel, qui va comparer la version déclarée dans la variable <em>app.version</em> à celle qui est connue comme version courante dans le dépôt Github ou Gitlab. Pour que le filtre fonctionne, il faut que la variable <em>app.checkRelease</em> soit positionnée à 1, et que le tableau <em>app.APPLI_release</em> soit correctement configuré.</p>
 </section>
 <section id="rights-filtre-ppci" class="level3">
 <h3 class="anchored" data-anchor-id="rights-filtre-ppci">rights : Filtre PPCI</h3>
@@ -269,7 +314,7 @@ ul.task-list li input[type="checkbox"] {
 <li>App/Config/Rights</li>
 <li>Ppci/Config/Rights</li>
 </ul></li>
-<li>s’il existe des droits demandés, vérifie si le login existe ou non. S’il n’existe pas, déclenche la procédure de connexion (<code>Ppci/Libraries/Login-&gt;getLogin()</code>)</li>
+<li>s’il existe des droits demandés, le filtre vérifie si le login existe ou non. S’il n’existe pas, déclenche la procédure de connexion (<code>Ppci/Libraries/Login-&gt;getLogin()</code>)</li>
 <li>vérifie que l’utilisateur dispose des droits nécessaires</li>
 </ul>
 </section>
@@ -283,11 +328,12 @@ ul.task-list li input[type="checkbox"] {
 <li>si la durée est &gt; 10’ :
 <ul>
 <li>si le compte n’a pas activé le TOTP, affichage de l’écran de création du code TOTP</li>
-<li>déclenche la saisie du code TOTP</li>
+<li>sinon déclenche la saisie du code TOTP</li>
 </ul></li>
 </ul></li>
 </ul>
-<p>L’utilisation du TOTP est désactivable (non conseillé en production) avec le paramètre <code>IdentificationConfig\disableTotpAdmin=1</code>. La durée de la session <em>admin</em> peut être modifiée avec le paramètre <code>IdentificationConfig\adminSessionDuration=600</code>. La durée est exprimée en secondes.</p>
+<p>L’utilisation du TOTP est désactivable (non conseillé en production) avec le paramètre <code>IdentificationConfig\disableTotpAdmin=1</code>.<br>
+La durée de la session <em>admin</em> peut être modifiée avec le paramètre <code>IdentificationConfig\adminSessionDuration=600</code>. La durée est exprimée en secondes.</p>
 </section>
 </section>
 <section id="appel-du-contrôleur" class="level2">

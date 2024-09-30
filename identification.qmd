@@ -4,14 +4,14 @@
 
 PPCI propose plusieurs mécanismes pour gérer l'identification des utilisateurs :
 
-- stockage des comptes dans la base de données (BDD)
-- identification auprès d'un serveur LDAP (LDAP)
-- identification auprès d'un serveur *Common Access Service* (CAS)
-- identification auprès d'un serveur *OpenID Connect* (OIDC)
-- identification fournie par le serveur web, pour utiliser des mécanismes Shibboleth (mode *Mellon* d'Apache par exemple) (HEADER)
-- des mécanismes mixtes, avec utilisation de serveurs tiers et stockage en base de données pour les comptes non gérés autrement :
-  - LDAP-BDD : test de l'identification auprès de l'annuaire LDAP, et en cas d'échec, auprès de la base de données
-  - CAS-BDD et OIDC-BDD : un bouton permet de sélectionner l'identification auprès du serveur considéré
+*   stockage des comptes dans la base de données (BDD)
+*   identification auprès d'un serveur LDAP (LDAP)
+*   identification auprès d'un serveur _Common Access Service_ (CAS)
+*   identification auprès d'un serveur _OpenID Connect_ (OIDC)
+*   identification fournie par le serveur web, pour utiliser des mécanismes Shibboleth (mode _Mellon_ d'Apache par exemple) (HEADER)
+*   des mécanismes mixtes, avec utilisation de serveurs tiers et stockage en base de données pour les comptes non gérés autrement :
+    *   LDAP-BDD : test de l'identification auprès de l'annuaire LDAP, et en cas d'échec, auprès de la base de données
+    *   CAS-BDD et OIDC-BDD : un bouton permet de sélectionner l'identification auprès du serveur considéré
 
 En outre, les utilisateurs peuvent activer une double identification TOTP. Celle-ci est d'ailleurs obligatoire pour accéder aux modules d'administration.
 
@@ -23,35 +23,35 @@ En outre, les utilisateurs peuvent activer une double identification TOTP. Celle
 
 Les paramètres sont définis dans `Ppci\Config\IdentificationConfig`.
 
-- CONNECTION_max_attempts : en cas d'échec de connexion (par défaut 5), le compte sera bloqué pendant la durée spécifiée dans :
-  - *CONNECTION_blocking_duration* (par défaut, 600 secondes). À noter que la tentative de connexion pendant cette durée réinitialise le compteur à zéro
-- *APP_passwordMinLength* : longueur minimum du mot de passe
-- *APPLI_lostPassword* : si positionné par 1 (défaut), l'utilisateur pourra demander à réinitialiser son mot de passe, sous réserve que son email soit renseigné
-- *tokenIdentityValidity* : durée de validité du jeton généré lors de la connexion BDD ou LDAP, pour éviter d'avoir à se réidentifier pendant la journée. Par défaut, 10 heures.
+*   CONNECTION\_max\_attempts : en cas d'échec de connexion (par défaut 5), le compte sera bloqué pendant la durée spécifiée dans :
+    *   _CONNECTION\_blocking\_duration_ (par défaut, 600 secondes). À noter que la tentative de connexion pendant cette durée réinitialise le compteur à zéro
+*   _APP\_passwordMinLength_ : longueur minimum du mot de passe
+*   _APPLI\_lostPassword_ : si positionné par 1 (défaut), l'utilisateur pourra demander à réinitialiser son mot de passe, sous réserve que son email soit renseigné
+*   _tokenIdentityValidity_ : durée de validité du jeton généré lors de la connexion BDD ou LDAP, pour éviter d'avoir à se réidentifier pendant la journée. Par défaut, 10 heures.
 
 ### Identification LDAP
 
 Les variables sont définies dans `Ppci\Config\IdentificationConfig.LDAP`.
 
-- *address* : adresse du serveur LDAP
-- *port* : port de connexion
-- *rdn* : compte de connexion pour interroger l'annuaire, si nécessaire
-- *basedn* : base de recherche des comptes
-- *user_attrib* : attribut contenant l'identifiant de l'utilisateur (uid)
-- *v3* : version 3 de l'annuaire, positionné par défaut *true*
-- *tls* : mettre à *true* pour activer la connexion *tls*
-- *upn_suffix* : suffixe upn, nécessaire dans certains cas pour Active Directory
-- *groupSupport* : si positionné à *true*, les groupes seront récupérés depuis l'annuaire pour alimenter le module de gestion des droits
-- *groupAttrib* : nom de l'attribut comprenant les groupes de l'utilisateurs
-- *commonNameAttrib* : nom de l'attribut comprenant le nom complet de l'utilisateur
-- *mailAttrib* : nom de l'attribut comprenant l'email de l'utilisateur
-- *attributgroupname* : nom de l'attribut comprenant le nom du groupe
-- *attributloginname* : nom de l'attribut comprenant l'uid du membre
-- *basedngroup* : chemin de recherche des groupes
-- *timeout* : time-out de recherche dans l'annuaire (positionné à 2 secondes par défaut)
-- *ldapnoanonymous* : si positionné à *true*, l'interrogation de l'annuaire pour récupérer les groupes impose une connexion
-  - *ldaplogin* : login de connexion
-  - *ldappassword* : mot de passe associé
+*   _address_ : adresse du serveur LDAP
+*   _port_ : port de connexion
+*   _rdn_ : compte de connexion pour interroger l'annuaire, si nécessaire
+*   _basedn_ : base de recherche des comptes
+*   _user\_attrib_ : attribut contenant l'identifiant de l'utilisateur (uid)
+*   _v3_ : version 3 de l'annuaire, positionné par défaut _true_
+*   _tls_ : mettre à _true_ pour activer la connexion _tls_
+*   _upn\_suffix_ : suffixe upn, nécessaire dans certains cas pour Active Directory
+*   _groupSupport_ : si positionné à _true_, les groupes seront récupérés depuis l'annuaire pour alimenter le module de gestion des droits
+*   _groupAttrib_ : nom de l'attribut comprenant les groupes de l'utilisateurs
+*   _commonNameAttrib_ : nom de l'attribut comprenant le nom complet de l'utilisateur
+*   _mailAttrib_ : nom de l'attribut comprenant l'email de l'utilisateur
+*   _attributgroupname_ : nom de l'attribut comprenant le nom du groupe
+*   _attributloginname_ : nom de l'attribut comprenant l'uid du membre
+*   _basedngroup_ : chemin de recherche des groupes
+*   _timeout_ : time-out de recherche dans l'annuaire (positionné à 2 secondes par défaut)
+*   _ldapnoanonymous_ : si positionné à _true_, l'interrogation de l'annuaire pour récupérer les groupes impose une connexion
+    *   _ldaplogin_ : login de connexion
+    *   _ldappassword_ : mot de passe associé
 
 ### Icône pour le bouton d'identification (CAS-BDD ou OIDC-BDD)
 
@@ -63,40 +63,40 @@ Les paramètres sont définis dans `Ppci\Config\IdentificationConfig.XX`, où XX
 
 Paramètres généraux :
 
-- *mail* : attribut comprenant l'email
-- *firstname* : attribut comprenant le prénom
-- *lastname* : attribut comprenant le nom de famille
-- *name* : attribut comprenant le nom complet
-- *groups* : attribut comprenant les groupes d'appartenance des utilisateurs
-- *getGroups* : si positionné à 1 (défaut), les groupes de l'utilisateur fournis par le serveur d'identification sont traités
+*   _mail_ : attribut comprenant l'email
+*   _firstname_ : attribut comprenant le prénom
+*   _lastname_ : attribut comprenant le nom de famille
+*   _name_ : attribut comprenant le nom complet
+*   _groups_ : attribut comprenant les groupes d'appartenance des utilisateurs
+*   _getGroups_ : si positionné à 1 (défaut), les groupes de l'utilisateur fournis par le serveur d'identification sont traités
 
 ### Paramètres spécifiques de l'identification CAS
 
-- *address* : adresse du serveur CAS, par exemple : *monserveur.society.com*
-- *uri* : dossier d'accès à l'identification. Par défaut : */cas*
-- *port* : par défaut, 443
-- *debug* : si positionné à *true* ou *1*, les traces sont stockées dans le fichier `writable/logs/cas.log`
-- *CApath* : chemin d'accès au certificat permettant de valider le serveur CAS. S'il n'est pas renseigné, le serveur CAS ne sera pas vérifié (déconseillé en production)
+*   _address_ : adresse du serveur CAS, par exemple : _monserveur.society.com_
+*   _uri_ : dossier d'accès à l'identification. Par défaut : _/cas_
+*   _port_ : par défaut, 443
+*   _debug_ : si positionné à _true_ ou _1_, les traces sont stockées dans le fichier `writable/logs/cas.log`
+*   _CApath_ : chemin d'accès au certificat permettant de valider le serveur CAS. S'il n'est pas renseigné, le serveur CAS ne sera pas vérifié (déconseillé en production)
 
 ### Identification OIDC
 
-- *name* : code du provider
-- *provider* : adresse web du provider (doit commencer par *https://*)
-- *clientId* : code fourni par le provider
-- *clientSecret* : clé secrète fournie par le provider
-- *scopeGroup* : nom du *scope* OIDC qui contient les attributs secondaires (par défaut : *affectation*)
+*   _name_ : code du provider
+*   _provider_ : adresse web du provider (doit commencer par _https://_)
+*   _clientId_ : code fourni par le provider
+*   _clientSecret_ : clé secrète fournie par le provider
+*   _scopeGroup_ : nom du _scope_ OIDC qui contient les attributs secondaires (par défaut : _affectation_)
 
 ### Identification HEADER
 
-- *login* : nom de l'attribut de `$_SERVER` contenant le login, renvoyé par le serveur Apache
-- *organizationGranted* : tableau contenant le code ou le nom des organismes autorisés. Si ce tableau est renseigné, et si un nouvel utilisateur n'appartient pas à une des organisations indiquées (attribut *organization*), la création de son compte ne sera pas effectuée
-- *groupsGranted* : tableau contenant la liste des groupes autorisés. Si un utilisateur se connecte pour la première fois et que son groupe (ou un de ses groupes) appartient à la liste des groupes autorisés, son compte sera activé automatiquement. Dans le cas contraire, son compte sera désactivé, et un email est envoyé aux administrateurs pour les inviter à activer le compte.
+*   _login_ : nom de l'attribut de `$_SERVER` contenant le login, renvoyé par le serveur Apache
+*   _organizationGranted_ : tableau contenant le code ou le nom des organismes autorisés. Si ce tableau est renseigné, et si un nouvel utilisateur n'appartient pas à une des organisations indiquées (attribut _organization_), la création de son compte ne sera pas effectuée
+*   _groupsGranted_ : tableau contenant la liste des groupes autorisés. Si un utilisateur se connecte pour la première fois et que son groupe (ou un de ses groupes) appartient à la liste des groupes autorisés, son compte sera activé automatiquement. Dans le cas contraire, son compte sera désactivé, et un email est envoyé aux administrateurs pour les inviter à activer le compte.
 
 ## Gestion de l'accès aux modules d'administration
 
 Les paramètres sont accessibles depuis `Ppci\Config\IdentificationConfig`.
 
-- *adminSessionDuration* : durée pendant laquelle l'identification reste valide pour accéder aux modules d'administration. Par défaut, 10'.
-- *disableTotpToAdmin* : si positionné à 1, désactive la double-identification pour accéder aux modules d'administration. Ne devrait pas être utilisé en production !
+*   _adminSessionDuration_ : durée pendant laquelle l'identification reste valide pour accéder aux modules d'administration. Par défaut, 10'.
+*   _disableTotpToAdmin_ : si positionné à 1, désactive la double-identification pour accéder aux modules d'administration. Ne devrait pas être utilisé en production !
 
 :::

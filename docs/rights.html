@@ -20,6 +20,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -205,7 +239,10 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Sur cette page</h2>
    
   <ul>
-  <li><a href="#droits-daccès-aux-modules" id="toc-droits-daccès-aux-modules" class="nav-link active" data-scroll-target="#droits-daccès-aux-modules">Droits d’accès aux modules</a></li>
+  <li><a href="#droits-daccès-aux-modules" id="toc-droits-daccès-aux-modules" class="nav-link active" data-scroll-target="#droits-daccès-aux-modules">Droits d’accès aux modules</a>
+  <ul class="collapse">
+  <li><a href="#organisation-des-droits-dans-la-base-de-données" id="toc-organisation-des-droits-dans-la-base-de-données" class="nav-link" data-scroll-target="#organisation-des-droits-dans-la-base-de-données">Organisation des droits dans la base de données</a></li>
+  </ul></li>
   </ul>
 </nav>
     <div class="quarto-margin-footer"><div class="margin-footer-item">
@@ -219,8 +256,47 @@ ul.task-list li input[type="checkbox"] {
 
 <section id="droits-daccès-aux-modules" class="level1">
 <h1>Droits d’accès aux modules</h1>
+<p>Les droits sont déclarés dans le fichier app/Config/Rights.php. Les droits des modules gérés directement dans Ppci sont déclarés dans vendor/equinton/ppci/src/Config/Rights.php.</p>
+<p>Pour tout module (route) qui doit être protégé, une entrée doit être rajoutée dans le tableau <em>rights</em>, ainsi :&nbsp;</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">protected</span> <span class="dt">array</span> <span class="va">$rights</span> <span class="op">=</span> [</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"storageConditionList"</span> =&gt; [<span class="st">"consult"</span>]<span class="ot">,</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"storageConditionChange"</span> =&gt; [<span class="st">"param"</span><span class="ot">,</span> <span class="st">"collection"</span>]<span class="ot">,</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"storageConditionWrite"</span> =&gt; [<span class="st">"param"</span><span class="ot">,</span> <span class="st">"collection"</span>]<span class="ot">,</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"storageConditionDelete"</span> =&gt; [<span class="st">"param"</span><span class="ot">,</span> <span class="st">"collection"</span>]<span class="ot">,</span></span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Les droits par défaut gérés par Ppci sont les suivants :</p>
+<ul>
+<li>admin : accès aux modules d’administration</li>
+<li>consult : consultation des informations</li>
+<li>manage : gestion au quotidien</li>
+<li>param : accès aux paramètres du logiciel (rôle de l’administrateur métier)</li>
+</ul>
+<p>D’autres droits peuvent être rajoutés dans l’application, comme c’est le cas dans l’exemple ci-dessus avec le droit <em>collection</em>. Ils sont décrits avec les tables <em>acl*</em> du schéma <em>gacl</em>.</p>
+<p>Lors de l’accès à un module protégé, les droits de l’utilisateur sont calculés par le filtre <em>RightsFilter</em> (<em>cf.</em> <a href="principes.html"><em>principes.html</em></a><em>)</em>, et l’accès n’est accordé que si l’utilisateur dispose d’un des droits déclarés dans le tableau <em>rights</em>.</p>
+<section id="organisation-des-droits-dans-la-base-de-données" class="level2">
+<h2 class="anchored" data-anchor-id="organisation-des-droits-dans-la-base-de-données">Organisation des droits dans la base de données</h2>
+<p>Les droits sont gérés dans des tables présentes dans le schéma <em>gacl</em>.</p>
+<ul>
+<li><em>acllogin</em> : liste des logins des utilisateurs. Si un compte est créé dans la base locale<br>
+d’identification (table <em>logingestion</em>), un enregistrement est également créé dans cette table.</li>
+<li><em>aclappli</em> : liste des applications gérées. Il est possible de gérer, à partir de<br>
+la même base de données, plusieurs ensembles de droits, qui utilisent les<br>
+mêmes logins. Dans la pratique, une seule entrée figure dans cette table. La valeur de <em>aclappli</em> doit être identique à la variable de configuration <em>app.GACL_aco</em>.</li>
+<li><em>aclaco</em> : liste des droits déclarés dans l’application ;</li>
+<li><em>aclgroup</em> : liste des groupes contenant les logins, et qui détiennent les droits.<br>
+Un groupe peut hériter d’un autre groupe. Les droits associés au groupe<br>
+parent sont également attribués au groupe hérité ;</li>
+<li><em>acllogingroup</em> : table permettant de déclarer les logins associés à un groupe ;</li>
+<li><em>aclacl</em> : table décrivant les droits détenus par un groupe.</li>
+</ul>
+<p>Dans certains cas (identification LDAP ou CAS), et si la reconnaissance automatique des groupes est activée dans la configuration, il n’est pas nécessaire de déclarer les logins dans la table <em>acllogin</em>. C’est l’appartenance à un groupe de l’annuaire, déclaré par ailleurs dans la table <em>aclgroup</em>, qui permettra d’attribuer les droits.</p>
+<p>L’algorithme d’attribution des droits va fonctionner ainsi :</p>
+<ul>
+<li>recherche des groupes auquel appartient le login, soit de manière formelle (déclaration dans la table <em>acllogingroup</em>), soit de manière induite (groupe de l’annuaire déclaré dans la table <em>aclgroup</em>), soit en récupérant les groupes dont hérite le groupe courant où est déclaré le login</li>
+<li>pour chacun des groupes d’appartenance, recherche dans la table <em>aclacl</em> des droits attribués aux groupes.</li>
+</ul>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->

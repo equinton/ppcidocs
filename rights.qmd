@@ -2,4 +2,50 @@
 
 # Droits d'accès aux modules
 
+Les droits sont déclarés dans le fichier app/Config/Rights.php. Les droits des modules gérés directement dans Ppci sont déclarés dans vendor/equinton/ppci/src/Config/Rights.php.
+
+Pour tout module (route) qui doit être protégé, une entrée doit être rajoutée dans le tableau _rights_, ainsi : 
+
+```php
+protected array $rights = [
+	"storageConditionList" => ["consult"],
+    "storageConditionChange" => ["param", "collection"],
+    "storageConditionWrite" => ["param", "collection"],
+    "storageConditionDelete" => ["param", "collection"],
+```
+
+Les droits par défaut gérés par Ppci sont les suivants :
+
+*   admin : accès aux modules d'administration
+*   consult : consultation des informations
+*   manage : gestion au quotidien
+*   param : accès aux paramètres du logiciel (rôle de l'administrateur métier)
+
+D'autres droits peuvent être rajoutés dans l'application, comme c'est le cas dans l'exemple ci-dessus avec le droit _collection_. Ils sont décrits avec les tables _acl\*_ du schéma _gacl_.
+
+Lors de l'accès à un module protégé, les droits de l'utilisateur sont calculés par le filtre _RightsFilter_ (_cf._ [_principes.html_](principes.html)_)_, et l'accès n'est accordé que si l'utilisateur dispose d'un des droits déclarés dans le tableau _rights_.
+
+## Organisation des droits dans la base de données
+
+Les droits sont gérés dans des tables présentes dans le schéma _gacl_.
+
+*   _acllogin_ : liste des logins des utilisateurs. Si un compte est créé dans la base locale  
+    d’identification (table _logingestion_), un enregistrement est également créé dans cette table.
+*   _aclappli_ : liste des applications gérées. Il est possible de gérer, à partir de  
+    la même base de données, plusieurs ensembles de droits, qui utilisent les  
+    mêmes logins. Dans la pratique, une seule entrée figure dans cette table. La valeur de _aclappli_ doit être identique à la variable de configuration _app.GACL\_aco_.
+*   _aclaco_ : liste des droits déclarés dans l’application ;
+*   _aclgroup_ : liste des groupes contenant les logins, et qui détiennent les droits.  
+    Un groupe peut hériter d’un autre groupe. Les droits associés au groupe  
+    parent sont également attribués au groupe hérité ;
+*   _acllogingroup_ : table permettant de déclarer les logins associés à un groupe ;
+*   _aclacl_ : table décrivant les droits détenus par un groupe.
+
+Dans certains cas (identification LDAP ou CAS), et si la reconnaissance automatique des groupes est activée dans la configuration, il n'est pas nécessaire de déclarer les logins dans la table _acllogin_. C'est l'appartenance à un groupe de l'annuaire, déclaré par ailleurs dans la table _aclgroup_, qui permettra d'attribuer les droits.
+
+L'algorithme d'attribution des droits va fonctionner ainsi :
+
+*   recherche des groupes auquel appartient le login, soit de manière formelle (déclaration dans la table _acllogingroup_), soit de manière induite (groupe de l'annuaire déclaré dans la table _aclgroup_), soit en récupérant les groupes dont hérite le groupe courant où est déclaré le login
+*   pour chacun des groupes d'appartenance, recherche dans la table _aclacl_ des droits attribués aux groupes.
+
 :::

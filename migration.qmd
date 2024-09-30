@@ -102,7 +102,6 @@ Modifiez toutes les actions des formulaires, pour qu'ils aient cette forme :
 ```
 
 Le champ `action` peut être supprimé. Par contre, le champ `moduleBase` doit être conservé : il est utilisé pour créer l'action `moduleDelete` par l'intermédiaire du script javascript dans `main_js.tpl`.
-Toutefois, si les modifications ne sont pas réalisées, le script créera automatiquement la bonne action à partir des champs `moduleBase` et `action` lors de l'envoi du formulaire.
 
 ## Réécriture des modèles
 
@@ -126,6 +125,7 @@ Elles peuvent être effectuées par rechercher/remplacer.
 - supprimer :
   - `$this->id_auto = 1;`
   - `$param["fullDescription"] = 1;`
+  - `$this->param = $param;`
 
 ### Transformations individuelles
 

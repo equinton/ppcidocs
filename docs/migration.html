@@ -367,7 +367,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Modifiez toutes les actions des formulaires, pour qu’ils aient cette forme :</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode html code-with-copy"><code class="sourceCode html"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">form</span><span class="ot"> class</span><span class="op">=</span><span class="st">"form-horizontal"</span><span class="ot"> id</span><span class="op">=</span><span class="st">"formName"</span><span class="ot"> method</span><span class="op">=</span><span class="st">"post"</span><span class="ot"> action</span><span class="op">=</span><span class="st">"moduleWrite"</span><span class="dt">&gt;</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">input</span><span class="ot"> type</span><span class="op">=</span><span class="st">"hidden"</span><span class="ot"> name</span><span class="op">=</span><span class="st">"moduleBase"</span><span class="ot"> value</span><span class="op">=</span><span class="st">"module"</span><span class="dt">&gt;</span></span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Le champ <code>action</code> peut être supprimé. Par contre, le champ <code>moduleBase</code> doit être conservé : il est utilisé pour créer l’action <code>moduleDelete</code> par l’intermédiaire du script javascript dans <code>main_js.tpl</code>. Toutefois, si les modifications ne sont pas réalisées, le script créera automatiquement la bonne action à partir des champs <code>moduleBase</code> et <code>action</code> lors de l’envoi du formulaire.</p>
+<p>Le champ <code>action</code> peut être supprimé. Par contre, le champ <code>moduleBase</code> doit être conservé : il est utilisé pour créer l’action <code>moduleDelete</code> par l’intermédiaire du script javascript dans <code>main_js.tpl</code>.</p>
 </section>
 </section>
 <section id="réécriture-des-modèles" class="level2">
@@ -394,6 +394,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <ul>
 <li><code>$this-&gt;id_auto = 1;</code></li>
 <li><code>$param["fullDescription"] = 1;</code></li>
+<li><code>$this-&gt;param = $param;</code></li>
 </ul></li>
 </ul>
 </section>

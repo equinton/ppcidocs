@@ -2,4 +2,82 @@
 
 # Bibliothèques
 
+Le code "actif" de l'application, c'est à dire celui qui enchaîne les actions, est décrit dans les bibliothèques (librairies). En général, on retrouve une librairie par table, mais ce n'est pas systématique.
+
+Les librairies héritent systématiquement de PpciLibrary, et contiennent en général les fonction suivantes :
+
+*   list : affichage de la liste des enregistrements de la table
+*   display : affichage du détail d'un enregistrement
+*   change : affichage de la page de modification
+*   write : écriture en base de données
+*   delete : suppression de l'enregistrement.
+
+Selon le cas, _write_ et _delete_ renvoient soit vers _display_, soit vers _list_ et, en cas de problème, la fonction recharge la page _change_.
+
+Dans certains cas, notamment quand les fonctions peuvent être appelées depuis des endroits différents dans l'application, les fonctions renvoient simplement la valeur _true_ ou  _false_, et c'est le contrôleur qui se chargera d'appeler la fonction d'affichage, notamment après les opérations d'enregistrement.
+
+## La classe PpciLibrary
+
+Elle gère l'accès direct à quelques services :
+
+*   `$this->message` : affichage de messages à l'écran et enregistrement de messages techniques dans Syslog
+*   `$this->appConfig` : accès aux paramètres de configuration stockés dans _app/Config/App.php_ ou mis à jour par l'intermédiaire de _.env_
+*   `$this->log` : enregistrement de traces dans la table _gacl.log_ de la base de données.
+
+Pour qu'elle fonctionne correctement, elle doit être initialisée ainsi : 
+
+```php
+function __construct()
+    {
+        parent::__construct();
+        $this->dataclass = new ModelsBorrower();
+        $this->keyName = "borrower_id";
+        if (isset($_REQUEST[$this->keyName])) {
+            $this->id = $_REQUEST[$this->keyName];
+        }
+    }
+```
+
+_$this->dataclass_ doit être une classe héritée de _PpciModel_. 
+
+Elle dispose également de fonctions génériques, qui permettent de simplifier l'écriture des classes dans l'application. Celles-ci déclenchent systématiquement une exception _PpciException_ en cas d'erreur rencontrée.
+
+### Lecture d'un enregistrement et affichage de la page pour la modification ou l'affichage
+
+`function dataRead($id, $smartyPage, $idParent = 0)`
+
+La fonction appelle _$this->dataclass->read ($id, true, $idParent)_, affecte le tableau de données lu à la variable _$data_, puis déclenche l'affichage de la page _$smartyPage_. Elle retourne le tableau _$data_ à la fonction appelante.
+
+### Écriture d'un enregistrement
+
+`function dataWrite(array $data, bool $isPartOfTransaction = false)`
+
+Écrit les données _$data_ dans la table gérée par _$this->dataclass_ (appel à la fonction _write_). Si l'indicateur de transaction n'est pas activé, un message informant de l'exécution de la commande est envoyé, et une trace est enregistrée dans la table _log_.
+
+### Suppression d'un enregistrement
+
+`function dataDelete($id, bool $isPartOfTransaction = false)`
+
+Supprime l'enregistrement identifié par _$id_, et affiche un message pour informer de la réussite de l'opération si l'indicateur de transaction n'est pas activé.
+
+## Traitement des transactions
+
+Dans le cas où plusieurs écritures concommittantes sont nécessaires, il est possible d'activer les transactions, gérées par CodeIgniter, avec les commandes suivantes :
+
+```php
+try {
+   /*
+    * Demarrage d'une transaction
+    */
+   $db = $this->dataclass->db;
+   $db->transBegin();
+   (...)
+   $db->transCommit();
+   } catch (PpciException $ie) {
+     if ($db->transEnabled) {
+     $db->transRollback();
+     (...)
+   }
+```
+
 :::

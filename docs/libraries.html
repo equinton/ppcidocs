@@ -20,6 +20,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -67,6 +101,35 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="site_libs/quarto-contrib/quarto-project/SebastienBoutry/inrae-project-website/ressources/styles.css">
 </head>
@@ -205,7 +268,16 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Sur cette page</h2>
    
   <ul>
-  <li><a href="#bibliothèques" id="toc-bibliothèques" class="nav-link active" data-scroll-target="#bibliothèques">Bibliothèques</a></li>
+  <li><a href="#bibliothèques" id="toc-bibliothèques" class="nav-link active" data-scroll-target="#bibliothèques">Bibliothèques</a>
+  <ul class="collapse">
+  <li><a href="#la-classe-ppcilibrary" id="toc-la-classe-ppcilibrary" class="nav-link" data-scroll-target="#la-classe-ppcilibrary">La classe PpciLibrary</a>
+  <ul class="collapse">
+  <li><a href="#lecture-dun-enregistrement-et-affichage-de-la-page-pour-la-modification-ou-laffichage" id="toc-lecture-dun-enregistrement-et-affichage-de-la-page-pour-la-modification-ou-laffichage" class="nav-link" data-scroll-target="#lecture-dun-enregistrement-et-affichage-de-la-page-pour-la-modification-ou-laffichage">Lecture d’un enregistrement et affichage de la page pour la modification ou l’affichage</a></li>
+  <li><a href="#écriture-dun-enregistrement" id="toc-écriture-dun-enregistrement" class="nav-link" data-scroll-target="#écriture-dun-enregistrement">Écriture d’un enregistrement</a></li>
+  <li><a href="#suppression-dun-enregistrement" id="toc-suppression-dun-enregistrement" class="nav-link" data-scroll-target="#suppression-dun-enregistrement">Suppression d’un enregistrement</a></li>
+  </ul></li>
+  <li><a href="#traitement-des-transactions" id="toc-traitement-des-transactions" class="nav-link" data-scroll-target="#traitement-des-transactions">Traitement des transactions</a></li>
+  </ul></li>
   </ul>
 </nav>
     <div class="quarto-margin-footer"><div class="margin-footer-item">
@@ -219,8 +291,72 @@ ul.task-list li input[type="checkbox"] {
 
 <section id="bibliothèques" class="level1">
 <h1>Bibliothèques</h1>
+<p>Le code “actif” de l’application, c’est à dire celui qui enchaîne les actions, est décrit dans les bibliothèques (librairies). En général, on retrouve une librairie par table, mais ce n’est pas systématique.</p>
+<p>Les librairies héritent systématiquement de PpciLibrary, et contiennent en général les fonction suivantes :</p>
+<ul>
+<li>list : affichage de la liste des enregistrements de la table</li>
+<li>display : affichage du détail d’un enregistrement</li>
+<li>change : affichage de la page de modification</li>
+<li>write : écriture en base de données</li>
+<li>delete : suppression de l’enregistrement.</li>
+</ul>
+<p>Selon le cas, <em>write</em> et <em>delete</em> renvoient soit vers <em>display</em>, soit vers <em>list</em> et, en cas de problème, la fonction recharge la page <em>change</em>.</p>
+<p>Dans certains cas, notamment quand les fonctions peuvent être appelées depuis des endroits différents dans l’application, les fonctions renvoient simplement la valeur <em>true</em> ou&nbsp; <em>false</em>, et c’est le contrôleur qui se chargera d’appeler la fonction d’affichage, notamment après les opérations d’enregistrement.</p>
+<section id="la-classe-ppcilibrary" class="level2">
+<h2 class="anchored" data-anchor-id="la-classe-ppcilibrary">La classe PpciLibrary</h2>
+<p>Elle gère l’accès direct à quelques services :</p>
+<ul>
+<li><code>$this-&gt;message</code> : affichage de messages à l’écran et enregistrement de messages techniques dans Syslog</li>
+<li><code>$this-&gt;appConfig</code> : accès aux paramètres de configuration stockés dans <em>app/Config/App.php</em> ou mis à jour par l’intermédiaire de <em>.env</em></li>
+<li><code>$this-&gt;log</code> : enregistrement de traces dans la table <em>gacl.log</em> de la base de données.</li>
+</ul>
+<p>Pour qu’elle fonctionne correctement, elle doit être initialisée ainsi :&nbsp;</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="bu">__construct</span>()</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    {</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>        <span class="kw">parent</span>::<span class="bu">__construct</span>()<span class="ot">;</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>        <span class="va">$this</span>-&gt;dataclass <span class="op">=</span> <span class="kw">new</span> ModelsBorrower()<span class="ot">;</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>        <span class="va">$this</span>-&gt;keyName <span class="op">=</span> <span class="st">"borrower_id"</span><span class="ot">;</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (<span class="kw">isset</span>(<span class="va">$_REQUEST</span>[<span class="va">$this</span>-&gt;keyName])) {</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>            <span class="va">$this</span>-&gt;id <span class="op">=</span> <span class="va">$_REQUEST</span>[<span class="va">$this</span>-&gt;keyName]<span class="ot">;</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    }</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><em>$this-&gt;dataclass</em> doit être une classe héritée de <em>PpciModel</em>.&nbsp;</p>
+<p>Elle dispose également de fonctions génériques, qui permettent de simplifier l’écriture des classes dans l’application. Celles-ci déclenchent systématiquement une exception <em>PpciException</em> en cas d’erreur rencontrée.</p>
+<section id="lecture-dun-enregistrement-et-affichage-de-la-page-pour-la-modification-ou-laffichage" class="level3">
+<h3 class="anchored" data-anchor-id="lecture-dun-enregistrement-et-affichage-de-la-page-pour-la-modification-ou-laffichage">Lecture d’un enregistrement et affichage de la page pour la modification ou l’affichage</h3>
+<p><code>function dataRead($id, $smartyPage, $idParent = 0)</code></p>
+<p>La fonction appelle <em><span class="math inline">\(this-&gt;dataclass-&gt;read (\)</span>id, true, <span class="math inline">\(idParent)_, affecte le tableau de données lu à la variable _\)</span>data</em>, puis déclenche l’affichage de la page <em><span class="math inline">\(smartyPage_. Elle retourne le tableau _\)</span>data</em> à la fonction appelante.</p>
+</section>
+<section id="écriture-dun-enregistrement" class="level3">
+<h3 class="anchored" data-anchor-id="écriture-dun-enregistrement">Écriture d’un enregistrement</h3>
+<p><code>function dataWrite(array $data, bool $isPartOfTransaction = false)</code></p>
+<p>Écrit les données <em><span class="math inline">\(data_ dans la table gérée par _\)</span>this-&gt;dataclass</em> (appel à la fonction <em>write</em>). Si l’indicateur de transaction n’est pas activé, un message informant de l’exécution de la commande est envoyé, et une trace est enregistrée dans la table <em>log</em>.</p>
+</section>
+<section id="suppression-dun-enregistrement" class="level3">
+<h3 class="anchored" data-anchor-id="suppression-dun-enregistrement">Suppression d’un enregistrement</h3>
+<p><code>function dataDelete($id, bool $isPartOfTransaction = false)</code></p>
+<p>Supprime l’enregistrement identifié par <em>$id</em>, et affiche un message pour informer de la réussite de l’opération si l’indicateur de transaction n’est pas activé.</p>
+</section>
+</section>
+<section id="traitement-des-transactions" class="level2">
+<h2 class="anchored" data-anchor-id="traitement-des-transactions">Traitement des transactions</h2>
+<p>Dans le cas où plusieurs écritures concommittantes sont nécessaires, il est possible d’activer les transactions, gérées par CodeIgniter, avec les commandes suivantes :</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="cf">try</span> {</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>   <span class="co">/*</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co">    * Demarrage d'une transaction</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co">    */</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>   <span class="va">$db</span> <span class="op">=</span> <span class="va">$this</span>-&gt;dataclass-&gt;db<span class="ot">;</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>   <span class="va">$db</span>-&gt;transBegin()<span class="ot">;</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>   (...)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>   <span class="va">$db</span>-&gt;transCommit()<span class="ot">;</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>   } <span class="cf">catch</span> (PpciException <span class="va">$ie</span>) {</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>     <span class="cf">if</span> (<span class="va">$db</span>-&gt;transEnabled) {</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>     <span class="va">$db</span>-&gt;transRollback()<span class="ot">;</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>     (...)</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>   }</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->

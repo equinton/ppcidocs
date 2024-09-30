@@ -2,4 +2,39 @@
 
 # Contrôleurs
 
+Les contrôleurs, première étape du traitement d'une route, héritent de la classe _PpciController_. Celle-ci appelle automatiquement la fonction d'initialisation `function initController( RequestInterface $request, ResponseInterface $response, LoggerInterface $logger)` et charge le service _message_ et la configuration _App_ dans _$this->config_.
+
+Voici un exemple typique d'implémentation :
+
+```php
+class Borrower extends PpciController
+{
+    protected $lib;
+    function __construct()
+    {
+        $this->lib = new LibrariesBorrower();
+    }
+    function list()
+    {
+        return $this->lib->list();
+    }
+    function display()
+    {
+        return $this->lib->display();
+    }
+    function change()
+    {
+        return $this->lib->change();
+    }
+    function write()
+    {
+        return $this->lib->write();
+    }
+    function delete()
+    {
+        return $this->lib->delete();
+    }
+}
+```
+
 :::

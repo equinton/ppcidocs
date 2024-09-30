@@ -2,4 +2,222 @@
 
 # Gestion des accès aux données stockées en base de données
 
+Les classes permettant le dialogue avec la base de données sont stockées dans `app/Models`. Elles héritent toutes de la classe `PpciModel`, qui encapsule l'ensemble des fonctions d'accès et de mise à jour.
+
+PpciModel s'appuie autant que faire se peut sur les mécanismes intrinsèques de CodeIgniter. Toutefois, certaines fonctions d'écriture ont été réécrites pour mieux maîtriser les opérations réalisées dans la base de données.
+
+## Initialiser une classe
+
+Lors de l'initialisation d'une classe d'accès à une table, plusieurs paramètres sont à renseigner :
+
+*   le nom de la table
+*   la liste des colonnes avec, pour chacune, si elle doit être fournie (obligatoire), son type, s'il s'agit de la clé primaire de la table, la valeur par défaut en cas de création d'un nouvel enregistrement, et si l'attribut est une clé étrangère vers le parent de l'enregistrement courant
+*   si la clé primaire est générée automatiquement ou pas par la base de données.
+
+Exemple :
+
+```php
+namespace App\Models;
+
+use Ppci\Models\PpciModel;
+
+class Peche extends PpciModel
+{
+    public array $warning = array();
+
+    public function __construct()
+    {
+        $this->table = "peche";
+        $this->fields = array(
+            "peche_id" => array(
+                "type" => 1,
+                "key" => 1,
+                "requis" => 1,
+                "defaultValue" => 0
+            ),
+            "trait_id" => array(
+                "type" => 1,
+                "requis" => 1,
+                "parentAttrib" => 1
+            ),
+            "uuid" => array(
+                "type" => 0,
+                "defaultValue" => $this->getUUID()
+            ),
+        );
+        parent::__construct();
+    }
+}
+```
+
+### Description des champs
+
+<table><tbody><tr><td>Attribut</td><td>Valeur</td></tr><tr><td>type</td><td>0 : chaîne de caractères<br>1: numérique<br>2 : date<br>3 : date-heure<br>4 : champ géographique (Postgis)</td></tr><tr><td>key</td><td>Si 1, c'est la clé primaire de la table</td></tr><tr><td>requis</td><td>Si 1, l'enregistrement échouera si la colonne n'est pas fournie ou est vide</td></tr><tr><td>parentAttrib</td><td>Si, la colonne est la clé étrangère, dans le cas d'une relation père-fils</td></tr><tr><td>defaultValue</td><td>La valeur par défaut, lors de la création d'un enregistrement.</td></tr></tbody></table>
+
+Par convention, pour tout nouvel enregistrement, la clé primaire prend la valeur 0.
+
+### Traitement des dates
+
+Les dates sont automatiquement transformées dans le format courant de la langue utilisée, tant pour les sélections que pour les mises à jour. Lors de l'initialisation de la classe, les tableaux  `$this->dateFields` et `$this->datetimeFields` sont renseignés à partir des informations déclarées. Il est possible de les compléter ponctuellement avant d'exécuter un `select` pour que des champs dates externes à la table, dans le cadre de jointures, soient également formatés.
+
+S'il est nécessaire de désactiver le formatage des date, il suffit d'indiquer :
+
+```php
+$this->autoformatDate = false;
+```
+
+### Traitement des champs numériques
+
+Par défaut, avant une mise à jour, les nombres sont traités pour remplacer la virgule par le point. Si ce mécanisme doit être désactivé, il suffit d'indiquer :
+
+```php
+$this->transformComma = false;
+```
+
+### Enregistrement des messages d'informations, traitement des erreurs
+
+La classe intègre nativement la classe `Message`, qui permet d'envoyer des informations au navigateur ou d'enregistrer des messages d'erreur dans les logs du serveur (syslog). Elle est accessible _via_ `$this->message->set(...);`
+
+Les erreurs d'exécution déclenchent une exception `PpciException`.
+
+## Fonctions génériques disponibles
+
+### Exécution des requêtes
+
+`protected function executeQuery(string $sql, array $data = null, $onlyExecute = false)`
+
+Synonyme : `public function executeSQL(string $sql, array $data = null, $onlyExecute = false)`
+
+Exécute la requête $sql, avec le tableau de variables $data. Si `$onlyExecute` est à _false_, la fonction retourne un tableau de résultat. Les requêtes de modification doivent impérativement avoir cette dernière variable à _true_.
+
+### Écriture d'un enregistrement
+
+### `public function write(array $row): int`
+
+Synonyme : `public function ecrire(array $row): int`
+
+Enregistre une ligne ($row) dans la base de données. La fonction gère automatiquement l'insertion ou la mise à jour.
+
+Pour les champs géographiques, ceux-ci sont enregistrés avec la fonction `ST_GeomFromText`.
+
+Retour : la clé primaire de l'enregistrement traité.
+
+### Écriture d'un enregistrement dans une table n-n
+
+`function writeTableNN(string $tablename, string $firstKey, string $secondKey, int $id, $data = array()): void`
+
+Synonyme : `function ecrireTableNN(string $tablename, string $firstKey, string $secondKey, int $id, $data = array()): void`
+
+Cette fonction traite le cas de l'enregistrement dans le cas d'une table n-n, c'est à dire liée à deux parents. Elle est typiquement utilisée pour traiter les valeurs multiples (sélection des membres dans un groupe, par exemple).
+
+Elle va enregistrer dans `$tablename`, pour la clé correspondant au parent principal (`$firstKey`), l'ensemble des valeurs correspondant à la table liée (`$secondKey`), fournies sous forme de tableau (`$data`). La fonction va supprimer automatiquement toutes les valeurs pré-existantes qui ne figurent pas dans le tableau fourni.
+
+### Mise à jour d'un champ binaire
+
+`function updateBinary(int $id, string $fieldName, $data)`
+
+La fonction va écrire un contenu binaire dans la colonne `$fieldName` pour l'enregistrement identifié par la clé primaire `$id`. Dans la pratique, elle utilise la fonction php _pg\_escape\_bytea_.
+
+### Suppression d'un enregistrement
+
+`function delete($id = null, bool $purge = false)`
+
+Synonyme : `function supprimer($id)`
+
+Supprime l'enregistrement `$id`. La valeur `$purge` ne sert à rien, elle est conservée pour des raisons de compatibilité avec les classes CodeIgniter.
+
+### Suppression d'un ou plusieurs enregistrements à partir d'un champ quelconque
+
+`function deleteFromField(int $id, string $field)`
+
+Synonyme : `function supprimerChamp(int $id, string $field)`
+
+Cette fonction est utilisée pour supprimer les enregistrements enfants à partir d'un parent. Elle supprime tous les enregistrements dont le champ `$field` qui contient la valeur `$id`.
+
+### Lecture d'un enregistrement
+
+`public function read(int $id, bool $getDefault = true, $parentKey = 0): array`
+
+Synonyme : `public function lire(int $id, bool $getDefault = true, $parentKey = 0): array`
+
+Llt l'enregistrement dont la clé primaire vaut `$id`. Si `$id` vaut 0 ou est vide (nouvel enregistrement), et que `$getDefault` est positionné à _true_, le tableau retourné contiendra les valeurs par défaut définies dans le constructeur de la classe. Si `$parentKey` est défini, la clé étrangère du parent est également positionnée dans les valeurs par défaut.
+
+### Données par défaut
+
+`public function getDefaultValues($parentKey = 0): array`
+
+Crée un tableau contenant l'ensemble des valeurs par défaut, pour un nouvel enregistrement. 
+
+### Lecture d'un enregistrement à partir d'un code SQL fourni
+
+`public function readParam(string $sql, array $param = null)`
+
+Synonymes : 
+
+`public function readParamAsPrepared(string $sql, array $param = null)`
+
+`public function lireParam(string $sql, array $param = null)`
+
+`public function lireParamAsPrepared(string $sql, array $param = null)`
+
+Retourne un enregistrement correspondant au code SQL fourni (le premier enregistrement rencontré si une liste est retournée par la requête). Les variables utilisées dans la requête doivent être fournies dans le tableau _$param_.
+
+### Liste de tous les enregistrements de la table
+
+`public function getList(string $order = ""): array`
+
+Synonyme : `function getListe(string $order = ""): array`
+
+Exécute un `select *` sur la table, en rajoutant le cas échéant le terme `order by $order` si la variable est renseignée.
+
+### Sélection d'enregistrements
+
+`function getListParam(string $sql, array $param = null): array`
+
+Synonymes :
+
+`function getListeParam(string $sql, array $param = null): array`
+
+`function getListeParamAsPrepared(string $sql, array $param = null): array`
+
+Retourne le résultat de la requête. Les variables utilisées pour celle-ci sont fournies dans le tableau _$param_.
+
+### Liste des enregistrements rattachés à un parent
+
+`function getListFromParent(int $parentId, $order = ""): array`
+
+Retourne la liste des enregistrements enfants dont la clé étrangère vaut _$parentId_, triée ou non.
+
+## Fonctions diverses
+
+### Formater les dates au format de la base de données
+
+`protected function formatDatesToDB(array $row): array`
+
+Transforme les dates contenues dans l'enregistrement, en fonction du type (date, date/heure) et du format courant.
+
+### Générer un UUID
+
+`function getUUID(): string`
+
+Execute une fonction dans la base de données pour générer un UUID.
+
+### Obtenir la date-heure courante
+
+`function getDateTime(): string`
+
+`function getDateHeure(): string`
+
+### Obtenir la date courante
+
+`function getDate(): string`
+
+`function getDateJour(): string`
+
+### Désactiver un champ obligatoire
+
+`function disableMandatoryField(string $name)`
+
+Désactive la valeur _champ obligatoire_ pour un champ. Cette fonction peut être utilisée pour mettre à jour un enregistrement dont on sait par avance que la valeur n'est pas fournie.
+
 :::
