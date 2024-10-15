@@ -2,4 +2,164 @@
 
 # Affichage des pages web
 
+## Principe général
+
+Les pages web sont générées avec le moteur de *templates* Smarty ([[https://www.smarty.net/](https://www.smarty.net/)). Les modèles sont stockés à deux endroits :
+
+- `vendors/equinton/ppci/src/Views/templates/ppci`, qui contient :
+  - la page principale de l'application `main.html`, la seule page appelée
+  - l'entête (`header.tpl`), qui comprend le menu, et le bas de page (`footer.tpl`)
+  - le chargement des bibliothèques javascript génériques (`main_js.tpl`), dont bootstrap 3, datatables, etc.
+  - toutes les templates nécessaires pour la gestion des droits et des utilisateurs, plus quelques pages communes à l'ensemble des applications (module d'interrogation sql, par exemple)
+  - les modèles de mails (sous-dossier *mail*)
+- `app/Views/templates` : les modèles spécifiques de l'application, dont :
+  - la page d'accueil : `main.tpl`
+  - le chargement des librairies javascript spécifiques : `app_js.tpl`
+  - les pages *À propos* `about_fr.tpl` et `about_en.tpl`
+
+Le moteur Smarty va préparer des pages PHP lors de l'opération de compilation. Ces pages sont stockées dans le dossier `writable/templates_c`.
+
+### Apparence
+
+Bootstrap 3 a été compilé en utilisant les couleurs de la charte graphique de l'ex Irstea. Des styles CSS complémentaires sont disponibles dans le fichier `public/display/CSS/bootstrap-prototypephp.css`.
+
+### Stockage des éléments envoyés au navigateur
+
+Les images sont en principe stockées dans le dossier `public/display/images`.
+
+La plupart des bibliothèques Javascript sont gérées par npm, et sont stockées dans `public/display/node-modules`. Si des scripts complémentaires sont nécessaires (et non intégrés dans les templates Smarty), vous les retrouverez dans le dossier `public/display/javascript`.
+
+### Appel des pages dans l'application
+
+L'affichage des pages HTML est confié à la vue `SmartyPpci`, qui peut être instanciée ainsi :
+
+```php
+$view = service ("Smarty");
+```
+
+Consultez la page [views.html](views.html) pour le détail de son fonctionnement.
+
+### Particularités concernant les formulaires
+
+La plupart des formulaires sont construits ainsi :
+
+```html
+<form class="form-horizontal" id="appliForm" method="post" action="appliChange">
+    <input type="hidden" name="aclappli_id" value="{$data.aclappli_id}">
+    <input type="hidden" name="moduleBase" value="appli">
+    <div class="form-group">
+        <label for="appli" class="control-label col-md-4"><span class="red">*</span> 
+                {t}Nom de l'application :{/t}
+        </label>
+        <div class="col-md-8">
+            <input id="appli" type="text" name="appli" class="form-control" value="{$data.appli}"
+                    autofocus required>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="applidetail" class="control-label col-md-4">{t}Description :{/t} </label>
+        <div class="col-md-8">
+            <input id="applidetail" type="text" class="form-control" name="applidetail"
+                    value="{$data.applidetail}">
+        </div>
+    </div>
+    <div class="form-group center">
+        <button type="submit" class="btn btn-primary button-valid">{t}Valider{/t}</button>
+        {if $data.aclappli_id > 0 }
+        <button class="btn btn-danger button-delete">{t}Supprimer{/t}</button>
+        {/if}
+    </div>
+    {$csrf}
+</form>
+```
+
+Dans la balise *form*, l'action correspond à la *route* à appeler. La variable *moduleBase* comprend le radical de la route : l'appui sur le bouton *supprimer* (classe *button-delete*) va modifier la route en la remplaçant par le contenu de *moduleBase* concaténé à *Delete*.
+
+La plupart des classes sont celles fournies par Bootstrap 3.
+
+La variable *{$csrf}* contient le champ `<input type="hidden" name="csrf_app_name" value="xxxxxx">` généré par CodeIgniter et utilisé pour prévenir les attaques de type *cross script request forgery*.
+
+### Particularités concernant les tableaux
+
+Les tableaux, dans leur immense majorité, utilisent le composant *Datatables* pour leur affichage. Voici un exemple typique d'appel :
+
+```html
+<table id="appliListe" class="table table-bordered table-hover datatable display" data-order='[[ 0, "asc" ]]'>
+```
+
+La classe *datatable* est décrite dans le template *main_js.tpl*. Elle contient l'initialisation du composant *Datatables* avec la gestion des traductions et une pré-programmation des fonctions proposées. Plusieurs classes permettent rapidement de gérer les différentes fonctionnalités activables :
+
+
+| classe                         | Recherche | Pagination | Tri | Boutons d'exportation |
+| -------------------------------- | :---------: | :----------: | :---: | :---------------------: |
+| datatable                      |           |     X     |  X  |                       |
+| datatable-nopaging-nosearching |           |           |  X  |                       |
+| datatable-searching            |     X     |     X     |  X  |                       |
+| datatable-nopaging             |     X     |           |  X  |                       |
+| datatable-nopaging-nosort      |     X     |           |     |                       |
+| datatable-nosort               |           |     X     |     |                       |
+| datatable-export               |     X     |           |  X  |           X           |
+| datatable-export-paging        |     X     |     X     |  X  |           X           |
+
+Les tableaux utilisent le composant *moment* pour pouvoir gérer les dates.
+
+### Classes javascript complémentaires
+
+- nombre : contrôle de la saisie de nombres entiers
+- taux : contrôle de la saisie de nombres décimaux (séparateur : point)
+- uuid : vérification de champs contenant un identifiant de type UUID
+- datepicker : sélection d'une date
+- datetimepicker : sélection d'une date/heure
+- timepicker : sélection d'une heure (hh:mm:ss)
+- textarea-edit : zone de texte multiligne (textarea) avec gestion des tabulations pour obtenir des retraits du texte
+- confirm : affichage d'une boite de confirmation sur le clic ou l'appui d'une touche
+
+Deux plus, deux fonctions complémentaires sont disponibles :
+
+- encodeHtml(content) : encode en HTML une chaîne de caractères. C'est une fonction utilisée pour encoder une information récupérée par une requête Ajax
+- operationConfirm() : affiche une boite de dialogue pour confirmer l'opération à exécuter.
+
+### Gestion des traductions
+
+Les traductions des libellés sont assurés par la bibliothèque `smarty-gettext`. Les libellés à traduire doivent être compris entre les balises `{t}` et `{/t}`.
+
+Pour plus de détail sur la gestion des traductions, consultez [cette page](locale.html).
+
+## Gestion du menu
+
+Le menu est construit dynamiquement en prenant en compte les droits de l'utilisateur.
+Il est décrit dans le fichier `app/Config/menu.xml`, et est structuré ainsi :
+
+~~~xml
+<?xml version="1.0" encoding="UTF-8"?>
+<menu xmlns:its="http://www.w3.org/2005/11/its" its:version="2.0">
+	<its:rules version="2.0">
+		<its:translateRule selector="//item/@label" translate="yes" />
+		<its:translateRule selector="//item/@tooltip" translate="yes" />
+	</its:rules>
+
+	<item module="manage" label="Gestion" tooltip="Gestion">
+		<item divider='1' droits="param" />
+		<item module="requestList" label="Requêtes SQL" tooltip="Exécution de requêtes SQL dans la base de données" droits="param" />
+	</item>
+</menu>
+~~~
+
+Les commandes *translateRule* sont utilisées pour la génération des traductions. Chaque entrée de menu peut contenir un sous-menu : dans l'exemple ci-dessus, le premier niveau (*module=manage*) contient deux entrées.
+
+Pour chaque entrée, il est possible d'indiquer :
+
+- module : le nom de la *route* (appellation CodeIgniter) qui doit être appelée
+- label : le libellé qui est affiché
+- tooltip : le texte qui s'affiche au survol
+- droits : les droits dont doit disposer l'utilisateur pour que l'entrée du menu soit affichée
+- onlynoconnect="1" : l'entrée n'est affichée que si l'utilisateur n'est pas connecté (utilisé pour afficher le bouton de connexion, notamment)
+- loginrequis="1" : l'entrée n'est affichée que si l'utilisateur est connecté
+
+Seuls les trois premiers attributs sont obligatoires.
+
+Il est également possible de tracer une ligne de séparation en ajoutant l'attribut *divider="1"* (avec ou sans droits).
+
+Le menu est stocké en variable de session sous forme de liste (attributs `<ul><li>`), et est généré à chaque changement d'état de l'utilisateur (connexion, déconnexion).
+
 :::

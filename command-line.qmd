@@ -4,29 +4,39 @@
 
 ## Transférer le nom du fichier .env à utiliser
 
-Dans CodeIgniter, avec le module PPCI, le fichier est généré automatiquement avec ce code : 
+Dans CodeIgniter, avec le module PPCI, le fichier .env est chargé automatiquement en prenant en compte le contenu de la variable `$_SERVER["envPath"]`, avec ce code : 
 
 ```php
 if (is_file($file = $_SERVER["envPath"] . DIRECTORY_SEPARATOR . ".env") && is_readable($file)) {
     (new CodeIgniter\Config\DotEnv($_SERVER["envPath"],".env"))->load();
 ```
-
-Pour transférer la valeur de `envPath` dans la variable  `$_SERVER`, dans le script permettant d'exécuter le code :
-
+Dans un script, pour transférer la valeur de `envPath` dans la variable  `$_SERVER` et permettre le chargement du fichier .env, il faut ajouter la ligne :
 ```bash
-#!/bin/bash
-export envPath="/home/equinton/web/metabo2"
-php test.php
-
-/home/equinton/web/metabo2
+export envPath="/var/www/instances/instancename"
 ```
+Voici un exemple d'utilisation, pour afficher simplement le contenu de la variable `$_SERVER["envPath"]` :
 
-Avec `test.php` :
+Fichier PHP `test.php` :
 
 ```php
 <?php
-
 echo $_SERVER["envPath"].PHP_EOL;
+```
+Script `test.sh` utilisé pour son déclenchement :
+
+```bash
+#!/bin/bash
+export envPath=/var/www/instances/instancename
+cd $envPath/public
+php index.php maroute
+```
+où *maroute* correspond à la route à appeler.
+
+Déclarez la route dans `app/Config/Routes.php` (sans oublier le contrôleur correspondant), puis lancez l'exécution du script : 
+
+```bash
+./test.sh
+/var/www/instances/instancename
 ```
 
 :::

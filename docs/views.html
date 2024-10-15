@@ -281,7 +281,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 <p>Au moment du déclenchement de l’affichage, la classe va :</p>
 <ul>
-<li>encoder les variables en HTML</li>
+<li>encoder les variables en HTML, sauf celles qui sont référencées dans le tableau <code>$view-&gt;htmlVars</code></li>
 <li>générer le jeton CSRF</li>
 <li>afficher les messages stockés dans la classe <code>Message</code></li>
 <li>générer le menu de l’application</li>

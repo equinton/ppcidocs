@@ -19,14 +19,14 @@ mkdir temp
 openssl genpkey -algorithm rsa -out id_app -pkeyopt rsa_keygen_bits:2048
 openssl rsa -in id_app -pubout -out id_app.pub
 # Recopie du fichier de parametrage
-cp $APP/.env .
+cp $APP/env .env
 # Mise à niveau des droits
-chmod -R g+r $FOLDER
+chmod -R g+r .
 chmod g+w temp
 chown www-data id_app
 ```
 
-Recopiez le fichier `.env` de l'application dans ce dossier.
+le dossier *temp* est le dossier dans lequel l'application va générer tous les fichiers avant leur envoi au navigateur. Pour éviter les risques de collision entre deux instances, il est vivement recommandé que chacune dispose de son propre espace.
 
 ## Mettre à niveau du site virtuel Apache
 
@@ -60,15 +60,15 @@ Vérifiez également le mode d'identification par défaut, et adaptez-le le cas 
 
 ## Adapter les scripts lancés en ligne de commande
 
-Si vous utilisez des scripts qui sont exécutés en ligne de commande, par exemple programmés à horaires réguliers (crontab), vous devrez modifier :
-
-- d'une part, le script de lancement :
+Si vous utilisez des scripts qui sont exécutés en ligne de commande, par exemple programmés à horaires réguliers (crontab), vous devrez modifier le script de lancement :
 
 ```bash
 #!/bin/bash
 export envPath=/var/www/instances/instancename
-php commandline.php
+cd $envPath/public
+php index.php monscript
 ```
+où *monscript* correspond à la route à appeler.
 
 La variable `envPath` est disponible dans `$_SERVER`.
 

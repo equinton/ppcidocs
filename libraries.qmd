@@ -46,19 +46,19 @@ Elle dispose également de fonctions génériques, qui permettent de simplifier 
 
 `function dataRead($id, $smartyPage, $idParent = 0)`
 
-La fonction appelle _$this->dataclass->read ($id, true, $idParent)_, affecte le tableau de données lu à la variable _$data_, puis déclenche l'affichage de la page _$smartyPage_. Elle retourne le tableau _$data_ à la fonction appelante.
+La fonction appelle `$this->dataclass->read ($id, true, $idParent)`, affecte le tableau de données lu à la variable `$data`, puis déclenche l'affichage de la page `$smartyPage`. Elle retourne le tableau `$data` à la fonction appelante.
 
 ### Écriture d'un enregistrement
 
 `function dataWrite(array $data, bool $isPartOfTransaction = false)`
 
-Écrit les données _$data_ dans la table gérée par _$this->dataclass_ (appel à la fonction _write_). Si l'indicateur de transaction n'est pas activé, un message informant de l'exécution de la commande est envoyé, et une trace est enregistrée dans la table _log_.
+Écrit les données `$data` dans la table gérée par `$this->dataclass` (appel à la fonction _write_). Si l'indicateur de transaction n'est pas activé, un message informant de l'exécution de la commande est envoyé, et une trace est enregistrée dans la table _log_.
 
 ### Suppression d'un enregistrement
 
 `function dataDelete($id, bool $isPartOfTransaction = false)`
 
-Supprime l'enregistrement identifié par _$id_, et affiche un message pour informer de la réussite de l'opération si l'indicateur de transaction n'est pas activé.
+Supprime l'enregistrement identifié par \$id`, et affiche un message pour informer de la réussite de l'opération si l'indicateur de transaction n'est pas activé.
 
 ## Traitement des transactions
 

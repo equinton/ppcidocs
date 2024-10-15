@@ -258,19 +258,24 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h1>Exécution en ligne de commande</h1>
 <section id="transférer-le-nom-du-fichier-.env-à-utiliser" class="level2">
 <h2 class="anchored" data-anchor-id="transférer-le-nom-du-fichier-.env-à-utiliser">Transférer le nom du fichier .env à utiliser</h2>
-<p>Dans CodeIgniter, avec le module PPCI, le fichier est généré automatiquement avec ce code :</p>
+<p>Dans CodeIgniter, avec le module PPCI, le fichier .env est chargé automatiquement en prenant en compte le contenu de la variable <code>$_SERVER["envPath"]</code>, avec ce code :</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">is_file</span>(<span class="va">$file</span> <span class="op">=</span> <span class="va">$_SERVER</span>[<span class="st">"envPath"</span>] <span class="op">.</span> <span class="cn">DIRECTORY_SEPARATOR</span> <span class="op">.</span> <span class="st">".env"</span>) <span class="op">&amp;&amp;</span> <span class="fu">is_readable</span>(<span class="va">$file</span>)) {</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    (<span class="kw">new</span> CodeIgniter\Config\DotEnv(<span class="va">$_SERVER</span>[<span class="st">"envPath"</span>]<span class="ot">,</span><span class="st">".env"</span>))-&gt;load()<span class="ot">;</span></span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Pour transférer la valeur de <code>envPath</code> dans la variable <code>$_SERVER</code>, dans le script permettant d’exécuter le code :</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">envPath</span><span class="op">=</span><span class="st">"/home/equinton/web/metabo2"</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="ex">php</span> test.php</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="ex">/home/equinton/web/metabo2</span></span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Avec <code>test.php</code> :</p>
+<p>Dans un script, pour transférer la valeur de <code>envPath</code> dans la variable <code>$_SERVER</code> et permettre le chargement du fichier .env, il faut ajouter la ligne :</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">envPath</span><span class="op">=</span><span class="st">"/var/www/instances/instancename"</span></span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Voici un exemple d’utilisation, pour afficher simplement le contenu de la variable <code>$_SERVER["envPath"]</code> :</p>
+<p>Fichier PHP <code>test.php</code> :</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;?php</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="va">$_SERVER</span>[<span class="st">"envPath"</span>]<span class="op">.</span><span class="cn">PHP_EOL</span><span class="ot">;</span></span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="va">$_SERVER</span>[<span class="st">"envPath"</span>]<span class="op">.</span><span class="cn">PHP_EOL</span><span class="ot">;</span></span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Script <code>test.sh</code> utilisé pour son déclenchement :</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">envPath</span><span class="op">=</span>/var/www/instances/instancename</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> <span class="va">$envPath</span>/public</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="ex">php</span> index.php maroute</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>où <em>maroute</em> correspond à la route à appeler.</p>
+<p>Déclarez la route dans <code>app/Config/Routes.php</code> (sans oublier le contrôleur correspondant), puis lancez l’exécution du script :</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">./test.sh</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">/var/www/instances/instancename</span></span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 
 </section>

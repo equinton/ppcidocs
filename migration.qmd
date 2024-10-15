@@ -85,6 +85,14 @@ Dans ce dossier, remplacez tous les libellés (filtre sur *tpl) :
 - `</form>` par `{$csrf}</form>` pour ajouter le jeton CSRF dans les formulaires
 - `droits` par `rights`
 - `.gestion` par `.manage`
+- `datatable"` par `datatable display"`
+- `datatable-nopaging-nosearching"` par `datatable-nopaging-nosearching display"`
+- `datatable-searching"` par `datatable-searching display"`
+- `datatable-nopaging"` par `datatable-nopaging display"`
+- `datatable-nopaging-nosort"` par `datatable-nopaging-nosort display"`
+- `datatable-nosort"` par `datatable-nosort display"`
+- `datatable-export"` par `datatable-export display"`
+- `datatable-export-paging"` par `datatable-export-paging display"`
 
 Supprimez
 

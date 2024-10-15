@@ -22,7 +22,7 @@ Les pages web sont générées avec le moteur de _templates_ Smarty. Les modèle
 
 Au moment du déclenchement de l'affichage, la classe va :
 
-- encoder les variables en HTML
+- encoder les variables en HTML, sauf celles qui sont référencées dans le tableau `$view->htmlVars`
 - générer le jeton CSRF
 - afficher les messages stockés dans la classe `Message`
 - générer le menu de l'application

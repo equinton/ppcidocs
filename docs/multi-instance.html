@@ -275,12 +275,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="ex">openssl</span> genpkey <span class="at">-algorithm</span> rsa <span class="at">-out</span> id_app <span class="at">-pkeyopt</span> rsa_keygen_bits:2048</span>
 <span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="ex">openssl</span> rsa <span class="at">-in</span> id_app <span class="at">-pubout</span> <span class="at">-out</span> id_app.pub</span>
 <span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Recopie du fichier de parametrage</span></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="fu">cp</span> <span class="va">$APP</span>/.env .</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="fu">cp</span> <span class="va">$APP</span>/env .env</span>
 <span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Mise à niveau des droits</span></span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="fu">chmod</span> <span class="at">-R</span> g+r <span class="va">$FOLDER</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="fu">chmod</span> <span class="at">-R</span> g+r .</span>
 <span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="fu">chmod</span> g+w temp</span>
 <span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="fu">chown</span> www-data id_app</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Recopiez le fichier <code>.env</code> de l’application dans ce dossier.</p>
+<p>le dossier <em>temp</em> est le dossier dans lequel l’application va générer tous les fichiers avant leur envoi au navigateur. Pour éviter les risques de collision entre deux instances, il est vivement recommandé que chacune dispose de son propre espace.</p>
 </section>
 <section id="mettre-à-niveau-du-site-virtuel-apache" class="level2">
 <h2 class="anchored" data-anchor-id="mettre-à-niveau-du-site-virtuel-apache">Mettre à niveau du site virtuel Apache</h2>
@@ -307,13 +307,12 @@ database.default.password = password_instance</code></pre>
 </section>
 <section id="adapter-les-scripts-lancés-en-ligne-de-commande" class="level2">
 <h2 class="anchored" data-anchor-id="adapter-les-scripts-lancés-en-ligne-de-commande">Adapter les scripts lancés en ligne de commande</h2>
-<p>Si vous utilisez des scripts qui sont exécutés en ligne de commande, par exemple programmés à horaires réguliers (crontab), vous devrez modifier :</p>
-<ul>
-<li>d’une part, le script de lancement :</li>
-</ul>
+<p>Si vous utilisez des scripts qui sont exécutés en ligne de commande, par exemple programmés à horaires réguliers (crontab), vous devrez modifier le script de lancement :</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">envPath</span><span class="op">=</span>/var/www/instances/instancename</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="ex">php</span> commandline.php</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> <span class="va">$envPath</span>/public</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="ex">php</span> index.php monscript</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>où <em>monscript</em> correspond à la route à appeler.</p>
 <p>La variable <code>envPath</code> est disponible dans <code>$_SERVER</code>.</p>
 </section>
 <section id="technique-modifications-apportées-au-code-pour-gérer-le-multi-instances" class="level2">

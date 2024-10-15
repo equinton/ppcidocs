@@ -359,55 +359,37 @@ window.Quarto = {
 <span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <section id="description-des-champs" class="level3">
 <h3 class="anchored" data-anchor-id="description-des-champs">Description des champs</h3>
-<table>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Attribut</th>
+<th>Valeur</th>
+</tr>
+</thead>
 <tbody>
-<tr>
-<td>
-Attribut
-</td>
-<td>
-Valeur
-</td>
+<tr class="odd">
+<td>type</td>
+<td>0 : chaîne de caractères 1: numérique 2: date 3: date-heure 4: champ géographique (Postgis)</td>
 </tr>
-<tr>
-<td>
-type
-</td>
-<td>
-0 : chaîne de caractères<br>1: numérique<br>2 : date<br>3 : date-heure<br>4 : champ géographique (Postgis)
-</td>
+<tr class="even">
+<td>key</td>
+<td>Si 1, c’est la clé primaire de la table</td>
 </tr>
-<tr>
-<td>
-key
-</td>
-<td>
-Si 1, c’est la clé primaire de la table
-</td>
+<tr class="odd">
+<td>requis</td>
+<td>Si 1, l’enregistrement échouera si la colonne n’est pas fournie ou est vide</td>
 </tr>
-<tr>
-<td>
-requis
-</td>
-<td>
-Si 1, l’enregistrement échouera si la colonne n’est pas fournie ou est vide
-</td>
+<tr class="even">
+<td>parentAttrib</td>
+<td>Si 1, la colonne est la clé étrangère, dans le cas d’une relation père-fils</td>
 </tr>
-<tr>
-<td>
-parentAttrib
-</td>
-<td>
-Si, la colonne est la clé étrangère, dans le cas d’une relation père-fils
-</td>
-</tr>
-<tr>
-<td>
-defaultValue
-</td>
-<td>
-La valeur par défaut, lors de la création d’un enregistrement.
-</td>
+<tr class="odd">
+<td>defaultValue</td>
+<td>La valeur par défaut, lors de la création d’un enregistrement.</td>
 </tr>
 </tbody>
 </table>

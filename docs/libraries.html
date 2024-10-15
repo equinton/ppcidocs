@@ -101,35 +101,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   }
 }</script>
 
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
 
 <link rel="stylesheet" href="site_libs/quarto-contrib/quarto-project/SebastienBoutry/inrae-project-website/ressources/styles.css">
 </head>
@@ -325,17 +296,17 @@ window.Quarto = {
 <section id="lecture-dun-enregistrement-et-affichage-de-la-page-pour-la-modification-ou-laffichage" class="level3">
 <h3 class="anchored" data-anchor-id="lecture-dun-enregistrement-et-affichage-de-la-page-pour-la-modification-ou-laffichage">Lecture d’un enregistrement et affichage de la page pour la modification ou l’affichage</h3>
 <p><code>function dataRead($id, $smartyPage, $idParent = 0)</code></p>
-<p>La fonction appelle <em><span class="math inline">\(this-&gt;dataclass-&gt;read (\)</span>id, true, <span class="math inline">\(idParent)_, affecte le tableau de données lu à la variable _\)</span>data</em>, puis déclenche l’affichage de la page <em><span class="math inline">\(smartyPage_. Elle retourne le tableau _\)</span>data</em> à la fonction appelante.</p>
+<p>La fonction appelle <code>$this-&gt;dataclass-&gt;read ($id, true, $idParent)</code>, affecte le tableau de données lu à la variable <code>$data</code>, puis déclenche l’affichage de la page <code>$smartyPage</code>. Elle retourne le tableau <code>$data</code> à la fonction appelante.</p>
 </section>
 <section id="écriture-dun-enregistrement" class="level3">
 <h3 class="anchored" data-anchor-id="écriture-dun-enregistrement">Écriture d’un enregistrement</h3>
 <p><code>function dataWrite(array $data, bool $isPartOfTransaction = false)</code></p>
-<p>Écrit les données <em><span class="math inline">\(data_ dans la table gérée par _\)</span>this-&gt;dataclass</em> (appel à la fonction <em>write</em>). Si l’indicateur de transaction n’est pas activé, un message informant de l’exécution de la commande est envoyé, et une trace est enregistrée dans la table <em>log</em>.</p>
+<p>Écrit les données <code>$data</code> dans la table gérée par <code>$this-&gt;dataclass</code> (appel à la fonction <em>write</em>). Si l’indicateur de transaction n’est pas activé, un message informant de l’exécution de la commande est envoyé, et une trace est enregistrée dans la table <em>log</em>.</p>
 </section>
 <section id="suppression-dun-enregistrement" class="level3">
 <h3 class="anchored" data-anchor-id="suppression-dun-enregistrement">Suppression d’un enregistrement</h3>
 <p><code>function dataDelete($id, bool $isPartOfTransaction = false)</code></p>
-<p>Supprime l’enregistrement identifié par <em>$id</em>, et affiche un message pour informer de la réussite de l’opération si l’indicateur de transaction n’est pas activé.</p>
+<p>Supprime l’enregistrement identifié par $id`, et affiche un message pour informer de la réussite de l’opération si l’indicateur de transaction n’est pas activé.</p>
 </section>
 </section>
 <section id="traitement-des-transactions" class="level2">
