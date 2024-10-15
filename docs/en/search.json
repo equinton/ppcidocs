@@ -1,0 +1,72 @@
+[
+  {
+    "objectID": "legal_notice.html",
+    "href": "legal_notice.html",
+    "title": "PPCI - PrototypePHP for CodeIgniter",
+    "section": "",
+    "text": "Nom du site : documentation PPCI\nURL complète du site : https://equinton.github.io/ppcidocs/"
+  },
+  {
+    "objectID": "legal_notice.html#identification-du-site",
+    "href": "legal_notice.html#identification-du-site",
+    "title": "PPCI - PrototypePHP for CodeIgniter",
+    "section": "",
+    "text": "Nom du site : documentation PPCI\nURL complète du site : https://equinton.github.io/ppcidocs/"
+  },
+  {
+    "objectID": "legal_notice.html#éditeurs-du-site",
+    "href": "legal_notice.html#éditeurs-du-site",
+    "title": "PPCI - PrototypePHP for CodeIgniter",
+    "section": "Éditeur(s) du site",
+    "text": "Éditeur(s) du site\nINRAE - Institut national de recherche pour l’agriculture, l’alimentation et l’environnement\nINRAE est un établissement public à caractère scientifique et technologique. Il a son siège au 147, rue de l’université – 75338 Paris cedex 07. Ses statuts sont publiés dans le code rural et de la pêche maritime (articles R831-1 et suivants).\nIl est représenté par son Président Directeur général, M. Philippe MAUGUIN.\nContact mail: web@inrae.fr - contact téléphonique: 01 42 75 90 00"
+  },
+  {
+    "objectID": "legal_notice.html#numéros-didentification",
+    "href": "legal_notice.html#numéros-didentification",
+    "title": "PPCI - PrototypePHP for CodeIgniter",
+    "section": "Numéros d’identification",
+    "text": "Numéros d’identification\nINRAE SIREN: 180070039\nCode APE: 7219Z\nNuméro de TVA intracommunautaire: FR 57 1800700039"
+  },
+  {
+    "objectID": "legal_notice.html#publication-du-site",
+    "href": "legal_notice.html#publication-du-site",
+    "title": "PPCI - PrototypePHP for CodeIgniter",
+    "section": "Publication du site",
+    "text": "Publication du site\nNom du directeur de publication : M. Philippe MAUGUIN\nNom du responsable de rédaction : Éric Quinton\nWebmaster du site : Éric Quinton"
+  },
+  {
+    "objectID": "legal_notice.html#hébergeur-du-site",
+    "href": "legal_notice.html#hébergeur-du-site",
+    "title": "PPCI - PrototypePHP for CodeIgniter",
+    "section": "Hébergeur du site",
+    "text": "Hébergeur du site\nINRAE Établissement public à caractère scientifique et technologique 147, rue de l’université – 75338 Paris cedex 07 01 42 75 90 00\nCopyright © 2024 - All rights reserved. Author: Éric Quinton for EABX-INRAE. Documentation distributed under license  CC-BY"
+  },
+  {
+    "objectID": "partners.html#list-of-financial-partners",
+    "href": "partners.html#list-of-financial-partners",
+    "title": "Partners",
+    "section": "List of Financial partners",
+    "text": "List of Financial partners"
+  },
+  {
+    "objectID": "command-line.html",
+    "href": "command-line.html",
+    "title": "Run on the command line",
+    "section": "",
+    "text": "In CodeIgniter, with the PPCI module, the .env file is loaded automatically, taking into account the contents of the $_SERVER[‘envPath’] variable, with this code:\nif (is_file($file = $_SERVER[\"envPath\"] . DIRECTORY_SEPARATOR . \".env\") && is_readable($file)) {\n    (new CodeIgniter\\Config\\DotEnv($_SERVER[\"envPath\"],\".env\"))-&gt;load();\nIn a script, to transfer the value of envPath to the variable $_SERVER and enable the .env file to be loaded, you need to add the line :\nexport envPath=\"/var/www/instances/instancename\"\nHere’s an example of how it can be used, simply to display the contents of the $_SERVER[‘envPath’] variable:\nPHP file:\n&lt;?php\necho $_SERVER[\"envPath\"].PHP_EOL;\nScript test.sh used to trigger it:\n#!/bin/bash\nexport envPath=/var/www/instances/instancename\ncd $envPath/public\nphp index.php myroute\nwhere myroute corresponds to the route to be called.\nDeclare the route in app/Config/Routes.php (don’t forget the corresponding controller), then run the script:\n./test.sh\n/var/www/instances/instancename"
+  },
+  {
+    "objectID": "command-line.html#transfer-the-name-of-the-.env-file-to-be-used",
+    "href": "command-line.html#transfer-the-name-of-the-.env-file-to-be-used",
+    "title": "Run on the command line",
+    "section": "",
+    "text": "In CodeIgniter, with the PPCI module, the .env file is loaded automatically, taking into account the contents of the $_SERVER[‘envPath’] variable, with this code:\nif (is_file($file = $_SERVER[\"envPath\"] . DIRECTORY_SEPARATOR . \".env\") && is_readable($file)) {\n    (new CodeIgniter\\Config\\DotEnv($_SERVER[\"envPath\"],\".env\"))-&gt;load();\nIn a script, to transfer the value of envPath to the variable $_SERVER and enable the .env file to be loaded, you need to add the line :\nexport envPath=\"/var/www/instances/instancename\"\nHere’s an example of how it can be used, simply to display the contents of the $_SERVER[‘envPath’] variable:\nPHP file:\n&lt;?php\necho $_SERVER[\"envPath\"].PHP_EOL;\nScript test.sh used to trigger it:\n#!/bin/bash\nexport envPath=/var/www/instances/instancename\ncd $envPath/public\nphp index.php myroute\nwhere myroute corresponds to the route to be called.\nDeclare the route in app/Config/Routes.php (don’t forget the corresponding controller), then run the script:\n./test.sh\n/var/www/instances/instancename"
+  },
+  {
+    "objectID": "controllers.html",
+    "href": "controllers.html",
+    "title": "PPCI - PrototypePHP for CodeIgniter",
+    "section": "",
+    "text": "Controllers, the first stage in processing a route, inherit from the PpciController class. This automatically calls the initialization function function initController( RequestInterface $request, ResponseInterface $response, LoggerInterface $logger) and loads the message service and the App configuration into $this-&gt;config.\nHere is a typical implementation example:\nclass Borrower extends PpciController\n{\n    protected $lib;\n    function __construct()\n    {\n        $this-&gt;lib = new LibrariesBorrower();\n    }\n    function list()\n    {\n        return $this-&gt;lib-&gt;list();\n    }\n    function display()\n    {\n        return $this-&gt;lib-&gt;display();\n    }\n    function change()\n    {\n        return $this-&gt;lib-&gt;change();\n    }\n    function write()\n    {\n        return $this-&gt;lib-&gt;write();\n    }\n    function delete()\n    {\n        return $this-&gt;lib-&gt;delete();\n    }\n}"
+  }
+]

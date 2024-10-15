@@ -40,3 +40,46 @@ Déclarez la route dans `app/Config/Routes.php` (sans oublier le contrôleur cor
 ```
 
 :::
+
+::: {.content-visible when-profile="english"}
+# Run on the command line
+
+## Transfer the name of the .env file to be used
+
+In CodeIgniter, with the PPCI module, the .env file is loaded automatically, taking into account the contents of the `$_SERVER[‘envPath’]` variable, with this code: 
+
+```php
+if (is_file($file = $_SERVER["envPath"] . DIRECTORY_SEPARATOR . ".env") && is_readable($file)) {
+    (new CodeIgniter\Config\DotEnv($_SERVER["envPath"],".env"))->load();
+```
+In a script, to transfer the value of `envPath` to the variable `$_SERVER` and enable the .env file to be loaded, you need to add the line :
+
+```bash
+export envPath="/var/www/instances/instancename"
+```
+
+Here's an example of how it can be used, simply to display the contents of the `$_SERVER[‘envPath’]` variable:
+
+PHP file:
+
+```php
+<?php
+echo $_SERVER["envPath"].PHP_EOL;
+```
+Script `test.sh` used to trigger it:
+
+```bash
+#!/bin/bash
+export envPath=/var/www/instances/instancename
+cd $envPath/public
+php index.php myroute
+```
+where *myroute* corresponds to the route to be called.
+
+Declare the route in `app/Config/Routes.php` (don't forget the corresponding controller), then run the script: 
+
+```bash
+./test.sh
+/var/www/instances/instancename
+```
+:::

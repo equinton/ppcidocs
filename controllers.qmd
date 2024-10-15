@@ -2,10 +2,20 @@
 
 # Contrôleurs
 
-Les contrôleurs, première étape du traitement d'une route, héritent de la classe _PpciController_. Celle-ci appelle automatiquement la fonction d'initialisation `function initController( RequestInterface $request, ResponseInterface $response, LoggerInterface $logger)` et charge le service _message_ et la configuration _App_ dans _$this->config_.
+Les contrôleurs, première étape du traitement d'une route, héritent de la classe _PpciController_. Celle-ci appelle automatiquement la fonction d'initialisation `function initController( RequestInterface $request, ResponseInterface $response, LoggerInterface $logger)` et charge le service _message_ et la configuration _App_ dans `$this->config`.
 
 Voici un exemple typique d'implémentation :
 
+:::
+::: {.content-visible when-profile="english"}
+
+Controllers, the first stage in processing a route, inherit from the _PpciController_ class. This automatically calls the initialization function `function initController( RequestInterface $request, ResponseInterface $response, LoggerInterface $logger)` and loads the _message_ service and the _App_ configuration into `$this->config`.
+
+
+
+Here is a typical implementation example:
+
+:::
 ```php
 class Borrower extends PpciController
 {
@@ -36,5 +46,3 @@ class Borrower extends PpciController
     }
 }
 ```
-
-:::

@@ -1,5 +1,5 @@
 project:
-  output-dir: docs
+  output-dir: docs/fr
   resources: images
   
   
@@ -54,9 +54,9 @@ website:
           - text: Ligne de commande
             href: command-line.qmd
     right:
-      - href: ./en
-        text: En
-      - text: "Other links"
+      - href: ../en
+        text: English
+      - text: "Autres liens"
         icon: globe
         menu: 
           - text: Quarto
