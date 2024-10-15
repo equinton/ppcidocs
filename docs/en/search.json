@@ -81,7 +81,7 @@
     "href": "index.html",
     "title": "PPCI - PrototypePHP for CodeIgniter",
     "section": "",
-    "text": "Translated with DeepL.com (free version)"
+    "text": "PrototypePHP for CodeIgniter (PPCI) is a port of the framework https://github.com/equinton/prototypephp developed in the 2000s to write various web applications, including Collec-Science.\nTo facilitate web application maintenance, PrototypePHP was ported to CodeIgniter in 2024. It takes the form of an additional component. It uses most of CodeIgniter’s features (routes, filters, services, database access, parameter management, etc.), with the exception of :\n\nweb page display, which remains the responsibility of the Smarty template engine\nidentification and rights management, where PPCI is much richer in terms of functionalities, such as support for multiple identification mechanisms (database, LDAP, CAS, OIDC, TOTP, etc.) or rights management.\n\nThe component is distributed under MIT licence.\nThe English version of this documentation is translated with DeepL.com (free version)"
   },
   {
     "objectID": "command-line.html",
