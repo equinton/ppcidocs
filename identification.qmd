@@ -100,3 +100,104 @@ Les paramètres sont accessibles depuis `Ppci\Config\IdentificationConfig`.
 *   _disableTotpToAdmin_ : si positionné à 1, désactive la double-identification pour accéder aux modules d'administration. Ne devrait pas être utilisé en production !
 
 :::
+
+::: {.content-visible when-profile="english"}
+# Identification management
+
+PPCI offers several mechanisms for managing user identification:
+
+* storage of accounts in the database (BDD)
+* identification with an LDAP server (LDAP)
+* identification with a _Common Access Service_ (CAS) server
+* identification with an _OpenID Connect_ (OIDC) server
+* identification provided by the web server, to use Shibboleth mechanisms (Apache _Mellon_ mode, for example) (HEADER)
+* mixed mechanisms, using third-party servers and database storage for accounts not otherwise managed:
+    * LDAP-BDD: identification test with the LDAP directory, and if unsuccessful, with the database.
+    * CAS-BDD and OIDC-BDD: a button can be used to select identification with the server in question.
+
+In addition, users can activate dual TOTP identification. This is compulsory to access the administration modules.
+
+Note that **LDAP identification is now considered obsolete**. It is better to use OIDC or CAS services, where available.
+
+## Specific parameters for each type of identification
+
+### Database identification
+
+Parameters are defined in `Ppci\ConfigIdentificationConfig`.
+
+*   CONNECTION\_max\_attempts : if the connection fails (default 5), the account will be blocked for the time specified in :
+    *   _CONNECTION\_blocking\_duration_ (default 600 seconds). Note that attempting to connect during this period resets the counter to zero
+*   _APP\_passwordMinLength_ : minimum password length.
+*   _APPLI\_lostPassword_ : if set to 1 (default), the user will be able to ask for their password to be reset, provided their email address is entered
+*   _tokenIdentityValidity_ : validity period of the token generated during the BDD or LDAP connection, to avoid having to re-identify during the day. By default, 10 hours.
+
+### LDAP identification
+
+Variables are defined in `Ppci\Config\IdentificationConfig.LDAP`.
+
+*   _address_ : LDAP server address
+*   _port_ : connection port
+*   _rdn_ : login account for directory queries, if required
+*   _basedn_ : account search base
+*   _user\_attrib_ : attribute containing the user's identifier (uid)
+*   _v3_ : version 3 of the directory, set by default to _true_
+*   _tls_ : set to _true_ to activate the _tls_ connection
+*   _upn\_suffix_ : upn suffix, necessary in some cases for Active Directory
+*   _groupSupport_ : if set to _true_, groups will be retrieved from the directory to feed the rights management module
+*   _groupAttrib_ : name of the attribute containing the user's groups
+*   _commonNameAttrib_ : name of the attribute containing the common name
+*   _mailAttrib_ : name of the attribute containing the email
+*   _attributgroupname_ : name of the attribute containing the group name
+*   _attributloginname_ : name of the attribute containing the uid member
+*   _basedngroup_ : groups search path
+*   _timeout_ : directory search time-out (set to 2 seconds by default)
+*   _ldapnoanonymous_ : if set to _true_, querying the directory to retrieve groups requires a connection
+    *   _ldaplogin_ : connection login
+    *   _ldappassword_ : associated password
+
+### Icon for the identification button (CAS-BDD ou OIDC-BDD)
+
+An icon has been added to the button used to activate identification with the CAS or OIDC server: `Ppci\Config\IdentificationConfig.identificationLogo = "${FRONT_DIR}/favicon.png"`
+
+## Identification on dedicated servers (HEADER, CAS, OIDC)
+
+Parameters are defined in `Ppci\Config\IdentificationConfig.XX`, where XX must be replaced by CAS, OIDC or HEADER.
+
+Generic parameters:
+
+*   _mail_ : attribute containing the email
+*   _firstname_ : attribute containing the first name
+*   _lastname_ : attribute containing the last name
+*   _name_ : attribute containing the common name
+*   _groups_ : attribute containing user membership groups
+*   _getGroups_ : if set to 1 (default), the user groups supplied by the identification server are processed
+
+### Specific parameters for CAS identification
+
+*   _address_ : CAS server address, by example: _monserveur.society.com_
+*   _uri_ : identification access folder. Default setting : _/cas_
+*   _port_ : default: 443
+*   _debug_ : f set to _true_ or _1_, traces are stored in the file `writable/logs/cas.log`
+*   _CApath_ : path to the certificate used to validate the CAS server. If it is not entered, the CAS server will not be verified (not recommended for production use).
+
+### OIDC identification
+
+*   _name_ : provider code
+*   _provider_ : provider web address (must start with _https://_)
+*   _clientId_ : code furnished by the provider
+*   _clientSecret_ : secret key furnished by the provider
+*   _scopeGroup_ : OIDC _scope_ name which contains the secondary attributes (default : _affectation_)
+
+### HEADER identification
+
+*   _login_ : name of the `$_SERVER` attribute containing the login, returned by the Apache server
+*   _organizationGranted_ : table containing the code or name of authorised organisations. If this table is filled in, and if a new user does not belong to one of the organisations indicated (_organization_ attribute), their account will not be created.
+*   _groupsGranted_ : table containing the list of authorised groups. If a user logs in for the first time and their group (or one of their groups) is on the list of authorised groups, their account will be activated automatically. If not, the account will be deactivated and an email will be sent to the administrators inviting them to activate the account.
+
+## Managing access to administration modules
+
+The parameters can be accessed from `Ppci\Config\IdentificationConfig`.
+
+*   _adminSessionDuration_ : period during which the identification remains valid for access to the administration modules. Default: 10'.
+*   _disableTotpToAdmin_ : if set to 1, disables dual-identification for access to administration modules. Should not be used in production!
+:::

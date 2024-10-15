@@ -7,11 +7,19 @@
 Les services permettent de conserver la même instance d'une classe tout au long de l'exécution du script. Ils sont décrits dans  `Ppci\Config\Services`.
 
 Ils s'appellent de la façon suivante :
+:::
+::: {.content-visible when-profile="english"}
+# Functions and services
+
+## Services
+
+Services allow the same instance of a class to be maintained throughout the execution of the script. They are described in `Ppci\Config\Services`.
+:::
 
 ```
 $monService = service ('name');
 ```
-
+::: {.content-visible when-profile="french"}
 La première fois que le code est appelé, la classe est instanciée. Ensuite, l'instance de classe est fournie, ce qui permet de conserver les mêmes paramètres.
 
 Trois types de services sont configurés : des services génériques, les services fournissant les paramètres de configuration, et les vues.
@@ -66,6 +74,63 @@ Les fonctions sont chargées automatiquement à partir de `ppci/Helpers/ppci_hel
 - `htmlDecode($content)` : fonction récursive permettant de décoder les caractères html (_htmlspecialchars_decode()_)
 - `printA($variable)` : affiche le contenu d'une variable. Pour les tableaux, affiche le contenu du tableau. Utilisé pour le débogage
 - `setlogRequest($request)` : écrit dans la table gacl.log la requête demandée
-- `test($var = "")` : affiche le mot "test" et le numéro de l'occurrence où la fonction a été appelée. Si $var est renseigné, affiche son contenu
+- `test($var = "")` : affiche le mot "test" et le numéro de l'occurrence où la fonction a été appelée. Si `$var` est renseigné, affiche son contenu
+
+:::
+::: {.content-visible when-profile="english"}
+The first time the code is called, the class is instantiated. Then, the class instance is provided, which means that the same parameters can be used.
+
+Three types of service are configured: generic services, services providing configuration parameters, and views.
+
+### Generic services
+
+#### PpciInit
+
+Code used systematically when a page is called.
+
+#### MessagePpci
+
+Class used to store messages and then retrieve them. Two functions can be used to store them:
+
+- `function set(string $value, bool $is_error = false)`: stores a message. If it is an error, the message will then be displayed in red.
+- `function setSyslog($message, $is_error = false)`: stores a message in the system logs. In development mode, the message is also displayed on the screen
+
+#### Log
+
+Class used to record information in the *gacl.log* table. An entry can be created with the function `$col->setLog($login, $module, $comment = null)`. The login value can be retrieved from `$_SESSION[‘login’]`. `$module` represents the name of the function or call to be logged, and `$comment` a particular content to be noted.
+
+#### Local
+
+Class used to set the language to be used. The labels can be modified using the `setLocale($locale)` function. By default, only ‘fr’ and ‘en’ are currently supported.
+
+### Configurations
+
+#### Dbparam
+Class containing all the parameters stored in the *dbparam* table. Parameters can be accessed using the `$dbparam->params[‘parameter_name’]` attribute.
+
+Parameters are also available in the `$_SESSION[‘dbparams’]` variable.
+
+#### AppConfig
+
+Contains the general settings for the application (`App\Config\App`).
+
+#### IdentificationConfig
+
+Contains identification-related settings (`Ppci\ConfigIdentificationConfig`).
+
+### Views
+
+The description of the views can be consulted [here](views.qmd).
+
+## Functions
+
+Functions are loaded automatically from `ppci/Helpers/ppci_helper.php`.
+
+- `defaultPage()`: displays the application's home page (without redirection)
+- `getLineFeed()`: returns the linefeed code depending on the context: web server or command line
+- `htmlDecode($content)`: recursive function for decoding html characters (_htmlspecialchars_decode()_)
+- `printA($variable)`: displays the contents of a variable. For arrays, displays the contents of the array. Used for debugging
+- `setlogRequest($request)`: writes the requested request to the gacl.log table.
+- `test($var = ‘’)`: displays the word ‘test’ and the number of the occurrence where the function was called. If `$var` is filled in, displays its contents
 
 :::
