@@ -2,11 +2,25 @@
 
 # Paramètres de l'application
 
-Les paramètres sont définis dans deux fichiers : _app/Config/App.php_ et _vendor/equinton/ppci/src/Config/IdentificationConfig.php_.
+Les paramètres sont définis dans deux fichiers : `app/Config/App.php` et `vendor/equinton/ppci/src/Config/IdentificationConfig.php`.
 
-S'ils peuvent tous être modifiés lors de chaque implémentation en utilisant le fichier .env, à la racine de l'application, certains ne devraient pas être modifiés par ce mécanisme.
+S'ils peuvent tous être modifiés lors de chaque implémentation en utilisant le fichier `.env`, à la racine de l'application, certains ne devraient pas être modifiés par ce mécanisme.
 
-Les paramètres dans le fichier .env sont préfixés soit par _app._, soit par _Ppci\\Config\\IdentificationConfig._, en fonction de leur origine. Le fichier _env_ contient l'ensemble des variables pouvant être modifiées lors de l'implémentation d'une instance du logiciel.
+Les paramètres dans le fichier .env sont préfixés soit par `app.`, soit par `Ppci\Config\IdentificationConfig.`, en fonction de leur origine. Le fichier _env_ contient l'ensemble des variables pouvant être modifiées lors de l'implémentation d'une instance du logiciel.
+:::
+
+::: {.content-visible when-profile="english"}
+# Application parameters
+
+The parameters are defined in two files: _app/Config/App.php_ and _vendor/equinton/ppci/src/Config/IdentificationConfig.php_.
+
+While they can all be modified during each implementation using the `.env` file at the root of the application, some should not be modified using this mechanism.
+
+Parameters in the .env file are prefixed with either `app.` or `Ppci\Config\IdentificationConfig.`, depending on their origin. The _env_ file contains all the variables that can be modified when an instance of the software is implemented.
+:::
+
+::: {.content-visible when-profile="french"}
+
 
 ## Paramètres génériques
 
@@ -33,6 +47,36 @@ Les paramètres dans le fichier .env sont préfixés soit par _app._, soit par _
 | app.MAIL\_param.mailDebug | Si à 1, affiche le contenu du mail à l'écran plutôt que de l'envoyer | 0 | en développement uniquement |
 | app.checkRelease | Si à 1, interroge le serveur GIT (Github ou Gitlab) pour connaître la dernière version disponible, et si la version est différente de celle enregistrée (app.version), affiche un message à l'écran. Les paramètres spécifiques pour l'interrogation sont décrits dans le fichier App.php | 0 | possible |
 
+:::
+
+::: {.content-visible when-profile="english"}
+## Generic parameters
+
+| Parameter (with the radical used in the .env file) | Description | Default value | Modifiable in .env |
+| --- | --- | --- | --- |
+| app.baseURL | Instance address | | mandatory |
+| BASE\_DIR | variable used in .env, to indicate the path to the application | e.g. "/var/www/collec2" | mandatory |
+| FRONT\_DIR | variable used in .env, to indicate the path to the public folder, the base of web pages | ${BASE\_DIR}/public | in principle, no |
+| app.defaultLocale | Default language in the instance | fr | possible |
+| app.supportedLocales | Languages ​​managed by the application | \['fr','en'\] | possible, provided that other languages ​​are integrated into the framework |
+| app.version | Application version |   | never |
+| app.versionDate | Version creation date |   | never |
+| app.dbversion | Database version. The version must also exist in the database dbversion table |   | never |
+| databaseSchemaFile | Path where the png describing the database tables is placed | e.g.: ROOTPATH ​​. "documentation/collec-schema.png" | never |
+| app.logDuration | Duration, in days, to keep logs in the logs table | 365 | possible |
+| app.privateKey | location of the private key used for encryption or decryption operations | e.g., ${BASE\_DIR}/id\_collec | possible |
+| app.pubKey | location of the public key used for encryption or decryption operations | e.g. ${BASE\_DIR}/id\_collec.pub | possible |
+| session.expiration | Session duration, in seconds | 14400 (4 hours) | possible |
+| app.APPLI\_absolute\_session | Maximum session duration, in seconds | 36000 (10 hours) | possible |
+| logger.threshold | Error trigger threshold | 4 | never |
+| app.APP\_mail | application email | mail@mysociety.com | mandatory |
+| app.MAIL\_enabled | If set to 1, sending emails is enabled | 1 | possible |
+| app.MAIL\_param.from | same as APP\_mail | mail@mysociety.com | mandatory |
+| app.MAIL\_param.mailDebug | If set to 1, display the content of the email on the screen instead of sending it | 0 | development only |
+| app.checkRelease | If set to 1, queries the GIT server (Github or Gitlab) for the latest version available, and if the version is different from the one saved (app.version), displays a message on the screen. The specific parameters for querying are described in the App.php file | 0 | possible |
+:::
+
+::: {.content-visible when-profile="french"}
 ## Paramètres de connexion à la base de données
 
 | Paramètre | Description | Valeur par défaut | Modifiable dans .env |
@@ -49,5 +93,24 @@ Les paramètres dans le fichier .env sont préfixés soit par _app._, soit par _
 ## Paramètres liés à l'identification des utilisateurs
 
 Voir la page [identification](identification.qmd).
+:::
 
+::: {.content-visible when-profile="english"}
+
+## Database Connection Parameters
+
+| Parameter | Description | Default | Can be changed in .env |
+| --- | --- | --- | --- |
+| database.default.hostname | server name or address | localhost | yes |
+| database.default.database | database name |   | yes |
+| database.default.username | login account name |   | yes |
+| database.default.password | associated password | | yes |
+| database.default.DBDriver | driver name | Postgre | no |
+| database.default.port | connection port | 5432 | yes |
+| database.default.searchpath | comma-separated list of schemas used in the database | e.g. col,gacl,public | normally no |
+| database.default.charset | character set used in the database | utf8 | never |
+
+## Settings related to user identification
+
+See the [identification](identification.qmd) page.
 :::
