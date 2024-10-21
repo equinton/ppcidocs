@@ -20,6 +20,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -205,7 +239,20 @@ ul.task-list li input[type="checkbox"] {
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#multi-instance-management" id="toc-multi-instance-management" class="nav-link active" data-scroll-target="#multi-instance-management">Multi-instance management</a>
+  <ul class="collapse">
+  <li><a href="#create-the-dedicated-instance-folder" id="toc-create-the-dedicated-instance-folder" class="nav-link" data-scroll-target="#create-the-dedicated-instance-folder">Create the dedicated instance folder</a></li>
+  <li><a href="#upgrading-the-apache-virtual-site" id="toc-upgrading-the-apache-virtual-site" class="nav-link" data-scroll-target="#upgrading-the-apache-virtual-site">Upgrading the Apache virtual site</a></li>
+  <li><a href="#modifying-the-parameters" id="toc-modifying-the-parameters" class="nav-link" data-scroll-target="#modifying-the-parameters">Modifying the parameters</a></li>
+  <li><a href="#adapt-scripts-run-on-the-command-line" id="toc-adapt-scripts-run-on-the-command-line" class="nav-link" data-scroll-target="#adapt-scripts-run-on-the-command-line">Adapt scripts run on the command line</a></li>
+  <li><a href="#technical-changes-made-to-the-code-to-manage-multi-instances" id="toc-technical-changes-made-to-the-code-to-manage-multi-instances" class="nav-link" data-scroll-target="#technical-changes-made-to-the-code-to-manage-multi-instances">Technical: changes made to the code to manage multi-instances</a></li>
+  </ul></li>
+  </ul>
+</nav>
     <div class="quarto-margin-footer"><div class="margin-footer-item">
 <p>Made with <a href="https://github.com/SebastienBoutry/inrae-project-website"><img src="https://github.com/SebastienBoutry/inrae-project-website/blob/main/images/extension-logo.png?raw=true" class="img-fluid" width="50"></a></p>
 </div></div></div>
@@ -215,8 +262,95 @@ ul.task-list li input[type="checkbox"] {
 
 
 
+<section id="multi-instance-management" class="level1">
+<h1>Multi-instance management</h1>
+<section id="create-the-dedicated-instance-folder" class="level2">
+<h2 class="anchored" data-anchor-id="create-the-dedicated-instance-folder">Create the dedicated instance folder</h2>
+<p>Create an instance folder in the server tree, for example <code>/var/www/app/instancename</code>, then create the files needed to keep the instances separate:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Folder containing the application code</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="va">APP</span><span class="op">=</span>/var/www/app</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Folder containing the specific parameters of the instance</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="va">FOLDER</span><span class="op">=</span><span class="st">"/var/www/instances/instancename"</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-P</span> <span class="va">$FOLDER</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">chmod</span> g+r <span class="va">$FOLDER</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> <span class="va">$FOLDER</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> temp</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co"># New cryptographic keys</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="ex">openssl</span> genpkey <span class="at">-algorithm</span> rsa <span class="at">-out</span> id_app <span class="at">-pkeyopt</span> rsa_keygen_bits:2048</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="ex">openssl</span> rsa <span class="at">-in</span> id_app <span class="at">-pubout</span> <span class="at">-out</span> id_app.pub</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Copy the configuration file</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="fu">cp</span> <span class="va">$APP</span>/env .env</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Upgrade rights</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="fu">chmod</span> <span class="at">-R</span> g+r .</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="fu">chmod</span> g+w temp</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="fu">chown</span> www-data id_app</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>the <em>temp</em> folder is the folder in which the application will generate all the files before sending them to the browser. To avoid the risk of collision between two instances, it is strongly recommended that each has its own space.</p>
+</section>
+<section id="upgrading-the-apache-virtual-site" class="level2">
+<h2 class="anchored" data-anchor-id="upgrading-the-apache-virtual-site">Upgrading the Apache virtual site</h2>
+<p>In the virtual site description (<code>myinstance.conf</code> file, in <code>/etc/apache2/sites-available</code>), add :</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode apache code-with-copy"><code class="sourceCode apache"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">&lt;VirtualHost</span><span class="at"> *:443</span><span class="fu">&gt;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>(...)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>DocumentRoot<span class="st"> /var/www/app</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>setenv<span class="st"> envPath /var/www/instances/instancename</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>(...) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="modifying-the-parameters" class="level2">
+<h2 class="anchored" data-anchor-id="modifying-the-parameters">Modifying the parameters</h2>
+<p>Edit the <code>/var/www/instances/instancename/.env</code> file:</p>
+<pre class="env"><code>app.baseURL = ‘https://myinstance.mysociety.com’
+BASE_DIR = ‘/var/www/instances/instancename
+app.privateKey = ${BASE_DIR}/id_app
+app.pubKey = ${BASE_DIR}/id_app.pub
+app.APP_temp = ${BASE_DIR}/temp
+database.default.hostname = localhost
+database.default.database = dbname_instance
+database.default.username = login_instance
+database.default.password = password_instance</code></pre>
+<p>Also check the default login mode, and adapt it if necessary.</p>
+</section>
+<section id="adapt-scripts-run-on-the-command-line" class="level2">
+<h2 class="anchored" data-anchor-id="adapt-scripts-run-on-the-command-line">Adapt scripts run on the command line</h2>
+<p>If you use scripts that are run from the command line, for example scripts that are scheduled to run at regular times (crontab), you will need to modify the script loader:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">envPath</span><span class="op">=</span>/var/www/instances/instancename</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> <span class="va">$envPath</span>/public</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="ex">php</span> index.php myscript</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>where <em>myscript</em> is the route to call.</p>
+<p>The <code>envPath</code> variable is available in <code>$_SERVER</code>.</p>
+</section>
+<section id="technical-changes-made-to-the-code-to-manage-multi-instances" class="level2">
+<h2 class="anchored" data-anchor-id="technical-changes-made-to-the-code-to-manage-multi-instances">Technical: changes made to the code to manage multi-instances</h2>
+<p>The end of the index.php file is modified as follows:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">//exit(CodeIgniter\Boot::bootWeb($paths));</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="kw">require</span> <span class="cn">FCPATH</span><span class="op">.</span> <span class="st">'../vendor/equinton/ppci/src/BootApp.php'</span><span class="ot">;</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="cf">exit</span> (CodeIgniter\BootApp::bootweb(<span class="va">$paths</span>))<span class="ot">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>And the <code>BootApp</code> class contains this code:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;?php</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="kw">namespace</span> CodeIgniter<span class="ot">;</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> CodeIgniter\Boot<span class="ot">;</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> Config\Paths<span class="ot">;</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> CodeIgniter\Config\DotEnv<span class="ot">;</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> BootApp <span class="kw">extends</span> Boot {</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    <span class="kw">protected</span> <span class="kw">static</span> <span class="kw">function</span> loadDotEnv(Paths <span class="va">$paths</span>)<span class="ot">:</span> <span class="dt">void</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    {</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>        <span class="kw">require_once</span> <span class="va">$paths</span>-&gt;systemDirectory <span class="op">.</span> <span class="st">'/Config/DotEnv.php'</span><span class="ot">;</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (<span class="fu">is_file</span>(<span class="va">$file</span> <span class="op">=</span> <span class="va">$_SERVER</span>[<span class="st">"envPath"</span>] <span class="op">.</span> <span class="cn">DIRECTORY_SEPARATOR</span> <span class="op">.</span> <span class="st">".env"</span>) <span class="op">&amp;&amp;</span> <span class="fu">is_readable</span>(<span class="va">$file</span>)) {</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>            (<span class="kw">new</span> DotEnv(<span class="va">$_SERVER</span>[<span class="st">"envPath"</span>]<span class="ot">,</span><span class="st">".env"</span>))-&gt;load()<span class="ot">;</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>        } <span class="cf">else</span> {</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>            (<span class="kw">new</span> DotEnv(<span class="va">$paths</span>-&gt;appDirectory <span class="op">.</span> <span class="st">'/../'</span>))-&gt;load()<span class="ot">;</span></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Warning:</strong> the use of an .env file placed elsewhere than at the root of the application prevents CodeIgniter’s debugging tools from working (development mode).</p>
 
 
+</section>
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

@@ -292,5 +292,47 @@
     "title": "Migration from PrototypePhp",
     "section": "",
     "text": "Edit the following files:\n\napp/Config/news.txt for news in French\napp/Config/newsen.txt for news in English\n\nAlso edit the following templates:\n\napp/Views/templates/about_fr.tpl\napp/Views/templates/about_en.tpl"
+  },
+  {
+    "objectID": "multi-instance.html",
+    "href": "multi-instance.html",
+    "title": "Multi-instance management",
+    "section": "",
+    "text": "Create an instance folder in the server tree, for example /var/www/app/instancename, then create the files needed to keep the instances separate:\n# Folder containing the application code\nAPP=/var/www/app\n# Folder containing the specific parameters of the instance\nFOLDER=\"/var/www/instances/instancename\"\nmkdir -P $FOLDER\nchmod g+r $FOLDER\ncd $FOLDER\nmkdir temp\n# New cryptographic keys\nopenssl genpkey -algorithm rsa -out id_app -pkeyopt rsa_keygen_bits:2048\nopenssl rsa -in id_app -pubout -out id_app.pub\n# Copy the configuration file\ncp $APP/env .env\n# Upgrade rights\nchmod -R g+r .\nchmod g+w temp\nchown www-data id_app\nthe temp folder is the folder in which the application will generate all the files before sending them to the browser. To avoid the risk of collision between two instances, it is strongly recommended that each has its own space.\n\n\n\nIn the virtual site description (myinstance.conf file, in /etc/apache2/sites-available), add :\n&lt;VirtualHost *:443&gt;\n(...)\nDocumentRoot /var/www/app\nsetenv envPath /var/www/instances/instancename\n(...) \n\n\n\nEdit the /var/www/instances/instancename/.env file:\napp.baseURL = ‘https://myinstance.mysociety.com’\nBASE_DIR = ‘/var/www/instances/instancename\napp.privateKey = ${BASE_DIR}/id_app\napp.pubKey = ${BASE_DIR}/id_app.pub\napp.APP_temp = ${BASE_DIR}/temp\ndatabase.default.hostname = localhost\ndatabase.default.database = dbname_instance\ndatabase.default.username = login_instance\ndatabase.default.password = password_instance\nAlso check the default login mode, and adapt it if necessary.\n\n\n\nIf you use scripts that are run from the command line, for example scripts that are scheduled to run at regular times (crontab), you will need to modify the script loader:\n#!/bin/bash\nexport envPath=/var/www/instances/instancename\ncd $envPath/public\nphp index.php myscript\nwhere myscript is the route to call.\nThe envPath variable is available in $_SERVER.\n\n\n\nThe end of the index.php file is modified as follows:\n//exit(CodeIgniter\\Boot::bootWeb($paths));\nrequire FCPATH. '../vendor/equinton/ppci/src/BootApp.php';\nexit (CodeIgniter\\BootApp::bootweb($paths));\nAnd the BootApp class contains this code:\n&lt;?php\n\nnamespace CodeIgniter;\n\nuse CodeIgniter\\Boot;\nuse Config\\Paths;\nuse CodeIgniter\\Config\\DotEnv;\n\nclass BootApp extends Boot {\n\n    protected static function loadDotEnv(Paths $paths): void\n    {\n        require_once $paths-&gt;systemDirectory . '/Config/DotEnv.php';\n        if (is_file($file = $_SERVER[\"envPath\"] . DIRECTORY_SEPARATOR . \".env\") && is_readable($file)) {\n            (new DotEnv($_SERVER[\"envPath\"],\".env\"))-&gt;load();\n        } else {\n            (new DotEnv($paths-&gt;appDirectory . '/../'))-&gt;load();\n        }\n    }\n}\nWarning: the use of an .env file placed elsewhere than at the root of the application prevents CodeIgniter’s debugging tools from working (development mode)."
+  },
+  {
+    "objectID": "multi-instance.html#create-the-dedicated-instance-folder",
+    "href": "multi-instance.html#create-the-dedicated-instance-folder",
+    "title": "Multi-instance management",
+    "section": "",
+    "text": "Create an instance folder in the server tree, for example /var/www/app/instancename, then create the files needed to keep the instances separate:\n# Folder containing the application code\nAPP=/var/www/app\n# Folder containing the specific parameters of the instance\nFOLDER=\"/var/www/instances/instancename\"\nmkdir -P $FOLDER\nchmod g+r $FOLDER\ncd $FOLDER\nmkdir temp\n# New cryptographic keys\nopenssl genpkey -algorithm rsa -out id_app -pkeyopt rsa_keygen_bits:2048\nopenssl rsa -in id_app -pubout -out id_app.pub\n# Copy the configuration file\ncp $APP/env .env\n# Upgrade rights\nchmod -R g+r .\nchmod g+w temp\nchown www-data id_app\nthe temp folder is the folder in which the application will generate all the files before sending them to the browser. To avoid the risk of collision between two instances, it is strongly recommended that each has its own space."
+  },
+  {
+    "objectID": "multi-instance.html#upgrading-the-apache-virtual-site",
+    "href": "multi-instance.html#upgrading-the-apache-virtual-site",
+    "title": "Multi-instance management",
+    "section": "",
+    "text": "In the virtual site description (myinstance.conf file, in /etc/apache2/sites-available), add :\n&lt;VirtualHost *:443&gt;\n(...)\nDocumentRoot /var/www/app\nsetenv envPath /var/www/instances/instancename\n(...)"
+  },
+  {
+    "objectID": "multi-instance.html#modifying-the-parameters",
+    "href": "multi-instance.html#modifying-the-parameters",
+    "title": "Multi-instance management",
+    "section": "",
+    "text": "Edit the /var/www/instances/instancename/.env file:\napp.baseURL = ‘https://myinstance.mysociety.com’\nBASE_DIR = ‘/var/www/instances/instancename\napp.privateKey = ${BASE_DIR}/id_app\napp.pubKey = ${BASE_DIR}/id_app.pub\napp.APP_temp = ${BASE_DIR}/temp\ndatabase.default.hostname = localhost\ndatabase.default.database = dbname_instance\ndatabase.default.username = login_instance\ndatabase.default.password = password_instance\nAlso check the default login mode, and adapt it if necessary."
+  },
+  {
+    "objectID": "multi-instance.html#adapt-scripts-run-on-the-command-line",
+    "href": "multi-instance.html#adapt-scripts-run-on-the-command-line",
+    "title": "Multi-instance management",
+    "section": "",
+    "text": "If you use scripts that are run from the command line, for example scripts that are scheduled to run at regular times (crontab), you will need to modify the script loader:\n#!/bin/bash\nexport envPath=/var/www/instances/instancename\ncd $envPath/public\nphp index.php myscript\nwhere myscript is the route to call.\nThe envPath variable is available in $_SERVER."
+  },
+  {
+    "objectID": "multi-instance.html#technical-changes-made-to-the-code-to-manage-multi-instances",
+    "href": "multi-instance.html#technical-changes-made-to-the-code-to-manage-multi-instances",
+    "title": "Multi-instance management",
+    "section": "",
+    "text": "The end of the index.php file is modified as follows:\n//exit(CodeIgniter\\Boot::bootWeb($paths));\nrequire FCPATH. '../vendor/equinton/ppci/src/BootApp.php';\nexit (CodeIgniter\\BootApp::bootweb($paths));\nAnd the BootApp class contains this code:\n&lt;?php\n\nnamespace CodeIgniter;\n\nuse CodeIgniter\\Boot;\nuse Config\\Paths;\nuse CodeIgniter\\Config\\DotEnv;\n\nclass BootApp extends Boot {\n\n    protected static function loadDotEnv(Paths $paths): void\n    {\n        require_once $paths-&gt;systemDirectory . '/Config/DotEnv.php';\n        if (is_file($file = $_SERVER[\"envPath\"] . DIRECTORY_SEPARATOR . \".env\") && is_readable($file)) {\n            (new DotEnv($_SERVER[\"envPath\"],\".env\"))-&gt;load();\n        } else {\n            (new DotEnv($paths-&gt;appDirectory . '/../'))-&gt;load();\n        }\n    }\n}\nWarning: the use of an .env file placed elsewhere than at the root of the application prevents CodeIgniter’s debugging tools from working (development mode)."
   }
 ]

@@ -28,6 +28,40 @@ chown www-data id_app
 
 le dossier *temp* est le dossier dans lequel l'application va générer tous les fichiers avant leur envoi au navigateur. Pour éviter les risques de collision entre deux instances, il est vivement recommandé que chacune dispose de son propre espace.
 
+:::
+
+::: {.content-visible when-profile="english"}
+# Multi-instance management
+
+## Create the dedicated instance folder
+
+Create an instance folder in the server tree, for example `/var/www/app/instancename`, then create the files needed to keep the instances separate:
+
+```bash
+# Folder containing the application code
+APP=/var/www/app
+# Folder containing the specific parameters of the instance
+FOLDER="/var/www/instances/instancename"
+mkdir -P $FOLDER
+chmod g+r $FOLDER
+cd $FOLDER
+mkdir temp
+# New cryptographic keys
+openssl genpkey -algorithm rsa -out id_app -pkeyopt rsa_keygen_bits:2048
+openssl rsa -in id_app -pubout -out id_app.pub
+# Copy the configuration file
+cp $APP/env .env
+# Upgrade rights
+chmod -R g+r .
+chmod g+w temp
+chown www-data id_app
+```
+
+the *temp* folder is the folder in which the application will generate all the files before sending them to the browser. To avoid the risk of collision between two instances, it is strongly recommended that each has its own space.
+:::
+
+::: {.content-visible when-profile="french"}
+
 ## Mettre à niveau du site virtuel Apache
 
 Rajoutez, dans la description du site virtuel (fichier `moninstance.conf`, dans `/etc/apache2/sites-available`) :
@@ -46,7 +80,7 @@ Rajoutez, dans la description du site virtuel (fichier `moninstance.conf`, dans 
 
 ```env
 app.baseURL = 'https://myinstance.mysociety.com'
-app.BASE_DIR = "/var/www/instances/instancename"
+BASE_DIR = "/var/www/instances/instancename"
 app.privateKey = ${BASE_DIR}/id_app
 app.pubKey = ${BASE_DIR}/id_app.pub
 app.APP_temp = ${BASE_DIR}/temp
@@ -72,6 +106,58 @@ où *monscript* correspond à la route à appeler.
 
 La variable `envPath` est disponible dans `$_SERVER`.
 
+:::
+
+::: {.content-visible when-profile="english"}
+## Upgrading the Apache virtual site
+
+In the virtual site description (`myinstance.conf` file, in `/etc/apache2/sites-available`), add :
+
+```apache
+<VirtualHost *:443>
+(...)
+DocumentRoot /var/www/app
+setenv envPath /var/www/instances/instancename
+(...) 
+```
+
+## Modifying the parameters
+
+Edit the `/var/www/instances/instancename/.env` file:
+
+```env
+app.baseURL = ‘https://myinstance.mysociety.com’
+BASE_DIR = ‘/var/www/instances/instancename
+app.privateKey = ${BASE_DIR}/id_app
+app.pubKey = ${BASE_DIR}/id_app.pub
+app.APP_temp = ${BASE_DIR}/temp
+database.default.hostname = localhost
+database.default.database = dbname_instance
+database.default.username = login_instance
+database.default.password = password_instance
+```
+
+Also check the default login mode, and adapt it if necessary.
+
+## Adapt scripts run on the command line
+
+If you use scripts that are run from the command line, for example scripts that are scheduled to run at regular times (crontab), you will need to modify the script loader:
+
+```bash
+#!/bin/bash
+export envPath=/var/www/instances/instancename
+cd $envPath/public
+php index.php myscript
+```
+
+where *myscript* is the route to call.
+
+The `envPath` variable is available in `$_SERVER`.
+:::
+
+::: {.content-visible when-profile="french"}
+
+
 ## Technique : modifications apportées au code pour gérer le multi-instances
 
 La fin du fichier index.php est modifié ainsi : 
@@ -83,6 +169,23 @@ exit (CodeIgniter\BootApp::bootweb($paths));
 ```
 
 Et la classe `BootApp` contient ce code :
+:::
+
+::: {.content-visible when-profile="english"}
+## Technical: changes made to the code to manage multi-instances
+
+
+The end of the index.php file is modified as follows: 
+
+
+```php
+//exit(CodeIgniter\Boot::bootWeb($paths));
+require FCPATH. '../vendor/equinton/ppci/src/BootApp.php';
+exit (CodeIgniter\BootApp::bootweb($paths));
+```
+
+And the `BootApp` class contains this code:
+:::
 
 ```php
 <?php
@@ -106,8 +209,11 @@ class BootApp extends Boot {
     }
 }
 ```
-
+::: {.content-visible when-profile="french"}
 **Attention :** l'utilisation d'un fichier .env placé ailleurs qu'à la racine de l'application empêche le fonctionnement des outils de débogage de CodeIgniter (mode développement).
 
+:::
 
+::: {.content-visible when-profile="english"}
+**Warning:** the use of an .env file placed elsewhere than at the root of the application prevents CodeIgniter's debugging tools from working (development mode).
 :::
