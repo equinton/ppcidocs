@@ -20,6 +20,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -205,7 +239,28 @@ ul.task-list li input[type="checkbox"] {
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#sequencing-when-calling-up-a-page" id="toc-sequencing-when-calling-up-a-page" class="nav-link active" data-scroll-target="#sequencing-when-calling-up-a-page">Sequencing when calling up a page</a>
+  <ul class="collapse">
+  <li><a href="#filters" id="toc-filters" class="nav-link" data-scroll-target="#filters">Filters</a>
+  <ul class="collapse">
+  <li><a href="#csrf-codeigniter-filter" id="toc-csrf-codeigniter-filter" class="nav-link" data-scroll-target="#csrf-codeigniter-filter">csrf: CodeIgniter filter</a></li>
+  <li><a href="#invalidchar-codeigniter-filter" id="toc-invalidchar-codeigniter-filter" class="nav-link" data-scroll-target="#invalidchar-codeigniter-filter">invalidChar : CodeIgniter filter</a></li>
+  <li><a href="#startcall-ppci-filter" id="toc-startcall-ppci-filter" class="nav-link" data-scroll-target="#startcall-ppci-filter">startCall : PPCI filter</a></li>
+  <li><a href="#dbversioncheck-ppci-filter" id="toc-dbversioncheck-ppci-filter" class="nav-link" data-scroll-target="#dbversioncheck-ppci-filter">dbversionCheck: PPCI filter</a></li>
+  <li><a href="#versioncheck-ppci-filter" id="toc-versioncheck-ppci-filter" class="nav-link" data-scroll-target="#versioncheck-ppci-filter">versionCheck: PPCI filter</a></li>
+  <li><a href="#rights-ppci-filter" id="toc-rights-ppci-filter" class="nav-link" data-scroll-target="#rights-ppci-filter">rights: PPCI filter</a></li>
+  <li><a href="#admin-ppci-filter" id="toc-admin-ppci-filter" class="nav-link" data-scroll-target="#admin-ppci-filter">Admin: PPCI filter</a></li>
+  </ul></li>
+  <li><a href="#calling-the-controller" id="toc-calling-the-controller" class="nav-link" data-scroll-target="#calling-the-controller">Calling the controller</a></li>
+  <li><a href="#calling-libraries" id="toc-calling-libraries" class="nav-link" data-scroll-target="#calling-libraries">Calling libraries</a></li>
+  <li><a href="#the-different-views" id="toc-the-different-views" class="nav-link" data-scroll-target="#the-different-views">The different views</a></li>
+  </ul></li>
+  </ul>
+</nav>
     <div class="quarto-margin-footer"><div class="margin-footer-item">
 <p>Made with <a href="https://github.com/SebastienBoutry/inrae-project-website"><img src="https://github.com/SebastienBoutry/inrae-project-website/blob/main/images/extension-logo.png?raw=true" class="img-fluid" width="50"></a></p>
 </div></div></div>
@@ -215,8 +270,107 @@ ul.task-list li input[type="checkbox"] {
 
 
 
+<section id="sequencing-when-calling-up-a-page" class="level1">
+<h1>Sequencing when calling up a page</h1>
+<section id="filters" class="level2">
+<h2 class="anchored" data-anchor-id="filters">Filters</h2>
+<p>Filters are declared in the <em>app/Config/Filters.php</em> file.</p>
+<section id="csrf-codeigniter-filter" class="level3">
+<h3 class="anchored" data-anchor-id="csrf-codeigniter-filter">csrf: CodeIgniter filter</h3>
+<p>Checks the CSRF token, which is present in all Smarty forms. The filter must be disabled for API calls, for example as follows:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="st">'csrf'</span> =&gt; [<span class="st">'except'</span> =&gt; [</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">'apiv1sampleWrite'</span><span class="ot">,</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">'apiv1sampleDelete'</span><span class="ot">,</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">'apiv1movementWrite'</span><span class="ot">,</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">'apiv1sampleList'</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>]]<span class="ot">,</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="invalidchar-codeigniter-filter" class="level3">
+<h3 class="anchored" data-anchor-id="invalidchar-codeigniter-filter">invalidChar : CodeIgniter filter</h3>
+<p>Checks the encoding of characters transmitted from the browser</p>
+</section>
+<section id="startcall-ppci-filter" class="level3">
+<h3 class="anchored" data-anchor-id="startcall-ppci-filter">startCall : PPCI filter</h3>
+<p>Starts <code>PpciInit:init()</code> :</p>
+<ul>
+<li>Before session start: runs the <code>App/Libraries/BeforeSession::index()</code> script, to load classes as needed before the session starts. In principle, this is obsolete for CodeIgniter.</li>
+<li>starts the session</li>
+<li><code>helper('ppci')</code>: loads generic PPCI functions</li>
+<li>initialise messages that have been transmitted before a redirection</li>
+<li>updates the locale and the translation file</li>
+<li>initialise the database connection</li>
+<li>purges the logs (gacl.log table). Logs older than one year are deleted (<em>app.logDuration</em> parameter).</li>
+</ul>
+</section>
+<section id="dbversioncheck-ppci-filter" class="level3">
+<h3 class="anchored" data-anchor-id="dbversioncheck-ppci-filter">dbversionCheck: PPCI filter</h3>
+<p>Checks the version of the database (<em>dbversion</em> table). If the version declared in the <em>app.dbversion</em> variable is not present in the table, the filter returns to the home page (call to the <em>defaultPage()</em> function) and displays an error message. The filter should be disabled for API calls and for scripts run on the command line.</p>
+</section>
+<section id="versioncheck-ppci-filter" class="level3">
+<h3 class="anchored" data-anchor-id="versioncheck-ppci-filter">versionCheck: PPCI filter</h3>
+<p>Optional filter, which compares the version declared in the <em>app.version</em> variable with the version known as the current version in the Github or Gitlab repository. For the filter to work, the <em>app.checkRelease</em> variable must be set to 1, and the <em>app.APPLI_release</em> array must be correctly configured.</p>
+</section>
+<section id="rights-ppci-filter" class="level3">
+<h3 class="anchored" data-anchor-id="rights-ppci-filter">rights: PPCI filter</h3>
+<ul>
+<li>Search for the necessary rights in :
+<ul>
+<li>App/Config/Rights</li>
+<li>Ppci/Config/Rights</li>
+</ul></li>
+<li>If the requested rights exist, the filter checks whether the login exists or not. If it does not exist, triggers the login procedure (<code>Ppci/Libraries/Login-&gt;getLogin()</code>)</li>
+<li>checks that the user has the necessary rights</li>
+</ul>
+</section>
+<section id="admin-ppci-filter" class="level3">
+<h3 class="anchored" data-anchor-id="admin-ppci-filter">Admin: PPCI filter</h3>
+<ul>
+<li>checks whether the module called requires the <em>admin</em> right in <code>Ppci/Config/Rights</code>.</li>
+<li>in the case of an administration module :
+<ul>
+<li>checks when the last TOTP identification or call to an administration module was made</li>
+<li>if the duration is &gt; 10’ :
+<ul>
+<li>if the account has not activated the TOTP, the TOTP code creation screen is displayed.</li>
+<li>otherwise triggers entry of the TOTP code.</li>
+</ul></li>
+</ul></li>
+</ul>
+<p>Use of the TOTP can be disabled (not recommended for production use) using the <code>IdentificationConfig\disableTotpAdmin=1</code> parameter.</p>
+<p>The duration of the <em>admin</em> session can be modified with the <code>IdentificationConfig\adminSessionDuration=600</code> parameter. The duration is expressed in seconds.</p>
+</section>
+</section>
+<section id="calling-the-controller" class="level2">
+<h2 class="anchored" data-anchor-id="calling-the-controller">Calling the controller</h2>
+<p>Controllers must inherit from <code>Ppci/Controllers/PpciController</code>, which will retrieve the <code>$_GET</code>, <code>$_REQUEST</code>, <code>$_POST</code> and <code>$_SESSION['lastGet']</code> variables from <em>FlashData</em>.</p>
+</section>
+<section id="calling-libraries" class="level2">
+<h2 class="anchored" data-anchor-id="calling-libraries">Calling libraries</h2>
+<p>Controllers call libraries, which can inherit from <code>PpciLibraries</code>. This class offers:</p>
+<ul>
+<li>pre-positioned parameters:
+<ul>
+<li><code>protected PpciModel $dataClass;</code> : a class for manipulating information stored in a table.</li>
+<li><code>$this-&gt;message = service('MessagePpci');</code> : class used to display messages on the screen or record them in the server logs</li>
+<li><code>$this-&gt;appConfig = config('App');</code> : general application parameters</li>
+<li><code>$this-&gt;log = service('Log');</code> : recording of actions in the gacl.log table</li>
+</ul></li>
+<li>generic functions for manipulating data:
+<ul>
+<li><code>dataRead($id, $smartyPage, $idParent = 0)</code> : reads information from a record in the $dataClass, and generates the Smarty view</li>
+<li><code>dataWrite(array $data, bool $isPartOfTransaction = false)</code>: writes information to the database</li>
+<li><code>dataDelete($id, bool $isPartOfTransaction = false)</code>: deletes a record</li>
+</ul></li>
+</ul>
+</section>
+<section id="the-different-views" class="level2">
+<h2 class="anchored" data-anchor-id="the-different-views">The different views</h2>
+<p>Sending information to the browser uses views, each dedicated to a type of information (web pages, pdf files, Ajax requests, binary files, etc.). They are available in the form of services (described in <code>ppci/Config/Services.php</code>), and are physically stored in <code>Ppci/Libraries/Views</code>.</p>
+<p>Details of the views can be viewed <a href="./views.html">here</a>.</p>
 
 
+</section>
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

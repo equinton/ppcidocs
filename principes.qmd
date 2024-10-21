@@ -63,9 +63,80 @@ Filtre optionnel, qui va comparer la version déclarée dans la variable _app.ve
 L'utilisation du TOTP est désactivable (non conseillé en production) avec le paramètre `IdentificationConfig\disableTotpAdmin=1`.  
 La durée de la session _admin_ peut être modifiée avec le paramètre `IdentificationConfig\adminSessionDuration=600`. La durée est exprimée en secondes.
 
+:::
+
+::: {.content-visible when-profile="english"}
+# Sequencing when calling up a page
+
+
+## Filters
+
+Filters are declared in the _app/Config/Filters.php_ file.
+
+### csrf: CodeIgniter filter
+
+Checks the CSRF token, which is present in all Smarty forms. The filter must be disabled for API calls, for example as follows:
+
+```php
+'csrf' => ['except' => [
+    'apiv1sampleWrite',
+    'apiv1sampleDelete',
+    'apiv1movementWrite',
+    'apiv1sampleList'
+]],
+```
+
+### invalidChar : CodeIgniter filter
+
+Checks the encoding of characters transmitted from the browser
+
+### startCall : PPCI filter
+
+Starts `PpciInit:init()` :
+
+* Before session start: runs the `App/Libraries/BeforeSession::index()` script, to load classes as needed before the session starts. In principle, this is obsolete for CodeIgniter.
+* starts the session
+* `helper('ppci')`: loads generic PPCI functions
+* initialise messages that have been transmitted before a redirection
+* updates the locale and the translation file
+* initialise the database connection
+* purges the logs (gacl.log table). Logs older than one year are deleted (_app.logDuration_ parameter).
+
+### dbversionCheck: PPCI filter
+
+Checks the version of the database (_dbversion_ table). If the version declared in the _app.dbversion_ variable is not present in the table, the filter returns to the home page (call to the _defaultPage()_ function) and displays an error message. The filter should be disabled for API calls and for scripts run on the command line.
+
+### versionCheck: PPCI filter
+
+Optional filter, which compares the version declared in the _app.version_ variable with the version known as the current version in the Github or Gitlab repository. For the filter to work, the _app.checkRelease_ variable must be set to 1, and the _app.APPLI\_release_ array must be correctly configured.
+
+### rights: PPCI filter
+
+* Search for the necessary rights in :
+  * App/Config/Rights
+  * Ppci/Config/Rights
+* If the requested rights exist, the filter checks whether the login exists or not. If it does not exist, triggers the login procedure (`Ppci/Libraries/Login->getLogin()`)
+* checks that the user has the necessary rights
+
+### Admin: PPCI filter
+
+* checks whether the module called requires the _admin_ right in `Ppci/Config/Rights`.
+* in the case of an administration module :
+  * checks when the last TOTP identification or call to an administration module was made
+  * if the duration is > 10' :
+    * if the account has not activated the TOTP, the TOTP code creation screen is displayed.
+    * otherwise triggers entry of the TOTP code.
+
+Use of the TOTP can be disabled (not recommended for production use) using the `IdentificationConfig\disableTotpAdmin=1` parameter. 
+
+The duration of the _admin_ session can be modified with the `IdentificationConfig\adminSessionDuration=600` parameter. The duration is expressed in seconds.
+:::
+
+::: {.content-visible when-profile="french"}
+
 ## Appel du contrôleur
 
-Les contrôleurs doivent hériter de `Ppci/Controllers/PpciController`, qui va récupérer depuis _FlashData_ les variables $\_GET, $\_REQUEST, $\_POST et $\_SESSION\["lastGet"\].
+Les contrôleurs doivent hériter de `Ppci/Controllers/PpciController`, qui va récupérer depuis _FlashData_ les variables `$_GET`, `$_REQUEST`, `$_POST` et `$_SESSION["lastGet"]`.
 
 ## Appel des librairies
 
@@ -87,4 +158,31 @@ L'envoi d'informations au navigateur fait appel à des vues, chacune étant déd
 
 Le détail des vues peut être consulté [ici](views.qmd).
 
+:::
+
+::: {.content-visible when-profile="english"}
+## Calling the controller
+
+Controllers must inherit from `Ppci/Controllers/PpciController`, which will retrieve the `$_GET`, `$_REQUEST`, `$_POST` and `$_SESSION['lastGet']` variables from _FlashData_.
+
+## Calling libraries
+
+Controllers call libraries, which can inherit from `PpciLibraries`. This class offers:
+
+* pre-positioned parameters:
+  * `protected PpciModel $dataClass;` : a class for manipulating information stored in a table.
+  * `$this->message = service('MessagePpci');` : class used to display messages on the screen or record them in the server logs
+  * `$this->appConfig = config('App');` : general application parameters
+  * `$this->log = service('Log');` : recording of actions in the gacl.log table
+* generic functions for manipulating data:
+  * `dataRead($id, $smartyPage, $idParent = 0)` : reads information from a record in the $dataClass, and generates the Smarty view
+  * `dataWrite(array $data, bool $isPartOfTransaction = false)`: writes information to the database
+  * `dataDelete($id, bool $isPartOfTransaction = false)`: deletes a record
+
+
+## The different views
+
+Sending information to the browser uses views, each dedicated to a type of information (web pages, pdf files, Ajax requests, binary files, etc.). They are available in the form of services (described in `ppci/Config/Services.php`), and are physically stored in `Ppci/Libraries/Views`.
+
+Details of the views can be viewed [here](views.qmd).
 :::
