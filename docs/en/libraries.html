@@ -20,6 +20,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -205,7 +239,22 @@ ul.task-list li input[type="checkbox"] {
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#libraries" id="toc-libraries" class="nav-link active" data-scroll-target="#libraries">Libraries</a>
+  <ul class="collapse">
+  <li><a href="#the-ppcilibrary-class" id="toc-the-ppcilibrary-class" class="nav-link" data-scroll-target="#the-ppcilibrary-class">The PpciLibrary class</a>
+  <ul class="collapse">
+  <li><a href="#reading-a-record-and-displaying-the-page-for-modification-or-display" id="toc-reading-a-record-and-displaying-the-page-for-modification-or-display" class="nav-link" data-scroll-target="#reading-a-record-and-displaying-the-page-for-modification-or-display">Reading a record and displaying the page for modification or display</a></li>
+  <li><a href="#writing-a-record" id="toc-writing-a-record" class="nav-link" data-scroll-target="#writing-a-record">Writing a record</a></li>
+  <li><a href="#deleting-a-record" id="toc-deleting-a-record" class="nav-link" data-scroll-target="#deleting-a-record">Deleting a record</a></li>
+  </ul></li>
+  <li><a href="#transaction-processing" id="toc-transaction-processing" class="nav-link" data-scroll-target="#transaction-processing">Transaction processing</a></li>
+  </ul></li>
+  </ul>
+</nav>
     <div class="quarto-margin-footer"><div class="margin-footer-item">
 <p>Made with <a href="https://github.com/SebastienBoutry/inrae-project-website"><img src="https://github.com/SebastienBoutry/inrae-project-website/blob/main/images/extension-logo.png?raw=true" class="img-fluid" width="50"></a></p>
 </div></div></div>
@@ -215,8 +264,76 @@ ul.task-list li input[type="checkbox"] {
 
 
 
+<section id="libraries" class="level1">
+<h1>Libraries</h1>
+<p>The “active” code of the application, that is to say the one that chains the actions, is described in the libraries. In general, there is one library per table, but this is not systematic.</p>
+<p>The libraries systematically inherit from PpciLibrary, and generally contain the following functions:</p>
+<ul>
+<li>list: display the list of records in the table</li>
+<li>display: display the details of a record</li>
+<li>change: display the modification page</li>
+<li>write: write to the database</li>
+<li>delete: delete the record.</li>
+</ul>
+<p>Depending on the case, <em>write</em> and <em>delete</em> refer either to <em>display</em> or to <em>list</em> and, in case of problem, the function reloads the <em>change</em> page.</p>
+<p>In some cases, especially when functions can be called from different places in the application, functions simply return the value <em>true</em> or <em>false</em>, and the controller will call the display function, especially after recording operations.</p>
+<section id="the-ppcilibrary-class" class="level2">
+<h2 class="anchored" data-anchor-id="the-ppcilibrary-class">The PpciLibrary class</h2>
+<p>It manages direct access to some services:</p>
+<ul>
+<li><code>$this-&gt;message</code>: display messages on the screen and record technical messages in Syslog</li>
+<li><code>$this-&gt;appConfig</code>: access to configuration parameters stored in <em>app/Config/App.php</em> or updated via <em>.env</em></li>
+<li><code>$this-&gt;log</code>: record traces in the <em>gacl.log</em> table of the database.</li>
+</ul>
+<p>For it to work properly, it must be initialized as follows:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="bu">__construct</span>()</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    {</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>        <span class="kw">parent</span>::<span class="bu">__construct</span>()<span class="ot">;</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>        <span class="va">$this</span>-&gt;dataclass <span class="op">=</span> <span class="kw">new</span> ModelsBorrower()<span class="ot">;</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>        <span class="va">$this</span>-&gt;keyName <span class="op">=</span> <span class="st">"borrower_id"</span><span class="ot">;</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (<span class="kw">isset</span>(<span class="va">$_REQUEST</span>[<span class="va">$this</span>-&gt;keyName])) {</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>            <span class="va">$this</span>-&gt;id <span class="op">=</span> <span class="va">$_REQUEST</span>[<span class="va">$this</span>-&gt;keyName]<span class="ot">;</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    }</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><em>$this-&gt;dataclass</em> must be a class inherited from <em>PpciModel</em>.</p>
+<p>It also has generic functions, which simplify the writing of classes in the application. These systematically raise a <em>PpciException</em> exception if an error is encountered.</p>
+<section id="reading-a-record-and-displaying-the-page-for-modification-or-display" class="level3">
+<h3 class="anchored" data-anchor-id="reading-a-record-and-displaying-the-page-for-modification-or-display">Reading a record and displaying the page for modification or display</h3>
+<p><code>function dataRead($id, $smartyPage, $idParent = 0)</code></p>
+<p>The function calls <code>$this-&gt;dataclass-&gt;read ($id, true, $idParent)</code>, assigns the read data array to the variable <code>$data</code>, then triggers the display of the page <code>$smartyPage</code>. It returns the <code>$data</code> array to the calling function.</p>
+</section>
+<section id="writing-a-record" class="level3">
+<h3 class="anchored" data-anchor-id="writing-a-record">Writing a record</h3>
+<p><code>function dataWrite(array $data, bool $isPartOfTransaction = false)</code></p>
+<p>Writes the data <code>$data</code> to the table managed by <code>$this-&gt;dataclass</code> (call to the <em>write</em> function). If the transaction flag is not enabled, a message informing of the execution of the command is sent, and a trace is recorded in the <em>log</em> table.</p>
+</section>
+<section id="deleting-a-record" class="level3">
+<h3 class="anchored" data-anchor-id="deleting-a-record">Deleting a record</h3>
+<p><code>function dataDelete($id, bool $isPartOfTransaction = false)</code></p>
+<p>Deletes the record identified by <code>$id</code>, and displays a message to inform of the success of the operation if the transaction flag is not enabled.</p>
+</section>
+</section>
+<section id="transaction-processing" class="level2">
+<h2 class="anchored" data-anchor-id="transaction-processing">Transaction processing</h2>
+<p>In the case where several concurrent writes are necessary, it is possible to activate the transactions, managed by CodeIgniter, with the following commands:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="cf">try</span> {</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>   <span class="co">/*</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co">    * Start transaction</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co">    */</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>   <span class="va">$db</span> <span class="op">=</span> <span class="va">$this</span>-&gt;dataclass-&gt;db<span class="ot">;</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>   <span class="va">$db</span>-&gt;transBegin()<span class="ot">;</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>   (...)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>   <span class="va">$db</span>-&gt;transCommit()<span class="ot">;</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>   } <span class="cf">catch</span> (PpciException <span class="va">$ie</span>) {</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>     <span class="cf">if</span> (<span class="va">$db</span>-&gt;transEnabled) {</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>     <span class="va">$db</span>-&gt;transRollback()<span class="ot">;</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>     (...)</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>   }</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>:::</p>
 
 
+</section>
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

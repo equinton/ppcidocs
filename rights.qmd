@@ -2,7 +2,7 @@
 
 # Droits d'accès aux modules
 
-Les droits sont déclarés dans le fichier app/Config/Rights.php. Les droits des modules gérés directement dans Ppci sont déclarés dans vendor/equinton/ppci/src/Config/Rights.php.
+Les droits sont déclarés dans le fichier `app/Config/Rights.php`. Les droits des modules gérés directement dans Ppci sont déclarés dans `vendor/equinton/ppci/src/Config/Rights.php`.
 
 Pour tout module (route) qui doit être protégé, une entrée doit être rajoutée dans le tableau _rights_, ainsi : 
 
@@ -21,7 +21,7 @@ Les droits par défaut gérés par Ppci sont les suivants :
 *   manage : gestion au quotidien
 *   param : accès aux paramètres du logiciel (rôle de l'administrateur métier)
 
-D'autres droits peuvent être rajoutés dans l'application, comme c'est le cas dans l'exemple ci-dessus avec le droit _collection_. Ils sont décrits avec les tables _acl\*_ du schéma _gacl_.
+D'autres droits peuvent être rajoutés dans l'application, comme c'est le cas dans l'exemple ci-dessus avec le droit _collection_. Ils sont décrits avec les tables `acl*` du schéma _gacl_.
 
 Lors de l'accès à un module protégé, les droits de l'utilisateur sont calculés par le filtre _RightsFilter_ (_cf._ [_principes.html_](principes.html)_)_, et l'accès n'est accordé que si l'utilisateur dispose d'un des droits déclarés dans le tableau _rights_.
 
@@ -48,4 +48,52 @@ L'algorithme d'attribution des droits va fonctionner ainsi :
 *   recherche des groupes auquel appartient le login, soit de manière formelle (déclaration dans la table _acllogingroup_), soit de manière induite (groupe de l'annuaire déclaré dans la table _aclgroup_), soit en récupérant les groupes dont hérite le groupe courant où est déclaré le login
 *   pour chacun des groupes d'appartenance, recherche dans la table _aclacl_ des droits attribués aux groupes.
 
+:::
+
+::: {.content-visible when-profile="english"}
+# Access rights to modules
+
+The rights are declared in the file `app/Config/Rights.php`. The rights of the modules managed directly in Ppci are declared in `vendor/equinton/ppci/src/Config/Rights.php`.
+
+For any module (route) that needs to be protected, an entry must be added to the _rights_ array, like this:
+
+```php
+protected array $rights = [
+"storageConditionList" => ["consult"],
+"storageConditionChange" => ["param", "collection"],
+"storageConditionWrite" => ["param", "collection"],
+"storageConditionDelete" => ["param", "collection"],
+```
+
+The default rights managed by Ppci are as follows:
+
+* admin: access to administration modules
+* consult: consultation of information
+* manage: daily management
+* param: access to software parameters (role of the business administrator)
+
+Other rights can be added to the application, as is the case in the example above with the _collection_ right. They are described with the `acl*` tables of the _gacl_ schema.
+
+When accessing a protected module, the user's rights are calculated by the _RightsFilter_ filter (_cf._ [_principes.html_](principes.html)_)_, and access is only granted if the user has one of the rights declared in the _rights_ table.
+
+## Organization of rights in the database
+
+Rights are managed in tables present in the _gacl_ schema.
+
+* _acllogin_: list of user logins. If an account is created in the local
+identification database (_logingestion_ table), a record is also created in this table.
+* _aclappli_: list of managed applications. It is possible to manage, from
+the same database, several sets of rights, which use the same logins. In practice, only one entry appears in this table. The value of _aclappli_ must be identical to the configuration variable _app.GACL\_aco_.
+* _aclaco_: list of rights declared in the application;
+* _aclgroup_: list of groups containing the logins, and which hold the rights.
+A group can inherit from another group. The rights associated with the parent group are also assigned to the inherited group;
+* _acllogingroup_: table used to declare the logins associated with a group;
+* _aclacl_: table describing the rights held by a group.
+
+In some cases (LDAP or CAS identification), and if automatic group recognition is enabled in the configuration, it is not necessary to declare the logins in the _acllogin_ table. It is membership in a directory group, declared elsewhere in the _aclgroup_ table, which will allow the rights to be assigned.
+
+The rights allocation algorithm will work as follows:
+
+* search for the groups to which the login belongs, either formally (declaration in the _acllogingroup_ table), or inferentially (directory group declared in the _aclgroup_ table), or by retrieving the groups inherited by the current group where the login is declared
+* for each of the membership groups, search in the _aclacl_ table for the rights assigned to the groups.
 :::

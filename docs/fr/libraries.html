@@ -306,7 +306,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="suppression-dun-enregistrement" class="level3">
 <h3 class="anchored" data-anchor-id="suppression-dun-enregistrement">Suppression d’un enregistrement</h3>
 <p><code>function dataDelete($id, bool $isPartOfTransaction = false)</code></p>
-<p>Supprime l’enregistrement identifié par $id`, et affiche un message pour informer de la réussite de l’opération si l’indicateur de transaction n’est pas activé.</p>
+<p>Supprime l’enregistrement identifié par <code>$id</code>, et affiche un message pour informer de la réussite de l’opération si l’indicateur de transaction n’est pas activé.</p>
 </section>
 </section>
 <section id="traitement-des-transactions" class="level2">
@@ -314,7 +314,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Dans le cas où plusieurs écritures concommittantes sont nécessaires, il est possible d’activer les transactions, gérées par CodeIgniter, avec les commandes suivantes :</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="cf">try</span> {</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>   <span class="co">/*</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co">    * Demarrage d'une transaction</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co">    * Start transaction</span></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co">    */</span></span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>   <span class="va">$db</span> <span class="op">=</span> <span class="va">$this</span>-&gt;dataclass-&gt;db<span class="ot">;</span></span>
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>   <span class="va">$db</span>-&gt;transBegin()<span class="ot">;</span></span>
@@ -325,6 +325,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>     <span class="va">$db</span>-&gt;transRollback()<span class="ot">;</span></span>
 <span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>     (...)</span>
 <span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>   }</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>:::</p>
 
 
 </section>

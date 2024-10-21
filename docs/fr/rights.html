@@ -256,7 +256,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="droits-daccès-aux-modules" class="level1">
 <h1>Droits d’accès aux modules</h1>
-<p>Les droits sont déclarés dans le fichier app/Config/Rights.php. Les droits des modules gérés directement dans Ppci sont déclarés dans vendor/equinton/ppci/src/Config/Rights.php.</p>
+<p>Les droits sont déclarés dans le fichier <code>app/Config/Rights.php</code>. Les droits des modules gérés directement dans Ppci sont déclarés dans <code>vendor/equinton/ppci/src/Config/Rights.php</code>.</p>
 <p>Pour tout module (route) qui doit être protégé, une entrée doit être rajoutée dans le tableau <em>rights</em>, ainsi :&nbsp;</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">protected</span> <span class="dt">array</span> <span class="va">$rights</span> <span class="op">=</span> [</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"storageConditionList"</span> =&gt; [<span class="st">"consult"</span>]<span class="ot">,</span></span>
@@ -270,7 +270,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>manage : gestion au quotidien</li>
 <li>param : accès aux paramètres du logiciel (rôle de l’administrateur métier)</li>
 </ul>
-<p>D’autres droits peuvent être rajoutés dans l’application, comme c’est le cas dans l’exemple ci-dessus avec le droit <em>collection</em>. Ils sont décrits avec les tables <em>acl*</em> du schéma <em>gacl</em>.</p>
+<p>D’autres droits peuvent être rajoutés dans l’application, comme c’est le cas dans l’exemple ci-dessus avec le droit <em>collection</em>. Ils sont décrits avec les tables <code>acl*</code> du schéma <em>gacl</em>.</p>
 <p>Lors de l’accès à un module protégé, les droits de l’utilisateur sont calculés par le filtre <em>RightsFilter</em> (<em>cf.</em> <a href="principes.html"><em>principes.html</em></a><em>)</em>, et l’accès n’est accordé que si l’utilisateur dispose d’un des droits déclarés dans le tableau <em>rights</em>.</p>
 <section id="organisation-des-droits-dans-la-base-de-données" class="level2">
 <h2 class="anchored" data-anchor-id="organisation-des-droits-dans-la-base-de-données">Organisation des droits dans la base de données</h2>

@@ -299,7 +299,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>        <span class="st">"tmp_name"</span> =&gt; <span class="st">""</span><span class="ot">,</span> <span class="co">/* emplacement du fichier dans le serveur */</span></span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>        <span class="st">"content_type"</span> =&gt; <span class="st">""</span><span class="ot">,</span> <span class="co">/* type mime */</span></span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>        <span class="st">"is_reference"</span> =&gt; <span class="kw">false</span><span class="ot">,</span> <span class="co">/* if true, tmp_name contains the handle of the opened file */</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>        <span class="st">"handle"</span> =&gt; <span class="dv">0</span><span class="ot">;</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>        <span class="st">"handle"</span> =&gt; <span class="dv">0</span>)<span class="ot">;</span></span>
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>setParam(<span class="ot">?</span><span class="dt">array</span> <span class="va">$param</span>)<span class="ot">;</span></span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="envoi-dun-fichier" class="level3">
@@ -316,7 +316,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="requête-ajax" class="level3">
 <h3 class="anchored" data-anchor-id="requête-ajax">Requête Ajax</h3>
 <p><code>$view = service ("AjaxView");</code></p>
-<p>Vue utilisée pour répondre à une requête Ajax. Le contenu, qui est fourni par défaut sous forme de tableau (contenu Json possible en positionnant la variable <em>is_json</em> à <em>true</em>, est encodé en html puis transformé en chaîne JSON avant d’être envoyé au navigateur.</p>
+<p>Vue utilisée pour répondre à une requête Ajax. Le contenu, qui est fourni par défaut sous forme de tableau (contenu Json possible en positionnant la variable <em>is_json</em> à <em>true</em>), est encodé en html puis transformé en chaîne JSON avant d’être envoyé au navigateur.</p>
 </section>
 <section id="envoi-dun-fichier-csv" class="level3">
 <h3 class="anchored" data-anchor-id="envoi-dun-fichier-csv">Envoi d’un fichier CSV</h3>

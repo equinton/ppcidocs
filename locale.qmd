@@ -34,3 +34,38 @@ Pour créer les traductions :
 - compilez le fichier avec le script `compile.sh`. Le script va générer le fichier *lang.mo*, puis le recopier dans le dossier *en/LC_MESSAGES*
 
 :::
+
+::: {.content-visible when-profile="english"}
+# Language support
+
+Currently, the engine only supports French (default language) and English.
+
+Translations are made with *gettext*. They are stored in `app/Language/locales`, with:
+
+- at the root:
+- *lang.po*: raw file containing the translations
+- *generate_po.sh*: script retrieving the labels to be translated in the php files, Smarty templates and in the menu (xml file) and creating the *lang.po* file
+- compile.sh: script creating the lang.mo file (compiled) from the translations present in *lang.po*, and copying this file into the following subfolder
+- *en/LC_MESSAGES*: folder corresponding to the language to be displayed, which contains the *lang.mo* file.
+
+## Set up translations
+
+The server must be configured to support the language to be displayed. To do this:
+
+- edit the file `/etc/locale.gen`
+- uncomment the line `en_GB.UTF-8`
+- run these commands:
+
+```bash
+locale-gen
+systemctl restart apache2
+```
+
+This operation only needs to be done once.
+
+To create the translations:
+
+- run the script `generate_po.sh` to create the file *lang.po*. The old translations are kept.
+- edit the file *lang.po* with the program *poedit*
+- compile the file with the script `compile.sh`. The script will generate the file *lang.mo*, then copy it into the folder *en/LC_MESSAGES*
+:::

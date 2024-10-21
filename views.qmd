@@ -43,7 +43,7 @@ $param = array(
         "tmp_name" => "", /* emplacement du fichier dans le serveur */
         "content_type" => "", /* type mime */
         "is_reference" => false, /* if true, tmp_name contains the handle of the opened file */
-        "handle" => 0;
+        "handle" => 0);
 setParam(?array $param);
 ```
 
@@ -66,7 +66,7 @@ $param = array(
 
 `$view = service ("AjaxView");`
 
-Vue utilisée pour répondre à une requête Ajax. Le contenu, qui est fourni par défaut sous forme de tableau (contenu Json possible en positionnant la variable _is_json_ à _true_, est encodé en html puis transformé en chaîne JSON avant d'être envoyé au navigateur.
+Vue utilisée pour répondre à une requête Ajax. Le contenu, qui est fourni par défaut sous forme de tableau (contenu Json possible en positionnant la variable _is_json_ à _true_), est encodé en html puis transformé en chaîne JSON avant d'être envoyé au navigateur.
 
 ### Envoi d'un fichier CSV
 
@@ -98,4 +98,104 @@ Transfert un fichier PDF, soit directement pour être affiché, soit en fichier 
 
 C'est une vue qui transmet au navigateur un contenu quelconque, sans encodage ni type MIME.
 
+:::
+
+::: {.content-visible when-profile="english"}
+# Views
+
+Sending information to the browser uses views, each dedicated to a type of information (web pages, pdf files, Ajax requests, binary files, etc.). They are available as services (described in `ppci/Config/Services.php`), and are physically stored in `Ppci/Libraries/Views`.
+
+All views inherit from the `Ppci\Libraries\Views\DefaultView` class, which includes the following generic functions:
+
+- `function set($value, $variable = "")`: assigns a content (named or not, if _variable_ is specified) to the view
+- `function get($variable = "")`: retrieves the content of a variable or the assigned content
+- `function encodehtml($data)`: recursive function for encoding variables in HTML
+- `function send($param = "")`: triggers the sending of information. This function is systematically rewritten in each view.
+
+### Displaying pages
+
+`$view = service ("Smarty");`
+
+Web pages are generated with the Smarty _templates_ engine. The templates are stored:
+
+- on the one hand in `Ppci/Views/templates/ppci`, which includes all the pages managed by Ppci, as well as the default page (`main.html`)
+- on the other hand in `App/Views/templates`, for the application's specific pages.
+
+When the display is triggered, the class will:
+
+- encode the variables in HTML, except those referenced in the `$view->htmlVars` table
+- generate the CSRF token
+- display the messages stored in the `Message` class
+- generate the application menu
+- add various generic contents, such as the application title.
+
+### Sending a binary file to the browser
+
+`$view = service ("BinaryView");`
+
+The class allows you to send the file either "inline" or as an "attachment". It can either send a file from its address in the server, or an already opened file (handle). It will also look for the MIME type if it is not provided.
+
+To work, it is necessary to indicate specific parameters:
+
+```php
+$param = array(
+"filename" => "", /* name of the file as it will appear in the browser */
+"disposition" => "attachment", /* attachment: the file is downloaded, inline: the file is displayed */
+"tmp_name" => "", /* location of the file in the server */
+"content_type" => "", /* mime type */
+"is_reference" => false, /* if true, tmp_name contains the handle of the opened file */
+"handle" => 0);
+setParam(?array $param);
+```
+
+### Sending a file
+
+`$view = service ("FileView");`
+
+The operation is quite similar to _BinaryView_, except that it only works from an existing file. The MIME type can also be searched automatically if it is not not specified.
+
+```php
+$param = array(
+"filename" => "export.txt", /* name of the file as it will appear in the browser */
+"disposition" => "attachment", /* attachment: the file is downloaded, inline: the file is displayed */
+"content_type" => "", /* mime type */
+"tmp_name" => "", /* Name of the file to send */
+);
+```
+
+### Ajax Request
+
+`$view = service ("AjaxView");`
+
+View used to respond to an Ajax request. The content, which is provided by default in the form of a table (Json content possible by setting the variable _is_json_ to _true_), is encoded in html then transformed into a JSON string before being sent to the browser.
+
+### Sending a CSV file
+
+`$view = service ("CsvView");`
+
+This view will generate a CSV file from a table (`$data[][]`). The generation and sending of the file is done with the function:
+
+```
+function send($filename = "", $delimiter = "")
+```
+
+The name of the file can be generated automatically. The delimiter can be a semicolon, a comma or a tab (indicate _\t_). The first header line is generated from the keys of the first record in the table.
+
+### Sending a JSON file
+
+`$view = service ("JsonFileView");`
+
+The view generates a file in the browser, with a functioning close to the Ajax view. If the data is provided to the class in the form of an array, it is encoded in html before transformation into Json.
+
+### Sending a PDF file
+
+`$view = service ("PdfView");`
+
+Transfers a PDF file, either directly to be displayed, or as an attached file. Same functioning as the `FileView` view.
+
+### Sending arbitrary content to the browser
+
+`$view = service ("DisplayView");`
+
+This is a view that transmits any content to the browser, without encoding or MIME type.
 :::

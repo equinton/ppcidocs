@@ -26,6 +26,36 @@ Elle gère l'accès direct à quelques services :
 
 Pour qu'elle fonctionne correctement, elle doit être initialisée ainsi : 
 
+:::
+
+::: {.content-visible when-profile="english"}
+# Libraries
+
+The "active" code of the application, that is to say the one that chains the actions, is described in the libraries. In general, there is one library per table, but this is not systematic.
+
+The libraries systematically inherit from PpciLibrary, and generally contain the following functions:
+
+* list: display the list of records in the table
+* display: display the details of a record
+* change: display the modification page
+* write: write to the database
+* delete: delete the record.
+
+Depending on the case, _write_ and _delete_ refer either to _display_ or to _list_ and, in case of problem, the function reloads the _change_ page.
+
+In some cases, especially when functions can be called from different places in the application, functions simply return the value _true_ or _false_, and the controller will call the display function, especially after recording operations.
+
+## The PpciLibrary class
+
+It manages direct access to some services:
+
+* `$this->message`: display messages on the screen and record technical messages in Syslog
+* `$this->appConfig`: access to configuration parameters stored in _app/Config/App.php_ or updated via _.env_
+* `$this->log`: record traces in the _gacl.log_ table of the database.
+
+For it to work properly, it must be initialized as follows:
+:::
+
 ```php
 function __construct()
     {
@@ -37,6 +67,7 @@ function __construct()
         }
     }
 ```
+::: {.content-visible when-profile="french"}
 
 _$this->dataclass_ doit être une classe héritée de _PpciModel_. 
 
@@ -58,16 +89,47 @@ La fonction appelle `$this->dataclass->read ($id, true, $idParent)`, affecte le 
 
 `function dataDelete($id, bool $isPartOfTransaction = false)`
 
-Supprime l'enregistrement identifié par \$id`, et affiche un message pour informer de la réussite de l'opération si l'indicateur de transaction n'est pas activé.
+Supprime l'enregistrement identifié par `$id`, et affiche un message pour informer de la réussite de l'opération si l'indicateur de transaction n'est pas activé.
 
 ## Traitement des transactions
 
 Dans le cas où plusieurs écritures concommittantes sont nécessaires, il est possible d'activer les transactions, gérées par CodeIgniter, avec les commandes suivantes :
 
+:::
+
+::: {.content-visible when-profile="english"}
+
+_$this->dataclass_ must be a class inherited from _PpciModel_.
+
+It also has generic functions, which simplify the writing of classes in the application. These systematically raise a _PpciException_ exception if an error is encountered.
+
+### Reading a record and displaying the page for modification or display
+
+`function dataRead($id, $smartyPage, $idParent = 0)`
+
+The function calls `$this->dataclass->read ($id, true, $idParent)`, assigns the read data array to the variable `$data`, then triggers the display of the page `$smartyPage`. It returns the `$data` array to the calling function.
+
+### Writing a record
+
+`function dataWrite(array $data, bool $isPartOfTransaction = false)`
+
+Writes the data `$data` to the table managed by `$this->dataclass` (call to the _write_ function). If the transaction flag is not enabled, a message informing of the execution of the command is sent, and a trace is recorded in the _log_ table.
+
+### Deleting a record
+
+`function dataDelete($id, bool $isPartOfTransaction = false)`
+
+Deletes the record identified by `$id`, and displays a message to inform of the success of the operation if the transaction flag is not enabled.
+
+## Transaction processing
+
+In the case where several concurrent writes are necessary, it is possible to activate the transactions, managed by CodeIgniter, with the following commands:
+:::
+
 ```php
 try {
    /*
-    * Demarrage d'une transaction
+    * Start transaction
     */
    $db = $this->dataclass->db;
    $db->transBegin();

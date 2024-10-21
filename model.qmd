@@ -16,6 +16,25 @@ Lors de l'initialisation d'une classe d'accès à une table, plusieurs paramètr
 
 Exemple :
 
+:::
+::: {.content-visible when-profile="english"}
+# Managing access to data stored in the database
+
+The classes that allow dialog with the database are stored in `app/Models`. They all inherit from the `PpciModel` class, which encapsulates all access and update functions.
+
+PpciModel relies as much as possible on the intrinsic mechanisms of CodeIgniter. However, some writing functions have been rewritten to better control the operations performed in the database.
+
+## Initialize a class
+
+When initializing a table access class, several parameters must be provided:
+
+* the name of the table
+* the list of columns with, for each, whether it must be provided (mandatory), its type, whether it is the primary key of the table, the default value in case of creation of a new record, and whether the attribute is a foreign key to the parent of the current record
+* whether the primary key is generated automatically or not by the database.
+
+Example:
+:::
+
 ```php
 namespace App\Models;
 
@@ -50,6 +69,7 @@ class Peche extends PpciModel
 }
 ```
 
+::: {.content-visible when-profile="french"}
 ### Description des champs
 
 | Attribut | Valeur |
@@ -194,6 +214,155 @@ Retourne le résultat de la requête. Les variables utilisées pour celle-ci son
 
 Retourne la liste des enregistrements enfants dont la clé étrangère vaut _$parentId_, triée ou non.
 
+:::
+
+::: {.content-visible when-profile="english"}
+### Field Description
+
+| Attribute | Value |
+| --- | --- |
+| type | 0: string 1: numeric 2: date 3: date-time 4: geographic field (Postgis) |
+| key | If 1, it is the primary key of the table |
+| required | If 1, the record will fail if the column is not provided or is empty |
+| parentAttrib | If 1, the column is the foreign key, in the case of a parent-child relationship |
+| defaultValue | The default value, when creating a record. |
+
+By convention, for any new record, the primary key takes the value 0.
+
+### Date processing
+
+Dates are automatically transformed into the current format of the language used, both for selections and updates. When initializing the class, the `$this->dateFields` and `$this->datetimeFields` tables are populated from the declared information. It is possible to complete them punctually before executing a `select` so that date fields external to the table, as part of joins, are also formatted.
+
+If it is necessary to disable date formatting, simply indicate:
+
+```php
+$this->autoformatDate = false;
+```
+
+### Numerical field processing
+
+By default, before an update, numbers are processed to replace the comma with a period. If this mechanism must be disabled, simply indicate:
+
+```php
+$this->transformComma = false;
+```
+
+### Logging information messages, error handling
+
+The class natively integrates the `Message` class, which allows you to send information to the browser or log error messages in the server logs (syslog). It is accessible _via_ `$this->message->set(...);`
+
+Execution errors trigger a `PpciException` exception.
+
+## Generic functions available
+
+### Execution of queries
+
+`protected function executeQuery(string $sql, array $data = null, $onlyExecute = false)`
+
+Synonym: `public function executeSQL(string $sql, array $data = null, $onlyExecute = false)`
+
+Executes the $sql query, with the $data variable array. If `$onlyExecute` is _false_, the function returns a result array. Modification requests must have this last variable set to _true_.
+
+### Writing a record
+
+### `public function write(array $row): int`
+
+Synonym: `public function ecrire(array $row): int`
+
+Saves a row ($row) in the database. The function automatically handles the insertion or update.
+
+For geographic fields, these are saved with the `ST_GeomFromText` function.
+
+Return: the primary key of the processed record.
+
+### Writing a record in an n-n table
+
+`function writeTableNN(string $tablename, string $firstKey, string $secondKey, int $id, $data = array()): void`
+
+Synonym: `function ecrireTableNN(string $tablename, string $firstKey, string $secondKey, int $id, $data = array()): void`
+
+This function handles the case of recording in the case of an n-n table, i.e. linked to two parents. It is typically used to process multiple values ​​(selection of members in a group, for example).
+
+It will record in `$tablename`, for the key corresponding to the main parent (`$firstKey`), all the values ​​corresponding to the linked table (`$secondKey`), provided in the form of an array (`$data`). The function will automatically delete all pre-existing values ​​that are not in the provided array.
+
+### Updating a binary field
+
+`function updateBinary(int $id, string $fieldName, $data)`
+
+The function will write a binary content in the column `$fieldName` for the record identified by the primary key `$id`. In practice, it uses the php function _pg\_escape\_bytea_.
+
+### Deleting a record
+
+`function delete($id = null, bool $purge = false)`
+
+Synonym: `function delete($id)`
+
+Deletes the record `$id`. The value `$purge` is useless, it is kept for compatibility reasons with CodeIgniter classes.
+
+### Deleting one or more records from any field
+
+`function deleteFromField(int $id, string $field)`
+
+Synonym: `function deleteField(int $id, string $field)`
+
+This function is used to delete child records from a parent. It deletes all records whose field `$field` contains the value `$id`.
+
+### Reading a record
+
+`public function read(int $id, bool $getDefault = true, $parentKey = 0): array`
+
+Synonym: `public function lire(int $id, bool $getDefault = true, $parentKey = 0): array`
+
+Read the record whose primary key is `$id`. If `$id` is 0 or empty (new record), and `$getDefault` is set to _true_, the returned array will contain the default values ​​defined in the class constructor. If `$parentKey` is set, the parent's foreign key is also set in the default values.
+
+### Default data
+
+`public function getDefaultValues($parentKey = 0): array`
+
+Creates an array containing all the default values, for a new record.
+
+### Read a record from a provided SQL code
+
+`public function readParam(string $sql, array $param = null)`
+
+Synonyms:
+
+`public function readParamAsPrepared(string $sql, array $param = null)`
+
+`public function lireParam(string $sql, array $param = null)`
+
+`public function lireParamAsPrepared(string $sql, array $param = null)`
+
+Returns a record matching the provided SQL code (the first record encountered if a list is returned by the query). Variables used in the query must be provided in the _$param_ array.
+
+### List of all records in the table
+
+`public function getList(string $order = ""): array`
+
+Synonym: `function getListe(string $order = ""): array`
+
+Executes a `select *` on the table, adding the term `order by $order` if the variable is specified.
+
+### Selecting records
+
+`function getListParam(string $sql, array $param = null): array`
+
+Synonyms:
+
+`function getListeParam(string $sql, array $param = null): array`
+
+`function getListeParamAsPrepared(string $sql, array $param = null): array`
+
+Returns the result of the query. The variables used for it are provided in the _$param_ array.
+
+### List of records attached to a parent
+
+`function getListFromParent(int $parentId, $order = ""): array`
+
+Returns the list of child records whose foreign key is _$parentId_, sorted or not.
+:::
+
+::: {.content-visible when-profile="french"}
 ## Fonctions diverses
 
 ### Formater les dates au format de la base de données
@@ -226,4 +395,38 @@ Execute une fonction dans la base de données pour générer un UUID.
 
 Désactive la valeur _champ obligatoire_ pour un champ. Cette fonction peut être utilisée pour mettre à jour un enregistrement dont on sait par avance que la valeur n'est pas fournie.
 
+:::
+
+::: {.content-visible when-profile="english"}
+## Miscellaneous functions
+
+### Format dates to database format
+
+`protected function formatDatesToDB(array $row): array`
+
+Transforms dates contained in the record, based on the type (date, date/time) and the current format.
+
+### Generate a UUID
+
+`function getUUID(): string`
+
+Executes a function in the database to generate a UUID.
+
+### Get the current date-time
+
+`function getDateTime(): string`
+
+`function getDateHeure(): string`
+
+### Get the current date
+
+`function getDate(): string`
+
+`function getDateJour(): string`
+
+### Disable a mandatory field
+
+`function disableMandatoryField(string $name)`
+
+Disables the _mandatory field_ value for a field. This function can be used to update a record for which it is known in advance that the value is not provided.
 :::

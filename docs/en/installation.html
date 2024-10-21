@@ -329,7 +329,7 @@ database.default.searchpath = public,app,gacl</code></pre>
 <div class="sourceCode" id="cb5"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">create</span> <span class="fu">user</span> applogin inherit login <span class="kw">password</span> ‘appPassword’;</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="kw">create</span> <span class="kw">database</span> app owner applogin;</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>\c app applogin</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>\vendor<span class="op">/</span>equinton<span class="op">/</span>ppci<span class="op">/</span>install<span class="op">/</span><span class="kw">create</span>.sql</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>\i vendor<span class="op">/</span>equinton<span class="op">/</span>ppci<span class="op">/</span>install<span class="op">/</span><span class="kw">create</span>.sql</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>The script will create two schemas: <code>app</code> for the application tables, and <code>gacl</code> for rights management.</p>
 <p>Two tables will be created in the <code>app</code> schema, which are needed for Ppci to work.</p>
 <p>The first connection to the application uses the login <code>admin</code>, password <code>password</code>.</p>
