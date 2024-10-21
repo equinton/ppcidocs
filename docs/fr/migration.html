@@ -449,21 +449,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>    <span class="kw">function</span> <span class="bu">__construct</span>()</span>
 <span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>    {</span>
 <span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>        <span class="kw">parent</span>::<span class="bu">__construct</span>()<span class="ot">;</span></span>
-<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>        <span class="va">$this</span>-&gt;dataClass <span class="op">=</span> <span class="kw">new</span> <span class="cn">XXX</span>()<span class="ot">;</span></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>        <span class="va">$this</span>-&gt;dataclass <span class="op">=</span> <span class="kw">new</span> <span class="cn">XXX</span>()<span class="ot">;</span></span>
 <span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>        <span class="va">$keyName</span> <span class="op">=</span> <span class="st">"xxx_id"</span><span class="ot">;</span></span>
 <span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (<span class="kw">isset</span>(<span class="va">$_REQUEST</span>[<span class="va">$this</span>-&gt;keyName])) {</span>
 <span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>            <span class="va">$this</span>-&gt;id <span class="op">=</span> <span class="va">$_REQUEST</span>[<span class="va">$this</span>-&gt;keyName]<span class="ot">;</span></span>
 <span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>        }</span>
 <span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>    }</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <ul>
-<li><code>dataRead($dataClass,</code> par <code>$this-&gt;dataRead(</code></li>
-<li><code>dataDelete($dataClass,</code> par <code>$this-&gt;dataDelete(</code></li>
+<li><code>dataRead($dataclass,</code> par <code>$this-&gt;dataRead(</code></li>
+<li><code>dataDelete($dataclass,</code> par <code>$this-&gt;dataDelete(</code></li>
 <li><code>case "list":</code> par <code>function list(){$vue=service('Smarty');</code> (saut de ligne)</li>
 <li><code>case "display":</code> par <code>function display(){$vue=service('Smarty');</code> (saut de ligne)</li>
 <li><code>case "change":</code> par <code>function change(){$vue=service('Smarty');</code> (saut de ligne)</li>
 <li><code>case "write":</code> par</li>
 </ul>
-<p><code>function write(){</code> par :</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>    <span class="kw">function</span> write() {</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">try</span> {</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>            <span class="va">$this</span>-&gt;id <span class="op">=</span> <span class="va">$this</span>-&gt;dataWrite(<span class="va">$_REQUEST</span>)<span class="ot">;</span></span>
@@ -482,7 +481,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><code>case "</code> par <code>function</code></li>
 <li><code>":</code> par <code>() {</code></li>
 <li><code>break;</code> par <code>}</code> : fermeture des fonctions</li>
-<li><code>$dataclass</code> par <code>$this-&gt;dataClass</code></li>
+<li><code>$dataclass</code> par <code>$this-&gt;dataclass</code></li>
 <li><code>$id</code> par <code>$this-&gt;id</code></li>
 <li><code>$vue</code> par <code>$this-&gt;vue</code></li>
 <li><code>$this-&gt;dataDelete($this-&gt;id);</code> par</li>
@@ -532,10 +531,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <ul>
 <li><code>$bdd-&gt;beginTransaction();</code> par :</li>
 </ul>
-<div class="sourceCode" id="cb10"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="va">$db</span> <span class="op">=</span> <span class="va">$this</span>-&gt;dataClass-&gt;db<span class="ot">;</span></span>
+<div class="sourceCode" id="cb10"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="va">$db</span> <span class="op">=</span> <span class="va">$this</span>-&gt;dataclass-&gt;db<span class="ot">;</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="va">$db</span>-&gt;transBegin()<span class="ot">;</span></span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <ul>
-<li>supprimer <code>$bdd-&gt;commit();</code> (automatique)</li>
+<li>supprimer <code>$bdd-&gt;commit();</code> by <code>$db-&gt;transCommit();</code></li>
 <li>remplacer <code>$bdd-&gt;rollback();</code> par :</li>
 </ul>
 <div class="sourceCode" id="cb11"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="va">$db</span>-&gt;transEnabled) {</span>

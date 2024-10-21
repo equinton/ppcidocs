@@ -8,20 +8,43 @@ L'installation ne peut s'effectuer que dans un dossier vide. L'exemple est donn�
 
 Dans le dossier de niveau supérieur :
 
+:::
+::: {.content-visible when-profile="english"}
+# Installation
+
+Installation can only be carried out in an empty folder. The example is given here for a migration to *otolithe2*.
+
+## Installing CodeIgniter and PPCI
+
+In the top level folder :
+:::
+
 ```bash
 composer create-project codeigniter4/appstarter otolithe2  
 cd otolithe2
 composer require equinton/ppci
 ```
 
+::: {.content-visible when-profile="french"}
+
 ## Configuration du support de PPCI
 
 Différents fichiers fournis par CodeIgniter doivent être adaptés pour le support de PPCI.
 Dans le dossier de l'application, à la racine, lancez le script :
+:::
+::: {.content-visible when-profile="english"}
+## Configuring PPCI support
+
+Various files supplied by CodeIgniter must be adapted for PPCI support.
+
+In the application folder, at the root, run the script :
+:::
 
 ```bash
 vendor/equinton/ppci/install/install.sh
 ```
+::: {.content-visible when-profile="french"}
+
 Le script va :
 
 - recopier les fichiers nécessaires pour le fonctionnement de l'application dans les différents dossiers :
@@ -38,6 +61,24 @@ Le script va :
 
 Éditez le fichier `.env`, à la racine de l'application, et renseignez impérativement les entrées suivantes :
 
+:::
+::: {.content-visible when-profile="english"}
+The script will :
+
+- copy the files needed to run the application into the various folders:
+    - parameters in `app/Config`
+    - libraries in `app/Libraries` (default classes)
+    - the _display_ folder in `public`, and loading the necessary Javascript classes _via_ `npm`.
+- create the `writable/temp` folder, and give `www-data` write access to all `writable` files
+- generate the `.env` file, including the default instantiation parameters
+- create the private/public keys used for cryptographic operations.
+
+## Initial setup
+
+### .env file
+Edit the `.env` file, at the root of the application, and fill in the following entries:
+:::
+
 ```env
 CI_ENVIRONMENT = development
 app.baseURL = 'https://myapp.mysociety.com'
@@ -52,6 +93,7 @@ database.default.username = login
 database.default.password = password
 database.default.searchpath = public,app,gacl
 ```
+::: {.content-visible when-profile="french"}
 
 ### Fichier app/Config/App
 
@@ -66,6 +108,25 @@ $APP_help_address =""; //lien vers la création de tickets ou vers la page donna
 $copyright = ""; //Copyright de l'application
 $APPLI_release = []; // Tableau permettant d'interroger soit Github, soit un serveur Gitlab, pour obtenir les informations concernant la dernière version publiée
 ```
+:::
+
+::: {.content-visible when-profile="english"}
+### app/Config/App file
+
+This is the file containing the application's default parameters. It is a PHP class, whose following variables can be modified:
+
+```php
+$dbversion = ‘1.0’; // database version
+$GACL_aco = ‘app’; // application code for rights management
+$version = ‘v1.0.0’; // Software version. This must correspond to one of the versions created in Github or Gitlab
+$versionDate = ‘01/01/2024’; //Version date
+$APP_help_address =‘’; //link to ticket creation or help page
+$copyright = ‘’; //Copyright of the application
+$APPLI_release = []; //Table used to query either Github or a Gitlab server to obtain information about the latest version released
+```
+:::
+
+::: {.content-visible when-profile="french"}
 
 ## Création de la base de données
 
@@ -84,3 +145,25 @@ Deux tables vont être créées dans le schéma `app`, nécessaires au fonctionn
 La première connexion à l'application utilise le login `admin`, mot de passe `password`.
 
 :::
+
+::: {.content-visible when-profile="english"}
+
+## Creating the database
+
+Connect to your Postgresql server with `psql`, then create your database:
+
+```sql
+create user applogin inherit login password ‘appPassword’;
+create database app owner applogin;
+\c app applogin
+\i vendor/equinton/ppci/install/create.sql
+```
+
+The script will create two schemas: `app` for the application tables, and `gacl` for rights management.
+
+Two tables will be created in the `app` schema, which are needed for Ppci to work.
+
+The first connection to the application uses the login `admin`, password `password`.
+:::
+
+

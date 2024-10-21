@@ -20,6 +20,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -205,7 +239,40 @@ ul.task-list li input[type="checkbox"] {
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#migration-from-prototypephp" id="toc-migration-from-prototypephp" class="nav-link active" data-scroll-target="#migration-from-prototypephp">Migration from PrototypePhp</a>
+  <ul class="collapse">
+  <li><a href="#install-codeigniter-and-ppci" id="toc-install-codeigniter-and-ppci" class="nav-link" data-scroll-target="#install-codeigniter-and-ppci">Install CodeIgniter and Ppci</a></li>
+  <li><a href="#create-a-new-vhost-in-apache" id="toc-create-a-new-vhost-in-apache" class="nav-link" data-scroll-target="#create-a-new-vhost-in-apache">Create a new vhost in Apache</a></li>
+  <li><a href="#update-the-database" id="toc-update-the-database" class="nav-link" data-scroll-target="#update-the-database">Update the database</a></li>
+  <li><a href="#upgrade-menu" id="toc-upgrade-menu" class="nav-link" data-scroll-target="#upgrade-menu">Upgrade menu</a></li>
+  <li><a href="#add-smarty-templates" id="toc-add-smarty-templates" class="nav-link" data-scroll-target="#add-smarty-templates">Add Smarty templates</a>
+  <ul class="collapse">
+  <li><a href="#global-changes" id="toc-global-changes" class="nav-link" data-scroll-target="#global-changes">Global changes</a></li>
+  <li><a href="#modifications-to-each-form" id="toc-modifications-to-each-form" class="nav-link" data-scroll-target="#modifications-to-each-form">Modifications to each form</a></li>
+  </ul></li>
+  <li><a href="#rewriting-models" id="toc-rewriting-models" class="nav-link" data-scroll-target="#rewriting-models">Rewriting models</a>
+  <ul class="collapse">
+  <li><a href="#global-transformations" id="toc-global-transformations" class="nav-link" data-scroll-target="#global-transformations">Global transformations</a></li>
+  <li><a href="#individual-transformations" id="toc-individual-transformations" class="nav-link" data-scroll-target="#individual-transformations">Individual transformations</a></li>
+  </ul></li>
+  <li><a href="#rewriting-libraries" id="toc-rewriting-libraries" class="nav-link" data-scroll-target="#rewriting-libraries">Rewriting libraries</a>
+  <ul class="collapse">
+  <li><a href="#global-transformations-1" id="toc-global-transformations-1" class="nav-link" data-scroll-target="#global-transformations-1">Global transformations</a></li>
+  <li><a href="#treatment-of-transactions" id="toc-treatment-of-transactions" class="nav-link" data-scroll-target="#treatment-of-transactions">Treatment of transactions</a></li>
+  </ul></li>
+  <li><a href="#generate-the-routes-and-rights-needed-to-run-the-modules" id="toc-generate-the-routes-and-rights-needed-to-run-the-modules" class="nav-link" data-scroll-target="#generate-the-routes-and-rights-needed-to-run-the-modules">Generate the routes and rights needed to run the modules</a></li>
+  <li><a href="#rename-the-gestion-right-to-manage." id="toc-rename-the-gestion-right-to-manage." class="nav-link" data-scroll-target="#rename-the-gestion-right-to-manage.">Rename the gestion right to ‘manage’.</a></li>
+  <li><a href="#add-controllers" id="toc-add-controllers" class="nav-link" data-scroll-target="#add-controllers">Add controllers</a></li>
+  <li><a href="#add-a-filter-for-generic-startup-operations" id="toc-add-a-filter-for-generic-startup-operations" class="nav-link" data-scroll-target="#add-a-filter-for-generic-startup-operations">Add a filter for generic startup operations</a></li>
+  <li><a href="#retrieving-translations" id="toc-retrieving-translations" class="nav-link" data-scroll-target="#retrieving-translations">Retrieving translations</a></li>
+  <li><a href="#upgrade-readme-and-about" id="toc-upgrade-readme-and-about" class="nav-link" data-scroll-target="#upgrade-readme-and-about">Upgrade readme and About</a></li>
+  </ul></li>
+  </ul>
+</nav>
     <div class="quarto-margin-footer"><div class="margin-footer-item">
 <p>Made with <a href="https://github.com/SebastienBoutry/inrae-project-website"><img src="https://github.com/SebastienBoutry/inrae-project-website/blob/main/images/extension-logo.png?raw=true" class="img-fluid" width="50"></a></p>
 </div></div></div>
@@ -215,8 +282,306 @@ ul.task-list li input[type="checkbox"] {
 
 
 
+<section id="migration-from-prototypephp" class="level1">
+<h1>Migration from PrototypePhp</h1>
+<section id="install-codeigniter-and-ppci" class="level2">
+<h2 class="anchored" data-anchor-id="install-codeigniter-and-ppci">Install CodeIgniter and Ppci</h2>
+<p>Create a different folder from the one containing the initial code of the application to be migrated, for example <code>app2</code>, then, from the lower-level directory:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">composer</span> create-project codeigniter4/appstarter app2</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> app2</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="ex">composer</span> require equinton/ppci</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="ex">vendor/equinton/ppci/install/install.sh</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Then edit the <code>.env</code> file, and update the necessary parameters (<code>CI_ENVIRONMENT</code>, <code>app.baseURL</code> and the database connection parameters).</p>
+</section>
+<section id="create-a-new-vhost-in-apache" class="level2">
+<h2 class="anchored" data-anchor-id="create-a-new-vhost-in-apache">Create a new vhost in Apache</h2>
+<p>Here is an example configuration:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode apache code-with-copy"><code class="sourceCode apache"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">&lt;VirtualHost</span><span class="at"> *:80</span><span class="fu">&gt;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    ServerName<span class="st"> app2.local</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    ServerPath<span class="st"> /app2.local</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="ex">RewriteEngine</span><span class="ch"> </span><span class="kw">On</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    RewriteRule<span class="st"> ^ https://app2.local%{REQUEST_URI} [R]</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="fu">&lt;/VirtualHost&gt;</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="fu">&lt;VirtualHost</span><span class="at"> *:443</span><span class="fu">&gt;</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    ServerName<span class="st"> app2.local</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    ServerPath<span class="st"> /app2.local</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    <span class="ex">SSLEngine</span><span class="ch"> </span><span class="kw">on</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    SSLCertificateFile<span class="st">  /etc/ssl/certs/server.crt</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>    SSLCertificateKeyFile<span class="st"> /etc/ssl/private/server.key</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>    SSLCACertificateFile<span class="st"> /etc/ssl/certs/cacert.crt</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>    DocumentRoot<span class="st"> /var/www/app2/public </span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="fu">&lt;/VirtualHost&gt;</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="fu">&lt;Directory</span><span class="at"> /var/www/app2/public</span><span class="fu">&gt;</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">&lt;LimitExcept</span><span class="at"> GET POST</span><span class="fu">&gt;</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>        Deny<span class="st"> from all</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">&lt;/LimitExcept&gt;</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>    <span class="ex">Options</span><span class="ch"> </span><span class="kw">-Indexes</span><span class="ch"> </span><span class="kw">FollowSymLinks</span><span class="ch"> </span><span class="kw">MultiViews</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>    Header<span class="st"> unset ETag</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>    Header<span class="st"> set Cache-Control "max-age=0, no-cache, no-store, must-revalidate, private"</span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>    Header<span class="st"> set Pragma "no-cache"</span></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>    Header<span class="st"> set X-Frame-Options "DENY"</span></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>    Header<span class="st"> set X-XSS-Protection "1; mode=block"</span></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>    Header<span class="st"> set X-Content-Type-Options "nosniff"</span></span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>    Header<span class="st"> always set Strict-Transport-Security "max-age=63072000; includeSubdomains;"</span></span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>    Header<span class="st"> always set Content-Security-Policy "default-src 'self' ; script-src blob: * 'self' 'unsafe-inline' 'unsafe-eval'; connect-src data: blob: filesystem: *.tile.openstreetmap.org 'self' ; img-src 'self' data: blob: *.openstreetmap.org ; style-src 'self' 'unsafe-inline' ;"</span></span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>    <span class="fu">&lt;FilesMatch</span><span class="at"> "\.(ico|flv|jpg|jpeg|png|gif|js|css|svg)$"</span><span class="fu">&gt;</span></span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>        Header<span class="st"> set Cache-Control "max-age=604800, private"</span></span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>    <span class="fu">&lt;/FilesMatch&gt;</span></span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a><span class="fu">&lt;FilesMatch</span><span class="at"> ".*openstreetmap.*\.png$"</span><span class="fu">&gt;</span></span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>    Header<span class="st"> set Cache-Control "max-age=2592000, public"</span></span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a><span class="fu">&lt;/FilesMatch&gt;</span></span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>    Require<span class="st"> all granted</span></span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>    <span class="ex">AllowOverride</span><span class="ch"> </span><span class="kw">all</span></span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>    <span class="ex">RewriteEngine</span><span class="ch"> </span><span class="kw">On</span></span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>    RewriteBase<span class="st"> /</span></span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>    RewriteCond<span class="st"> "/%{REQUEST_FILENAME}" !-f</span></span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>    RewriteCond<span class="st"> "/%{REQUEST_FILENAME}" !-d</span></span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>    RewriteRule<span class="st"> "(.*)" "/index.php?$1" [PT,QSA]</span></span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a><span class="fu">&lt;/Directory&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="update-the-database" class="level2">
+<h2 class="anchored" data-anchor-id="update-the-database">Update the database</h2>
+<p>Edit the <code>vendor/equinton/ppci/migration/updatedb.sql</code> file, and check the first line (<em>set search_path</em>), replacing <em>app</em> with the name of the schema containing the data.</p>
+<p>Then run the sql file.</p>
+</section>
+<section id="upgrade-menu" class="level2">
+<h2 class="anchored" data-anchor-id="upgrade-menu">Upgrade menu</h2>
+<p>Edit the <code>app/Config/menu.xml</code> file, and add the necessary entries.</p>
+</section>
+<section id="add-smarty-templates" class="level2">
+<h2 class="anchored" data-anchor-id="add-smarty-templates">Add Smarty templates</h2>
+<p>Copy the Smarty templates from <code>display/templates</code> into <code>app/Views/templates</code>, keeping the sub-folder organisation, except for the root files and the <em>framework</em> sub-folder.</p>
+<section id="global-changes" class="level3">
+<h3 class="anchored" data-anchor-id="global-changes">Global changes</h3>
+<p>In this folder, replace all the labels (filter on *tpl) :</p>
+<ul>
+<li><code>&lt;/form&gt;</code> with <code>{$csrf}&lt;/form&gt;</code> to add the CSRF token in forms</li>
+<li><code>droits</code> with <code>rights</code></li>
+<li><code>.gestion</code> by <code>.manage</code></li>
+<li><code>datatable"</code> by <code>datatable display”</code></li>
+<li><code>datatable-nopaging-nosearching</code> by <code>datatable-nopaging-nosearching display</code></li>
+<li><code>datatable-searching</code> by <code>datatable-searching display</code></li>
+<li><code>datatable-nopaging-nosearching</code> by <code>datatable-nopaging-nosearching display</code></li>
+<li><code>datatable-nopaging</code> by <code>datatable-nopaging display</code></li>
+<li><code>datatable-nopaging-nosort</code> by <code>datatable-nopaging-nosort display</code></li>
+<li><code>datatable-nosort</code> by <code>datatable-nosort display</code></li>
+<li><code>datatable-export</code> by <code>datatable-export display</code></li>
+<li><code>datatable-export-paging</code> by <code>datatable-export-paging display</code>.</li>
+</ul>
+<p>Delete</p>
+<ul>
+<li><code>index.php?module=</code></li>
+</ul>
+</section>
+<section id="modifications-to-each-form" class="level3">
+<h3 class="anchored" data-anchor-id="modifications-to-each-form">Modifications to each form</h3>
+<p>Go back to all the links (look for the <code>a href</code> tags) and replace the first <code>&amp;</code> with <code>?</code>.</p>
+<p>Change all the form actions so that they look like this:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode html code-with-copy"><code class="sourceCode html"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">form</span><span class="ot"> class</span><span class="op">=</span><span class="st">‘form-horizontal’</span><span class="ot"> id</span><span class="op">=</span><span class="st">‘formName’</span><span class="ot"> method</span><span class="op">=</span><span class="st">‘post’</span><span class="ot"> action</span><span class="op">=</span><span class="st">‘moduleWrite’</span><span class="dt">&gt;</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">input</span><span class="ot"> type</span><span class="op">=</span><span class="st">‘hidden’</span><span class="ot"> name</span><span class="op">=</span><span class="st">‘moduleBase’</span><span class="ot"> value</span><span class="op">=</span><span class="st">‘module’</span><span class="dt">&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The <code>action</code> field can be removed. However, the <code>moduleBase</code> field must be retained: it is used to create the <code>moduleDelete</code> action via the javascript script in <code>main_js.tpl</code>.</p>
+</section>
+</section>
+<section id="rewriting-models" class="level2">
+<h2 class="anchored" data-anchor-id="rewriting-models">Rewriting models</h2>
+<p>Copy the files from <code>modules/classes</code> to <code>app/Models</code>.</p>
+<section id="global-transformations" class="level3">
+<h3 class="anchored" data-anchor-id="global-transformations">Global transformations</h3>
+<p>These can be carried out using search/replace.</p>
+<ul>
+<li>replace :</li>
+<li><code>&lt;?php</code> by <code>&lt;?php namespace App\Models;use Ppci\Models\PpciModel;</code>, with line breaks;</li>
+<li><code>extends ObjetBDD</code> with <code>extends PpciModel</code> ;</li>
+<li><code>(public function __construct().*)</code> by <code>public function __construct()</code>, ticking <em>regular expression</em> ;</li>
+<li><code>$this-&gt;columns</code> by <code>$this-&gt;fields</code> ;</li>
+<li><code>function ecrire</code> by <code>function write</code>;</li>
+<li><code>function lire</code> by <code>function read</code></li>
+<li>replace <code>parent::ecrire</code> with <code>parent::write</code>.</li>
+<li><code>(parent::__construct().*)</code> by <code>parent::__construct()</code>, checking <em>regular expression</em> ;</li>
+<li><code>$this-&gt;auto_id = 0</code> by <code>$this-&gt;useAutoIncrement = false</code></li>
+<li><code>auto_date = 0</code> by <code>autoFormatDate = false</code></li>
+<li>delete :
+<ul>
+<li><code>$this-&gt;auto_id = 1;</code></li>
+<li><code>$param[‘fullDescription’] = 1;</code></li>
+<li><code>$this-&gt;param = $param;</code></li>
+</ul></li>
+</ul>
+</section>
+<section id="individual-transformations" class="level3">
+<h3 class="anchored" data-anchor-id="individual-transformations">Individual transformations</h3>
+<ul>
+<li>rename the file name, for example <code>espece.class.php</code> to <code>espece.php</code> ;</li>
+<li>in SQL queries, modify variables by adding : at the end: <code>:id</code> must become <code>:id:</code> ;</li>
+<li>for tables containing geographical data (fields with type=4), modify the queries or create the <code>read()</code> functions to add <code>st_astext()</code> for the fields concerned;</li>
+<li>date transformations for fields not present in the table must be rewritten according to this scheme:</li>
+</ul>
+<div class="sourceCode" id="cb4"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="va">$this</span>-&gt;dateFields[] <span class="op">=</span> ‘peche_date’<span class="ot">;</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="va">$this</span>-&gt;datetimeFields[] <span class="op">=</span> ‘peche_datetime’<span class="ot">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>if the <code>utf8_encode</code> function is used, it must be replaced by :</li>
+</ul>
+<div class="sourceCode" id="cb5"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="va">$data</span> <span class="op">=</span> <span class="fu">mb_convert_encoding</span>(<span class="va">$data</span><span class="ot">,</span> ‘<span class="cn">UTF</span><span class="op">-</span><span class="dv">8</span>’<span class="ot">,</span> ‘<span class="cn">ISO</span><span class="op">-</span><span class="dv">8859</span><span class="op">-</span><span class="dv">15</span><span class="ot">,</span> <span class="cn">ISO</span><span class="op">-</span><span class="dv">8859</span><span class="op">-</span><span class="dv">1</span><span class="ot">,</span> Windows<span class="op">-</span><span class="dv">1252</span>’)<span class="ot">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The function processes strings or arrays indiscriminately.</p>
+</section>
+</section>
+<section id="rewriting-libraries" class="level2">
+<h2 class="anchored" data-anchor-id="rewriting-libraries">Rewriting libraries</h2>
+<p>Copy all the modules into <code>app/Libraries</code>. They need to be transformed into classes.</p>
+<section id="global-transformations-1" class="level3">
+<h3 class="anchored" data-anchor-id="global-transformations-1">Global transformations</h3>
+<p>Replace :</p>
+<ul>
+<li><code>&lt;?php</code> by:</li>
+</ul>
+<div class="sourceCode" id="cb6"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;?php</span> </span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="kw">namespace</span> App\Libraries<span class="ot">;</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> Ppci\Libraries\PpciException<span class="ot">;</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> Ppci\Libraries\PpciLibrary<span class="ot">;</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> Ppci\Models\PpciModel<span class="ot">;</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Xx <span class="kw">extends</span> PpciLibrary { </span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    <span class="co">/**</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="co">     * </span><span class="an">@var</span><span class="co"> </span><span class="do">xx</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="co">     */</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    <span class="kw">protected</span> PpciModel <span class="va">$dataclass</span><span class="ot">;</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>    <span class="kw">private</span> <span class="va">$keyName</span><span class="ot">;</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>    <span class="kw">function</span> <span class="bu">__construct</span>()</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>    {</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>        <span class="kw">parent</span>::<span class="bu">__construct</span>()<span class="ot">;</span></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>        <span class="va">$this</span>-&gt;dataclass <span class="op">=</span> <span class="kw">new</span> <span class="cn">XXX</span>()<span class="ot">;</span></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>        <span class="va">$keyName</span> <span class="op">=</span> <span class="st">"xxx_id"</span><span class="ot">;</span></span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (<span class="kw">isset</span>(<span class="va">$_REQUEST</span>[<span class="va">$this</span>-&gt;keyName])) {</span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>            <span class="va">$this</span>-&gt;id <span class="op">=</span> <span class="va">$_REQUEST</span>[<span class="va">$this</span>-&gt;keyName]<span class="ot">;</span></span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>    }</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li><code>dataRead($dataclass,</code> by <code>$this-&gt;dataRead(</code></li>
+<li><code>dataDelete($dataclass,</code> by <code>$this-&gt;dataDelete(</code></li>
+<li><code>case "list":</code> by <code>function list(){$vue=service('Smarty');</code> (line feed)</li>
+<li><code>case "display":</code> by <code>function display(){$vue=service('Smarty');</code> (line feed)</li>
+<li><code>case "change":</code> by <code>function change(){$vue=service('Smarty');</code> (line feed)</li>
+<li><code>case "write":</code> by:</li>
+</ul>
+<div class="sourceCode" id="cb7"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>    <span class="kw">function</span> write() {</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">try</span> {</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>            <span class="va">$this</span>-&gt;id <span class="op">=</span> <span class="va">$this</span>-&gt;dataWrite(<span class="va">$_REQUEST</span>)<span class="ot">;</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> (<span class="va">$this</span>-&gt;id <span class="op">&gt;</span> <span class="dv">0</span>) {</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>                <span class="va">$_REQUEST</span>[<span class="va">$this</span>-&gt;keyName] <span class="op">=</span> <span class="va">$this</span>-&gt;id<span class="ot">;</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>                <span class="cf">return</span> <span class="va">$this</span>-&gt;display()<span class="ot">;</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>            } <span class="cf">else</span> {</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>                <span class="cf">return</span> <span class="va">$this</span>-&gt;change()<span class="ot">;</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>            }</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>        } <span class="cf">catch</span> (PpciException) {</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> <span class="va">$this</span>-&gt;change()<span class="ot">;</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>    }</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li><code>case "delete":</code> by <code>function delete(){</code></li>
+<li><code>case "</code> by <code>function</code></li>
+<li><code>":</code> by <code>() {</code></li>
+<li><code>break;</code> by <code>}</code> : functions close</li>
+<li><code>$dataclass</code> by <code>$this-&gt;dataclass</code></li>
+<li><code>$id</code> by <code>$this-&gt;id</code></li>
+<li><code>$vue</code> by <code>$this-&gt;vue</code></li>
+<li><code>$this-&gt;dataDelete($this-&gt;id);</code> by</li>
+</ul>
+<div class="sourceCode" id="cb8"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>        <span class="cf">try</span> {</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>            <span class="va">$this</span>-&gt;dataDelete(<span class="va">$this</span>-&gt;id)<span class="ot">;</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> <span class="va">$this</span>-&gt;<span class="kw">list</span>()<span class="ot">;</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>        } <span class="cf">catch</span> (PpciException <span class="va">$e</span>) {</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> <span class="va">$this</span>-&gt;change()<span class="ot">;</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>        }</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li><code>$this-&gt;dataWrite( $_REQUEST );</code> by</li>
+</ul>
+<div class="sourceCode" id="cb9"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>        <span class="cf">try</span> {</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>            <span class="va">$this</span>-&gt;id <span class="op">=</span> <span class="va">$this</span>-&gt;dataWrite(<span class="va">$_REQUEST</span>)<span class="ot">;</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>            <span class="va">$_REQUEST</span>[<span class="st">"xx_id"</span>] <span class="op">=</span> <span class="va">$this</span>-&gt;id<span class="ot">;</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> <span class="va">$this</span>-&gt;<span class="kw">list</span>()<span class="ot">;</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>        } <span class="cf">catch</span> (PpciException <span class="va">$e</span>) {</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> <span class="va">$this</span>-&gt;change()<span class="ot">;</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>        }</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li><code>$message-&gt;</code> by <code>$this-&gt;message-&gt;</code></li>
+</ul>
+<p>and delete:</p>
+<ul>
+<li><code>switch ($t_module["param"]) {</code></li>
+<li><code>$bdd, $ObjetBDDParam</code></li>
+</ul>
+</section>
+<section id="treatment-of-transactions" class="level3">
+<h3 class="anchored" data-anchor-id="treatment-of-transactions">Treatment of transactions</h3>
+<p>Replace :</p>
+<ul>
+<li><code>$bdd-&gt;beginTransaction();</code> by :</li>
+</ul>
+<div class="sourceCode" id="cb10"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="va">$db</span> <span class="op">=</span> <span class="va">$this</span>-&gt;dataclass-&gt;db<span class="ot">;</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="va">$db</span>-&gt;transBegin()<span class="ot">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>replace <code>$bdd-&gt;commit();</code> by <code>$db-&gt;transCommit();</code></li>
+<li>replace <code>$bdd-&gt;rollback();</code> by :</li>
+</ul>
+<div class="sourceCode" id="cb11"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="va">$db</span>-&gt;transEnabled) {</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    <span class="va">$db</span>-&gt;transRollback()<span class="ot">;</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+</section>
+<section id="generate-the-routes-and-rights-needed-to-run-the-modules" class="level2">
+<h2 class="anchored" data-anchor-id="generate-the-routes-and-rights-needed-to-run-the-modules">Generate the routes and rights needed to run the modules</h2>
+<p>Run the following command:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="ex">php</span> vendor/equinton/ppci/migration/actionsParse.php ../app/param/actions.xml</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The script will read the old <code>actions.xml</code> file, and prepare two contents:</p>
+<ul>
+<li>the first is intended to be inserted into the <code>app\Config\Rights</code> class, and contains the list of rights required to run a module</li>
+<li>the second contains a prototype of the routes for executing the modules. The content must be inserted into <code>app/Config/Routes.php</code>.</li>
+</ul>
+</section>
+<section id="rename-the-gestion-right-to-manage." class="level2">
+<h2 class="anchored" data-anchor-id="rename-the-gestion-right-to-manage.">Rename the gestion right to ‘manage’.</h2>
+<p>Use an automatic search function to replace <code>gestion</code> with <code>manage</code>.</p>
+</section>
+<section id="add-controllers" class="level2">
+<h2 class="anchored" data-anchor-id="add-controllers">Add controllers</h2>
+<p>Run the script :</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="ex">php</span> vendor/equinton/ppci/migration/generateController.php app/Config/Routes.php app/Controllers/</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The program will read the routes defined, then create the corresponding controllers, grouping the routes by module.</p>
+<p>The controllers include calls to functions from the corresponding library (same name).</p>
+</section>
+<section id="add-a-filter-for-generic-startup-operations" class="level2">
+<h2 class="anchored" data-anchor-id="add-a-filter-for-generic-startup-operations">Add a filter for generic startup operations</h2>
+<ul>
+<li>Add a filter to perform the operations described in <code>modules/common.php</code> ;</li>
+<li>if necessary, fill in the <code>App\Libraries\Postlogin</code> class, to perform specific operations after connection.</li>
+</ul>
+</section>
+<section id="retrieving-translations" class="level2">
+<h2 class="anchored" data-anchor-id="retrieving-translations">Retrieving translations</h2>
+<p>Ppci translations are provided by default. To avoid losing everything, you need to merge them with the old translations:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="ex">msgmerge</span> app/Language/locales/lang.po ../oldapp/locales/en.po <span class="at">-o</span> app/Language/locales/lang.po</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> app/Language/locales</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="ex">./generate_po.sh</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="ex">./compile.sh</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="upgrade-readme-and-about" class="level2">
+<h2 class="anchored" data-anchor-id="upgrade-readme-and-about">Upgrade readme and About</h2>
+<p>Edit the following files:</p>
+<ul>
+<li><code>app/Config/news.txt</code> for news in French</li>
+<li><code>app/Config/newsen.txt</code> for news in English</li>
+</ul>
+<p>Also edit the following templates:</p>
+<ul>
+<li><code>app/Views/templates/about_fr.tpl</code></li>
+<li><code>app/Views/templates/about_en.tpl</code></li>
+</ul>
 
 
+</section>
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

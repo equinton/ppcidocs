@@ -124,5 +124,173 @@
     "title": "PPCI - PrototypePHP for CodeIgniter",
     "section": "",
     "text": "Controllers, the first stage in processing a route, inherit from the PpciController class. This automatically calls the initialization function function initController( RequestInterface $request, ResponseInterface $response, LoggerInterface $logger) and loads the message service and the App configuration into $this-&gt;config.\nHere is a typical implementation example:\nclass Borrower extends PpciController\n{\n    protected $lib;\n    function __construct()\n    {\n        $this-&gt;lib = new LibrariesBorrower();\n    }\n    function list()\n    {\n        return $this-&gt;lib-&gt;list();\n    }\n    function display()\n    {\n        return $this-&gt;lib-&gt;display();\n    }\n    function change()\n    {\n        return $this-&gt;lib-&gt;change();\n    }\n    function write()\n    {\n        return $this-&gt;lib-&gt;write();\n    }\n    function delete()\n    {\n        return $this-&gt;lib-&gt;delete();\n    }\n}"
+  },
+  {
+    "objectID": "installation.html",
+    "href": "installation.html",
+    "title": "Installation",
+    "section": "",
+    "text": "Installation can only be carried out in an empty folder. The example is given here for a migration to otolithe2.\n\n\nIn the top level folder :\ncomposer create-project codeigniter4/appstarter otolithe2  \ncd otolithe2\ncomposer require equinton/ppci\n\n\n\nVarious files supplied by CodeIgniter must be adapted for PPCI support.\nIn the application folder, at the root, run the script :\nvendor/equinton/ppci/install/install.sh\nThe script will :\n\ncopy the files needed to run the application into the various folders:\n\nparameters in app/Config\nlibraries in app/Libraries (default classes)\nthe display folder in public, and loading the necessary Javascript classes via npm.\n\ncreate the writable/temp folder, and give www-data write access to all writable files\ngenerate the .env file, including the default instantiation parameters\ncreate the private/public keys used for cryptographic operations.\n\n\n\n\n\n\nEdit the .env file, at the root of the application, and fill in the following entries:\nCI_ENVIRONMENT = development\napp.baseURL = 'https://myapp.mysociety.com'\n\ndatabase.default.DBDriver = Postgre\ndatabase.default.DBPrefix =\ndatabase.default.port = 5432\ndatabase.default.charset = utf8\ndatabase.default.hostname = localhost\ndatabase.default.database = dbname\ndatabase.default.username = login\ndatabase.default.password = password\ndatabase.default.searchpath = public,app,gacl\n\n\n\nThis is the file containing the application’s default parameters. It is a PHP class, whose following variables can be modified:\n$dbversion = ‘1.0’; // database version\n$GACL_aco = ‘app’; // application code for rights management\n$version = ‘v1.0.0’; // Software version. This must correspond to one of the versions created in Github or Gitlab\n$versionDate = ‘01/01/2024’; //Version date\n$APP_help_address =‘’; //link to ticket creation or help page\n$copyright = ‘’; //Copyright of the application\n$APPLI_release = []; //Table used to query either Github or a Gitlab server to obtain information about the latest version released\n\n\n\n\nConnect to your Postgresql server with psql, then create your database:\ncreate user applogin inherit login password ‘appPassword’;\ncreate database app owner applogin;\n\\c app applogin\n\\vendor/equinton/ppci/install/create.sql\nThe script will create two schemas: app for the application tables, and gacl for rights management.\nTwo tables will be created in the app schema, which are needed for Ppci to work.\nThe first connection to the application uses the login admin, password password."
+  },
+  {
+    "objectID": "installation.html#installing-codeigniter-and-ppci",
+    "href": "installation.html#installing-codeigniter-and-ppci",
+    "title": "Installation",
+    "section": "",
+    "text": "In the top level folder :\ncomposer create-project codeigniter4/appstarter otolithe2  \ncd otolithe2\ncomposer require equinton/ppci"
+  },
+  {
+    "objectID": "installation.html#configuring-ppci-support",
+    "href": "installation.html#configuring-ppci-support",
+    "title": "Installation",
+    "section": "",
+    "text": "Various files supplied by CodeIgniter must be adapted for PPCI support.\nIn the application folder, at the root, run the script :\nvendor/equinton/ppci/install/install.sh\nThe script will :\n\ncopy the files needed to run the application into the various folders:\n\nparameters in app/Config\nlibraries in app/Libraries (default classes)\nthe display folder in public, and loading the necessary Javascript classes via npm.\n\ncreate the writable/temp folder, and give www-data write access to all writable files\ngenerate the .env file, including the default instantiation parameters\ncreate the private/public keys used for cryptographic operations."
+  },
+  {
+    "objectID": "installation.html#paramétrage-initial",
+    "href": "installation.html#paramétrage-initial",
+    "title": "Installation",
+    "section": "Paramétrage initial",
+    "text": "Paramétrage initial\n\nFichier .env\nÉditez le fichier .env, à la racine de l’application, et renseignez impérativement les entrées suivantes :\nThe script will :\n\ncopy the files needed to run the application into the various folders:\n\nparameters in app/Config\nlibraries in app/Libraries (default classes)\nthe display folder in public, and loading the necessary Javascript classes via npm.\n\ncreate the writable/temp folder, and give www-data write access to all writable files\ngenerate the .env file, including the default instantiation parameters\ncreate the private/public keys used for cryptographic operations."
+  },
+  {
+    "objectID": "installation.html#création-de-la-base-de-données",
+    "href": "installation.html#création-de-la-base-de-données",
+    "title": "Installation",
+    "section": "Création de la base de données",
+    "text": "Création de la base de données\nConnectez-vous à votre serveur Postgresql avec psql, puis créez votre base de données :\ncreate user applogin inherit login password  'appPassword';\ncreate database app owner applogin;\n\\c app applogin\n\\i vendor/equinton/ppci/install/create.sql\nLe script va créer deux schémas : app pour les tables de l’application, et gacl pour la gestion des droits. Deux tables vont être créées dans le schéma app, nécessaires au fonctionnement de Ppci.\nLa première connexion à l’application utilise le login admin, mot de passe password."
+  },
+  {
+    "objectID": "installation.html#installation-de-codeigniter-et-de-ppci",
+    "href": "installation.html#installation-de-codeigniter-et-de-ppci",
+    "title": "Installation",
+    "section": "",
+    "text": "Dans le dossier de niveau supérieur :"
+  },
+  {
+    "objectID": "installation.html#configuration-du-support-de-ppci",
+    "href": "installation.html#configuration-du-support-de-ppci",
+    "title": "Installation",
+    "section": "Configuration du support de PPCI",
+    "text": "Configuration du support de PPCI\nDifférents fichiers fournis par CodeIgniter doivent être adaptés pour le support de PPCI. Dans le dossier de l’application, à la racine, lancez le script :"
+  },
+  {
+    "objectID": "installation.html#initial-setup",
+    "href": "installation.html#initial-setup",
+    "title": "Installation",
+    "section": "",
+    "text": "Edit the .env file, at the root of the application, and fill in the following entries:\nCI_ENVIRONMENT = development\napp.baseURL = 'https://myapp.mysociety.com'\n\ndatabase.default.DBDriver = Postgre\ndatabase.default.DBPrefix =\ndatabase.default.port = 5432\ndatabase.default.charset = utf8\ndatabase.default.hostname = localhost\ndatabase.default.database = dbname\ndatabase.default.username = login\ndatabase.default.password = password\ndatabase.default.searchpath = public,app,gacl\n\n\n\nThis is the file containing the application’s default parameters. It is a PHP class, whose following variables can be modified:\n$dbversion = ‘1.0’; // database version\n$GACL_aco = ‘app’; // application code for rights management\n$version = ‘v1.0.0’; // Software version. This must correspond to one of the versions created in Github or Gitlab\n$versionDate = ‘01/01/2024’; //Version date\n$APP_help_address =‘’; //link to ticket creation or help page\n$copyright = ‘’; //Copyright of the application\n$APPLI_release = []; //Table used to query either Github or a Gitlab server to obtain information about the latest version released"
+  },
+  {
+    "objectID": "installation.html#creating-the-database",
+    "href": "installation.html#creating-the-database",
+    "title": "Installation",
+    "section": "",
+    "text": "Connect to your Postgresql server with psql, then create your database:\ncreate user applogin inherit login password ‘appPassword’;\ncreate database app owner applogin;\n\\c app applogin\n\\vendor/equinton/ppci/install/create.sql\nThe script will create two schemas: app for the application tables, and gacl for rights management.\nTwo tables will be created in the app schema, which are needed for Ppci to work.\nThe first connection to the application uses the login admin, password password."
+  },
+  {
+    "objectID": "migration.html",
+    "href": "migration.html",
+    "title": "Migration from PrototypePhp",
+    "section": "",
+    "text": "Create a different folder from the one containing the initial code of the application to be migrated, for example app2, then, from the lower-level directory:\ncomposer create-project codeigniter4/appstarter app2\ncd app2\ncomposer require equinton/ppci\nvendor/equinton/ppci/install/install.sh\nThen edit the .env file, and update the necessary parameters (CI_ENVIRONMENT, app.baseURL and the database connection parameters).\n\n\n\nHere is an example configuration:\n&lt;VirtualHost *:80&gt;\n    ServerName app2.local\n    ServerPath /app2.local\n    RewriteEngine On\n    RewriteRule ^ https://app2.local%{REQUEST_URI} [R]\n&lt;/VirtualHost&gt;\n&lt;VirtualHost *:443&gt;\n    ServerName app2.local\n    ServerPath /app2.local\n    SSLEngine on\n    SSLCertificateFile  /etc/ssl/certs/server.crt\n    SSLCertificateKeyFile /etc/ssl/private/server.key\n    SSLCACertificateFile /etc/ssl/certs/cacert.crt\n    DocumentRoot /var/www/app2/public \n&lt;/VirtualHost&gt;\n&lt;Directory /var/www/app2/public&gt;\n    &lt;LimitExcept GET POST&gt;\n        Deny from all\n    &lt;/LimitExcept&gt;\n    Options -Indexes FollowSymLinks MultiViews\n    Header unset ETag\n    Header set Cache-Control \"max-age=0, no-cache, no-store, must-revalidate, private\"\n    Header set Pragma \"no-cache\"\n    Header set X-Frame-Options \"DENY\"\n    Header set X-XSS-Protection \"1; mode=block\"\n    Header set X-Content-Type-Options \"nosniff\"\n    Header always set Strict-Transport-Security \"max-age=63072000; includeSubdomains;\"\n    Header always set Content-Security-Policy \"default-src 'self' ; script-src blob: * 'self' 'unsafe-inline' 'unsafe-eval'; connect-src data: blob: filesystem: *.tile.openstreetmap.org 'self' ; img-src 'self' data: blob: *.openstreetmap.org ; style-src 'self' 'unsafe-inline' ;\"\n    &lt;FilesMatch \"\\.(ico|flv|jpg|jpeg|png|gif|js|css|svg)$\"&gt;\n        Header set Cache-Control \"max-age=604800, private\"\n    &lt;/FilesMatch&gt;\n&lt;FilesMatch \".*openstreetmap.*\\.png$\"&gt;\n    Header set Cache-Control \"max-age=2592000, public\"\n&lt;/FilesMatch&gt;\n    Require all granted\n    AllowOverride all\n    RewriteEngine On\n    RewriteBase /\n    RewriteCond \"/%{REQUEST_FILENAME}\" !-f\n    RewriteCond \"/%{REQUEST_FILENAME}\" !-d\n    RewriteRule \"(.*)\" \"/index.php?$1\" [PT,QSA]\n&lt;/Directory&gt;\n\n\n\nEdit the vendor/equinton/ppci/migration/updatedb.sql file, and check the first line (set search_path), replacing app with the name of the schema containing the data.\nThen run the sql file.\n\n\n\nEdit the app/Config/menu.xml file, and add the necessary entries.\n\n\n\nCopy the Smarty templates from display/templates into app/Views/templates, keeping the sub-folder organisation, except for the root files and the framework sub-folder.\n\n\nIn this folder, replace all the labels (filter on *tpl) :\n\n&lt;/form&gt; with {$csrf}&lt;/form&gt; to add the CSRF token in forms\ndroits with rights\n.gestion by .manage\ndatatable\" by datatable display”\ndatatable-nopaging-nosearching by datatable-nopaging-nosearching display\ndatatable-searching by datatable-searching display\ndatatable-nopaging-nosearching by datatable-nopaging-nosearching display\ndatatable-nopaging by datatable-nopaging display\ndatatable-nopaging-nosort by datatable-nopaging-nosort display\ndatatable-nosort by datatable-nosort display\ndatatable-export by datatable-export display\ndatatable-export-paging by datatable-export-paging display.\n\nDelete\n\nindex.php?module=\n\n\n\n\nGo back to all the links (look for the a href tags) and replace the first & with ?.\nChange all the form actions so that they look like this:\n&lt;form class=‘form-horizontal’ id=‘formName’ method=‘post’ action=‘moduleWrite’&gt;\n&lt;input type=‘hidden’ name=‘moduleBase’ value=‘module’&gt;\nThe action field can be removed. However, the moduleBase field must be retained: it is used to create the moduleDelete action via the javascript script in main_js.tpl.\n\n\n\n\nCopy the files from modules/classes to app/Models.\n\n\nThese can be carried out using search/replace.\n\nreplace :\n&lt;?php by &lt;?php namespace App\\Models;use Ppci\\Models\\PpciModel;, with line breaks;\nextends ObjetBDD with extends PpciModel ;\n(public function __construct().*) by public function __construct(), ticking regular expression ;\n$this-&gt;columns by $this-&gt;fields ;\nfunction ecrire by function write;\nfunction lire by function read\nreplace parent::ecrire with parent::write.\n(parent::__construct().*) by parent::__construct(), checking regular expression ;\n$this-&gt;auto_id = 0 by $this-&gt;useAutoIncrement = false\nauto_date = 0 by autoFormatDate = false\ndelete :\n\n$this-&gt;auto_id = 1;\n$param[‘fullDescription’] = 1;\n$this-&gt;param = $param;\n\n\n\n\n\n\nrename the file name, for example espece.class.php to espece.php ;\nin SQL queries, modify variables by adding : at the end: :id must become :id: ;\nfor tables containing geographical data (fields with type=4), modify the queries or create the read() functions to add st_astext() for the fields concerned;\ndate transformations for fields not present in the table must be rewritten according to this scheme:\n\n$this-&gt;dateFields[] = ‘peche_date’;\n$this-&gt;datetimeFields[] = ‘peche_datetime’;\n\nif the utf8_encode function is used, it must be replaced by :\n\n$data = mb_convert_encoding($data, ‘UTF-8’, ‘ISO-8859-15, ISO-8859-1, Windows-1252’);\nThe function processes strings or arrays indiscriminately.\n\n\n\n\nCopy all the modules into app/Libraries. They need to be transformed into classes.\n\n\nReplace :\n\n&lt;?php by:\n\n&lt;?php \nnamespace App\\Libraries;\n\nuse Ppci\\Libraries\\PpciException;\nuse Ppci\\Libraries\\PpciLibrary;\nuse Ppci\\Models\\PpciModel;\n\nclass Xx extends PpciLibrary { \n    /**\n     * @var xx\n     */\n    protected PpciModel $dataclass;\n    private $keyName;\n\n    function __construct()\n    {\n        parent::__construct();\n        $this-&gt;dataclass = new XXX();\n        $keyName = \"xxx_id\";\n        if (isset($_REQUEST[$this-&gt;keyName])) {\n            $this-&gt;id = $_REQUEST[$this-&gt;keyName];\n        }\n    }\n\ndataRead($dataclass, by $this-&gt;dataRead(\ndataDelete($dataclass, by $this-&gt;dataDelete(\ncase \"list\": by function list(){$vue=service('Smarty'); (line feed)\ncase \"display\": by function display(){$vue=service('Smarty'); (line feed)\ncase \"change\": by function change(){$vue=service('Smarty'); (line feed)\ncase \"write\": by:\n\n    function write() {\n    try {\n            $this-&gt;id = $this-&gt;dataWrite($_REQUEST);\n            if ($this-&gt;id &gt; 0) {\n                $_REQUEST[$this-&gt;keyName] = $this-&gt;id;\n                return $this-&gt;display();\n            } else {\n                return $this-&gt;change();\n            }\n        } catch (PpciException) {\n            return $this-&gt;change();\n        }\n    }\n\ncase \"delete\": by function delete(){\ncase \" by function\n\": by () {\nbreak; by } : functions close\n$dataclass by $this-&gt;dataclass\n$id by $this-&gt;id\n$vue by $this-&gt;vue\n$this-&gt;dataDelete($this-&gt;id); by\n\n        try {\n            $this-&gt;dataDelete($this-&gt;id);\n            return $this-&gt;list();\n        } catch (PpciException $e) {\n            return $this-&gt;change();\n        }\n\n$this-&gt;dataWrite( $_REQUEST ); by\n\n        try {\n            $this-&gt;id = $this-&gt;dataWrite($_REQUEST);\n            $_REQUEST[\"xx_id\"] = $this-&gt;id;\n            return $this-&gt;list();\n        } catch (PpciException $e) {\n            return $this-&gt;change();\n        }\n\n$message-&gt; by $this-&gt;message-&gt;\n\nand delete:\n\nswitch ($t_module[\"param\"]) {\n$bdd, $ObjetBDDParam\n\n\n\n\nReplace :\n\n$bdd-&gt;beginTransaction(); by :\n\n$db = $this-&gt;dataclass-&gt;db;\n$db-&gt;transBegin();\n\nreplace $bdd-&gt;commit(); by $db-&gt;transCommit();\nreplace $bdd-&gt;rollback(); by :\n\nif ($db-&gt;transEnabled) {\n    $db-&gt;transRollback();\n}\n\n\n\n\nRun the following command:\nphp vendor/equinton/ppci/migration/actionsParse.php ../app/param/actions.xml\nThe script will read the old actions.xml file, and prepare two contents:\n\nthe first is intended to be inserted into the app\\Config\\Rights class, and contains the list of rights required to run a module\nthe second contains a prototype of the routes for executing the modules. The content must be inserted into app/Config/Routes.php.\n\n\n\n\nUse an automatic search function to replace gestion with manage.\n\n\n\nRun the script :\nphp vendor/equinton/ppci/migration/generateController.php app/Config/Routes.php app/Controllers/\nThe program will read the routes defined, then create the corresponding controllers, grouping the routes by module.\nThe controllers include calls to functions from the corresponding library (same name).\n\n\n\n\nAdd a filter to perform the operations described in modules/common.php ;\nif necessary, fill in the App\\Libraries\\Postlogin class, to perform specific operations after connection.\n\n\n\n\nPpci translations are provided by default. To avoid losing everything, you need to merge them with the old translations:\nmsgmerge app/Language/locales/lang.po ../oldapp/locales/en.po -o app/Language/locales/lang.po\ncd app/Language/locales\n./generate_po.sh\n./compile.sh\n\n\n\nEdit the following files:\n\napp/Config/news.txt for news in French\napp/Config/newsen.txt for news in English\n\nAlso edit the following templates:\n\napp/Views/templates/about_fr.tpl\napp/Views/templates/about_en.tpl"
+  },
+  {
+    "objectID": "migration.html#install-codeigniter-and-ppci",
+    "href": "migration.html#install-codeigniter-and-ppci",
+    "title": "Migration from PrototypePhp",
+    "section": "",
+    "text": "Create a different folder from the one containing the initial code of the application to be migrated, for example app2, then, from the lower-level directory:\ncomposer create-project codeigniter4/appstarter app2\ncd app2\ncomposer require equinton/ppci\nvendor/equinton/ppci/install/install.sh\nThen edit the .env file, and update the necessary parameters (CI_ENVIRONMENT, app.baseURL and the database connection parameters)."
+  },
+  {
+    "objectID": "migration.html#create-a-new-vhost-in-apache",
+    "href": "migration.html#create-a-new-vhost-in-apache",
+    "title": "Migration from PrototypePhp",
+    "section": "",
+    "text": "Here is an example configuration:\n&lt;VirtualHost *:80&gt;\n    ServerName app2.local\n    ServerPath /app2.local\n    RewriteEngine On\n    RewriteRule ^ https://app2.local%{REQUEST_URI} [R]\n&lt;/VirtualHost&gt;\n&lt;VirtualHost *:443&gt;\n    ServerName app2.local\n    ServerPath /app2.local\n    SSLEngine on\n    SSLCertificateFile  /etc/ssl/certs/server.crt\n    SSLCertificateKeyFile /etc/ssl/private/server.key\n    SSLCACertificateFile /etc/ssl/certs/cacert.crt\n    DocumentRoot /var/www/app2/public \n&lt;/VirtualHost&gt;\n&lt;Directory /var/www/app2/public&gt;\n    &lt;LimitExcept GET POST&gt;\n        Deny from all\n    &lt;/LimitExcept&gt;\n    Options -Indexes FollowSymLinks MultiViews\n    Header unset ETag\n    Header set Cache-Control \"max-age=0, no-cache, no-store, must-revalidate, private\"\n    Header set Pragma \"no-cache\"\n    Header set X-Frame-Options \"DENY\"\n    Header set X-XSS-Protection \"1; mode=block\"\n    Header set X-Content-Type-Options \"nosniff\"\n    Header always set Strict-Transport-Security \"max-age=63072000; includeSubdomains;\"\n    Header always set Content-Security-Policy \"default-src 'self' ; script-src blob: * 'self' 'unsafe-inline' 'unsafe-eval'; connect-src data: blob: filesystem: *.tile.openstreetmap.org 'self' ; img-src 'self' data: blob: *.openstreetmap.org ; style-src 'self' 'unsafe-inline' ;\"\n    &lt;FilesMatch \"\\.(ico|flv|jpg|jpeg|png|gif|js|css|svg)$\"&gt;\n        Header set Cache-Control \"max-age=604800, private\"\n    &lt;/FilesMatch&gt;\n&lt;FilesMatch \".*openstreetmap.*\\.png$\"&gt;\n    Header set Cache-Control \"max-age=2592000, public\"\n&lt;/FilesMatch&gt;\n    Require all granted\n    AllowOverride all\n    RewriteEngine On\n    RewriteBase /\n    RewriteCond \"/%{REQUEST_FILENAME}\" !-f\n    RewriteCond \"/%{REQUEST_FILENAME}\" !-d\n    RewriteRule \"(.*)\" \"/index.php?$1\" [PT,QSA]\n&lt;/Directory&gt;"
+  },
+  {
+    "objectID": "migration.html#update-the-database",
+    "href": "migration.html#update-the-database",
+    "title": "Migration from PrototypePhp",
+    "section": "",
+    "text": "Edit the vendor/equinton/ppci/migration/updatedb.sql file, and check the first line (set search_path), replacing app with the name of the schema containing the data.\nThen run the sql file."
+  },
+  {
+    "objectID": "migration.html#upgrade-menu",
+    "href": "migration.html#upgrade-menu",
+    "title": "Migration from PrototypePhp",
+    "section": "",
+    "text": "Edit the app/Config/menu.xml file, and add the necessary entries."
+  },
+  {
+    "objectID": "migration.html#add-smarty-templates",
+    "href": "migration.html#add-smarty-templates",
+    "title": "Migration from PrototypePhp",
+    "section": "",
+    "text": "Copy the Smarty templates from display/templates into app/Views/templates, keeping the sub-folder organisation, except for the root files and the framework sub-folder.\n\n\nIn this folder, replace all the labels (filter on *tpl) :\n\n&lt;/form&gt; with {$csrf}&lt;/form&gt; to add the CSRF token in forms\ndroits with rights\n.gestion by .manage\ndatatable\" by datatable display”\ndatatable-nopaging-nosearching by datatable-nopaging-nosearching display\ndatatable-searching by datatable-searching display\ndatatable-nopaging-nosearching by datatable-nopaging-nosearching display\ndatatable-nopaging by datatable-nopaging display\ndatatable-nopaging-nosort by datatable-nopaging-nosort display\ndatatable-nosort by datatable-nosort display\ndatatable-export by datatable-export display\ndatatable-export-paging by datatable-export-paging display.\n\nDelete\n\nindex.php?module=\n\n\n\n\nGo back to all the links (look for the a href tags) and replace the first & with ?.\nChange all the form actions so that they look like this:\n&lt;form class=‘form-horizontal’ id=‘formName’ method=‘post’ action=‘moduleWrite’&gt;\n&lt;input type=‘hidden’ name=‘moduleBase’ value=‘module’&gt;\nThe action field can be removed. However, the moduleBase field must be retained: it is used to create the moduleDelete action via the javascript script in main_js.tpl."
+  },
+  {
+    "objectID": "migration.html#rewriting-models",
+    "href": "migration.html#rewriting-models",
+    "title": "Migration from PrototypePhp",
+    "section": "",
+    "text": "Copy the files from modules/classes to app/Models.\n\n\nThese can be carried out using search/replace.\n\nreplace :\n&lt;?php by &lt;?php namespace App\\Models;use Ppci\\Models\\PpciModel;, with line breaks;\nextends ObjetBDD with extends PpciModel ;\n(public function __construct().*) by public function __construct(), ticking regular expression ;\n$this-&gt;columns by $this-&gt;fields ;\nfunction ecrire by function write;\nfunction lire by function read\nreplace parent::ecrire with parent::write.\n(parent::__construct().*) by parent::__construct(), checking regular expression ;\n$this-&gt;auto_id = 0 by $this-&gt;useAutoIncrement = false\nauto_date = 0 by autoFormatDate = false\ndelete :\n\n$this-&gt;auto_id = 1;\n$param[‘fullDescription’] = 1;\n$this-&gt;param = $param;\n\n\n\n\n\n\nrename the file name, for example espece.class.php to espece.php ;\nin SQL queries, modify variables by adding : at the end: :id must become :id: ;\nfor tables containing geographical data (fields with type=4), modify the queries or create the read() functions to add st_astext() for the fields concerned;\ndate transformations for fields not present in the table must be rewritten according to this scheme:\n\n$this-&gt;dateFields[] = ‘peche_date’;\n$this-&gt;datetimeFields[] = ‘peche_datetime’;\n\nif the utf8_encode function is used, it must be replaced by :\n\n$data = mb_convert_encoding($data, ‘UTF-8’, ‘ISO-8859-15, ISO-8859-1, Windows-1252’);\nThe function processes strings or arrays indiscriminately."
+  },
+  {
+    "objectID": "migration.html#réécriture-des-librairies",
+    "href": "migration.html#réécriture-des-librairies",
+    "title": "Migration from PrototypePhp",
+    "section": "",
+    "text": "Recopier l’ensemble des modules dans app/Libraries. Il faut les transformer en classes.\n\n\nRemplacer :\n\n&lt;?php par :\n\n&lt;?php \nnamespace App\\Libraries;\n\nuse Ppci\\Libraries\\PpciException;\nuse Ppci\\Libraries\\PpciLibrary;\nuse Ppci\\Models\\PpciModel;\n\nclass Xx extends PpciLibrary { \n    /**\n     * @var xx\n     */\n    protected PpciModel $dataclass;\n    private $keyName;\n\n    function __construct()\n    {\n        parent::__construct();\n        $this-&gt;dataClass = new XXX();\n        $keyName = \"xxx_id\";\n        if (isset($_REQUEST[$this-&gt;keyName])) {\n            $this-&gt;id = $_REQUEST[$this-&gt;keyName];\n        }\n    }\n\ndataRead($dataClass, par $this-&gt;dataRead(\ndataDelete($dataClass, par $this-&gt;dataDelete(\ncase \"list\": par function list(){$vue=service('Smarty'); (saut de ligne)\ncase \"display\": par function display(){$vue=service('Smarty'); (saut de ligne)\ncase \"change\": par function change(){$vue=service('Smarty'); (saut de ligne)\ncase \"write\": par\n\n    function write() {\n    try {\n            $this-&gt;id = $this-&gt;dataWrite($_REQUEST);\n            if ($this-&gt;id &gt; 0) {\n                $_REQUEST[$this-&gt;keyName] = $this-&gt;id;\n                return $this-&gt;display();\n            } else {\n                return $this-&gt;change();\n            }\n        } catch (PpciException) {\n            return $this-&gt;change();\n        }\n    }\n\ncase \"delete\": par function delete(){\ncase \" par function\n\": par () {\nbreak; par } : fermeture des fonctions\n$dataclass par $this-&gt;dataClass\n$id par $this-&gt;id\n$vue par $this-&gt;vue\n$this-&gt;dataDelete($this-&gt;id); par\n\n        try {\n            $this-&gt;dataDelete($this-&gt;id);\n            return $this-&gt;list();\n        } catch (PpciException $e) {\n            return $this-&gt;change();\n        }\n\n$this-&gt;dataWrite( $_REQUEST ); par\n\n        try {\n            $this-&gt;id = $this-&gt;dataWrite($_REQUEST);\n            $_REQUEST[\"xx_id\"] = $this-&gt;id;\n            return $this-&gt;list();\n        } catch (PpciException $e) {\n            return $this-&gt;change();\n        }\n\n$message-&gt; par $this-&gt;message-&gt;\n\net suppression de :\n\nswitch ($t_module[\"param\"]) {\n$bdd, $ObjetBDDParam\n\n:::"
+  },
+  {
+    "objectID": "migration.html#rewriting-libraries",
+    "href": "migration.html#rewriting-libraries",
+    "title": "Migration from PrototypePhp",
+    "section": "",
+    "text": "Copy all the modules into app/Libraries. They need to be transformed into classes.\n\n\nReplace :\n\n&lt;?php by:\n\n&lt;?php \nnamespace App\\Libraries;\n\nuse Ppci\\Libraries\\PpciException;\nuse Ppci\\Libraries\\PpciLibrary;\nuse Ppci\\Models\\PpciModel;\n\nclass Xx extends PpciLibrary { \n    /**\n     * @var xx\n     */\n    protected PpciModel $dataclass;\n    private $keyName;\n\n    function __construct()\n    {\n        parent::__construct();\n        $this-&gt;dataclass = new XXX();\n        $keyName = \"xxx_id\";\n        if (isset($_REQUEST[$this-&gt;keyName])) {\n            $this-&gt;id = $_REQUEST[$this-&gt;keyName];\n        }\n    }\n\ndataRead($dataclass, by $this-&gt;dataRead(\ndataDelete($dataclass, by $this-&gt;dataDelete(\ncase \"list\": by function list(){$vue=service('Smarty'); (line feed)\ncase \"display\": by function display(){$vue=service('Smarty'); (line feed)\ncase \"change\": by function change(){$vue=service('Smarty'); (line feed)\ncase \"write\": by:\n\n    function write() {\n    try {\n            $this-&gt;id = $this-&gt;dataWrite($_REQUEST);\n            if ($this-&gt;id &gt; 0) {\n                $_REQUEST[$this-&gt;keyName] = $this-&gt;id;\n                return $this-&gt;display();\n            } else {\n                return $this-&gt;change();\n            }\n        } catch (PpciException) {\n            return $this-&gt;change();\n        }\n    }\n\ncase \"delete\": by function delete(){\ncase \" by function\n\": by () {\nbreak; by } : functions close\n$dataclass by $this-&gt;dataclass\n$id by $this-&gt;id\n$vue by $this-&gt;vue\n$this-&gt;dataDelete($this-&gt;id); by\n\n        try {\n            $this-&gt;dataDelete($this-&gt;id);\n            return $this-&gt;list();\n        } catch (PpciException $e) {\n            return $this-&gt;change();\n        }\n\n$this-&gt;dataWrite( $_REQUEST ); by\n\n        try {\n            $this-&gt;id = $this-&gt;dataWrite($_REQUEST);\n            $_REQUEST[\"xx_id\"] = $this-&gt;id;\n            return $this-&gt;list();\n        } catch (PpciException $e) {\n            return $this-&gt;change();\n        }\n\n$message-&gt; by $this-&gt;message-&gt;\n\nand delete:\n\nswitch ($t_module[\"param\"]) {\n$bdd, $ObjetBDDParam\n\n\n\n\nReplace :\n\n$bdd-&gt;beginTransaction(); by :\n\n$db = $this-&gt;dataclass-&gt;db;\n$db-&gt;transBegin();\n\nreplace $bdd-&gt;commit(); by $db-&gt;transCommit();\nreplace $bdd-&gt;rollback(); by :\n\nif ($db-&gt;transEnabled) {\n    $db-&gt;transRollback();\n}"
+  },
+  {
+    "objectID": "migration.html#generate-the-routes-and-rights-needed-to-run-the-modules",
+    "href": "migration.html#generate-the-routes-and-rights-needed-to-run-the-modules",
+    "title": "Migration from PrototypePhp",
+    "section": "",
+    "text": "Run the following command:\nphp vendor/equinton/ppci/migration/actionsParse.php ../app/param/actions.xml\nThe script will read the old actions.xml file, and prepare two contents:\n\nthe first is intended to be inserted into the app\\Config\\Rights class, and contains the list of rights required to run a module\nthe second contains a prototype of the routes for executing the modules. The content must be inserted into app/Config/Routes.php."
+  },
+  {
+    "objectID": "migration.html#rename-the-gestion-right-to-manage.",
+    "href": "migration.html#rename-the-gestion-right-to-manage.",
+    "title": "Migration from PrototypePhp",
+    "section": "",
+    "text": "Use an automatic search function to replace gestion with manage."
+  },
+  {
+    "objectID": "migration.html#add-controllers",
+    "href": "migration.html#add-controllers",
+    "title": "Migration from PrototypePhp",
+    "section": "",
+    "text": "Run the script :\nphp vendor/equinton/ppci/migration/generateController.php app/Config/Routes.php app/Controllers/\nThe program will read the routes defined, then create the corresponding controllers, grouping the routes by module.\nThe controllers include calls to functions from the corresponding library (same name)."
+  },
+  {
+    "objectID": "migration.html#add-a-filter-for-generic-startup-operations",
+    "href": "migration.html#add-a-filter-for-generic-startup-operations",
+    "title": "Migration from PrototypePhp",
+    "section": "",
+    "text": "Add a filter to perform the operations described in modules/common.php ;\nif necessary, fill in the App\\Libraries\\Postlogin class, to perform specific operations after connection."
+  },
+  {
+    "objectID": "migration.html#retrieving-translations",
+    "href": "migration.html#retrieving-translations",
+    "title": "Migration from PrototypePhp",
+    "section": "",
+    "text": "Ppci translations are provided by default. To avoid losing everything, you need to merge them with the old translations:\nmsgmerge app/Language/locales/lang.po ../oldapp/locales/en.po -o app/Language/locales/lang.po\ncd app/Language/locales\n./generate_po.sh\n./compile.sh"
+  },
+  {
+    "objectID": "migration.html#upgrade-readme-and-about",
+    "href": "migration.html#upgrade-readme-and-about",
+    "title": "Migration from PrototypePhp",
+    "section": "",
+    "text": "Edit the following files:\n\napp/Config/news.txt for news in French\napp/Config/newsen.txt for news in English\n\nAlso edit the following templates:\n\napp/Views/templates/about_fr.tpl\napp/Views/templates/about_en.tpl"
   }
 ]

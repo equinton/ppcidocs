@@ -6,6 +6,17 @@
 
 Créez un dossier différent de celui qui contient le code initial de l'application à migrer, par exemple `app2`, puis, depuis le répertoire de niveau inférieur :
 
+:::
+
+::: {.content-visible when-profile="english"}
+# Migration from PrototypePhp
+
+## Install CodeIgniter and Ppci
+
+Create a different folder from the one containing the initial code of the application to be migrated, for example `app2`, then, from the lower-level directory:
+
+:::
+
 ```bash
 composer create-project codeigniter4/appstarter app2
 cd app2
@@ -13,11 +24,22 @@ composer require equinton/ppci
 vendor/equinton/ppci/install/install.sh
 ```
 
+::: {.content-visible when-profile="french"}
 Éditez ensuite le fichier `.env`, et mettez à jour les paramètres nécessaires (`CI_ENVIRONMENT`, `app.baseURL` et les paramètres de connexion à la base de données).
 
 ## Créer un nouveau vhost dans Apache
 
 Voici un exemple de configuration :
+:::
+
+::: {.content-visible when-profile="english"}
+Then edit the `.env` file, and update the necessary parameters (`CI_ENVIRONMENT`, `app.baseURL` and the database connection parameters).
+
+## Create a new vhost in Apache
+
+Here is an example configuration:
+:::
+
 
 ```apache
 <VirtualHost *:80>
@@ -63,6 +85,7 @@ Voici un exemple de configuration :
     RewriteRule "(.*)" "/index.php?$1" [PT,QSA]
 </Directory>
 ```
+::: {.content-visible when-profile="french"}
 
 ## Mettre à jour la base de données
 
@@ -111,6 +134,60 @@ Modifiez toutes les actions des formulaires, pour qu'ils aient cette forme :
 
 Le champ `action` peut être supprimé. Par contre, le champ `moduleBase` doit être conservé : il est utilisé pour créer l'action `moduleDelete` par l'intermédiaire du script javascript dans `main_js.tpl`.
 
+:::
+
+::: {.content-visible when-profile="english"}
+## Update the database
+
+Edit the `vendor/equinton/ppci/migration/updatedb.sql` file, and check the first line (_set search\_path_), replacing _app_ with the name of the schema containing the data.
+
+Then run the sql file.
+
+## Upgrade menu
+
+Edit the `app/Config/menu.xml` file, and add the necessary entries.
+
+## Add Smarty templates
+
+Copy the Smarty templates from `display/templates` into `app/Views/templates`, keeping the sub-folder organisation, except for the root files and the _framework_ sub-folder.
+
+### Global changes
+
+In this folder, replace all the labels (filter on *tpl) :
+
+- `</form>` with `{$csrf}</form>` to add the CSRF token in forms
+- `droits` with `rights`
+- `.gestion` by `.manage`
+- `datatable"` by `datatable display”`
+- `datatable-nopaging-nosearching` by `datatable-nopaging-nosearching display`
+- `datatable-searching` by `datatable-searching display` 
+- `datatable-nopaging-nosearching`  by `datatable-nopaging-nosearching display`
+- `datatable-nopaging` by `datatable-nopaging display`
+- `datatable-nopaging-nosort` by `datatable-nopaging-nosort display`
+- `datatable-nosort` by `datatable-nosort display`
+- `datatable-export` by `datatable-export display`
+- `datatable-export-paging` by `datatable-export-paging display`.
+
+Delete
+
+- `index.php?module=`
+
+### Modifications to each form
+
+Go back to all the links (look for the `a href` tags) and replace the first `&` with `?`.
+
+Change all the form actions so that they look like this:
+
+```html
+<form class=‘form-horizontal’ id=‘formName’ method=‘post’ action=‘moduleWrite’>
+<input type=‘hidden’ name=‘moduleBase’ value=‘module’>
+```
+
+The `action` field can be removed. However, the `moduleBase` field must be retained: it is used to create the `moduleDelete` action via the javascript script in `main_js.tpl`.
+:::
+
+::: {.content-visible when-profile="french"}
+
 ## Réécriture des modèles
 
 Recopier les fichiers depuis `modules/classes` vers `app/Models`.
@@ -135,6 +212,36 @@ Elles peuvent être effectuées par rechercher/remplacer.
   - `$param["fullDescription"] = 1;`
   - `$this->param = $param;`
 
+:::
+
+::: {.content-visible when-profile="english"}
+## Rewriting models
+
+Copy the files from `modules/classes` to `app/Models`.
+
+### Global transformations
+
+These can be carried out using search/replace.
+
+- replace :
+- `<?php` by `<?php namespace App\Models;use Ppci\Models\PpciModel;`, with line breaks;
+- `extends ObjetBDD` with `extends PpciModel` ;
+- `(public function __construct().*)` by `public function __construct()`, ticking _regular expression_ ;
+- `$this->columns` by `$this->fields` ;
+- `function ecrire` by `function write`;
+- `function lire` by `function read`
+- replace `parent::ecrire` with `parent::write`.
+- `(parent::__construct().*)` by `parent::__construct()`, checking _regular expression_ ;
+- `$this->auto_id = 0` by `$this->useAutoIncrement = false`
+- `auto_date = 0` by `autoFormatDate = false`
+- delete :
+  - `$this->auto_id = 1;`
+  - `$param[‘fullDescription’] = 1;`
+  - `$this->param = $param;`
+:::
+
+
+::: {.content-visible when-profile="french"}
 ### Transformations individuelles
 
 - renommer le nom du fichier, par exemple `espece.class.php` en `Espece.php` ;
@@ -154,6 +261,33 @@ $data = mb_convert_encoding($data, 'UTF-8', 'ISO-8859-15, ISO-8859-1, Windows-12
 ```
 
 La fonction traite indistinctement les chaînes ou les tableaux.
+
+:::
+
+::: {.content-visible when-profile="english"}
+### Individual transformations
+
+- rename the file name, for example `espece.class.php` to `espece.php` ;
+- in SQL queries, modify variables by adding : at the end: `:id` must become `:id:` ;
+- for tables containing geographical data (fields with type=4), modify the queries or create the `read()` functions to add `st_astext()` for the fields concerned;
+- date transformations for fields not present in the table must be rewritten according to this scheme:
+
+```php
+$this->dateFields[] = ‘peche_date’;
+$this->datetimeFields[] = ‘peche_datetime’;
+```
+
+- if the `utf8_encode` function is used, it must be replaced by : 
+
+```php
+$data = mb_convert_encoding($data, ‘UTF-8’, ‘ISO-8859-15, ISO-8859-1, Windows-1252’);
+```
+
+The function processes strings or arrays indiscriminately.
+
+:::
+
+::: {.content-visible when-profile="french"}
 
 ## Réécriture des librairies
 
@@ -183,7 +317,7 @@ class Xx extends PpciLibrary {
     function __construct()
     {
         parent::__construct();
-        $this->dataClass = new XXX();
+        $this->dataclass = new XXX();
         $keyName = "xxx_id";
         if (isset($_REQUEST[$this->keyName])) {
             $this->id = $_REQUEST[$this->keyName];
@@ -191,14 +325,12 @@ class Xx extends PpciLibrary {
     }
 ```
 
-- `dataRead($dataClass,` par `$this->dataRead(`
-- `dataDelete($dataClass,` par `$this->dataDelete(`
+- `dataRead($dataclass,` par `$this->dataRead(`
+- `dataDelete($dataclass,` par `$this->dataDelete(`
 - `case "list":` par `function list(){$vue=service('Smarty');` (saut de ligne)
 - `case "display":` par `function display(){$vue=service('Smarty');` (saut de ligne)
 - `case "change":` par `function change(){$vue=service('Smarty');` (saut de ligne)
 - `case "write":` par 
-
-`function write(){` par :
 
 ```php
     function write() {
@@ -221,7 +353,7 @@ class Xx extends PpciLibrary {
 - `case "` par `function `
 - `":` par `() {`
 - `break;` par `}` : fermeture des fonctions
-- `$dataclass` par `$this->dataClass`
+- `$dataclass` par `$this->dataclass`
 - `$id` par `$this->id`
 - `$vue` par `$this->vue`
 - `$this->dataDelete($this->id);` par
@@ -254,6 +386,110 @@ et suppression de :
 - `switch ($t_module["param"]) {`
 - `$bdd, $ObjetBDDParam`
 
+:::
+
+::: {.content-visible when-profile="english"}
+
+## Rewriting libraries
+
+Copy all the modules into `app/Libraries`. They need to be transformed into classes.
+
+### Global transformations
+
+Replace :
+
+- `<?php` by:
+
+```php
+<?php 
+namespace App\Libraries;
+
+use Ppci\Libraries\PpciException;
+use Ppci\Libraries\PpciLibrary;
+use Ppci\Models\PpciModel;
+
+class Xx extends PpciLibrary { 
+    /**
+	 * @var xx
+	 */
+	protected PpciModel $dataclass;
+    private $keyName;
+
+    function __construct()
+    {
+        parent::__construct();
+        $this->dataclass = new XXX();
+        $keyName = "xxx_id";
+        if (isset($_REQUEST[$this->keyName])) {
+            $this->id = $_REQUEST[$this->keyName];
+        }
+    }
+```
+
+- `dataRead($dataclass,` by `$this->dataRead(`
+- `dataDelete($dataclass,` by `$this->dataDelete(`
+- `case "list":` by `function list(){$vue=service('Smarty');` (line feed)
+- `case "display":` by `function display(){$vue=service('Smarty');` (line feed)
+- `case "change":` by `function change(){$vue=service('Smarty');` (line feed)
+- `case "write":` by:
+
+```php
+    function write() {
+    try {
+            $this->id = $this->dataWrite($_REQUEST);
+            if ($this->id > 0) {
+                $_REQUEST[$this->keyName] = $this->id;
+                return $this->display();
+            } else {
+                return $this->change();
+            }
+        } catch (PpciException) {
+            return $this->change();
+        }
+    }
+```
+
+- `case "delete":` by `function delete(){`
+- `case "` by `function `
+- `":` by `() {`
+- `break;` by `}` : functions close
+- `$dataclass` by `$this->dataclass`
+- `$id` by `$this->id`
+- `$vue` by `$this->vue`
+- `$this->dataDelete($this->id);` by
+
+```php
+        try {
+            $this->dataDelete($this->id);
+            return $this->list();
+        } catch (PpciException $e) {
+            return $this->change();
+        }
+```
+
+- `$this->dataWrite( $_REQUEST );` by
+
+```php
+        try {
+			$this->id = $this->dataWrite($_REQUEST);
+            $_REQUEST["xx_id"] = $this->id;
+			return $this->list();
+		} catch (PpciException $e) {
+			return $this->change();
+		}
+```
+
+- `$message->` by `$this->message->`
+
+and delete:
+
+- `switch ($t_module["param"]) {`
+- `$bdd, $ObjetBDDParam`
+
+:::
+
+::: {.content-visible when-profile="french"}
+
 ### Modifications individuelles
 
 - renommer le fichier en le commençant par une majuscule
@@ -271,11 +507,11 @@ Remplacer :
 - `$bdd->beginTransaction();` par :
 
 ```php
-$db = $this->dataClass->db;
+$db = $this->dataclass->db;
 $db->transBegin();
 ```
 
-- supprimer `$bdd->commit();` (automatique)
+- supprimer `$bdd->commit();` by `$db->transCommit();`
 - remplacer `$bdd->rollback();` par :
 
 ```php
@@ -283,6 +519,34 @@ if ($db->transEnabled) {
     $db->transRollback();
 }
 ```
+
+:::
+
+::: {.content-visible when-profile="english"}
+
+### Treatment of transactions
+
+Replace :
+
+- `$bdd->beginTransaction();` by :
+
+```php
+$db = $this->dataclass->db;
+$db->transBegin();
+```
+
+- replace `$bdd->commit();` by `$db->transCommit();`
+- replace `$bdd->rollback();` by :
+
+```php
+if ($db->transEnabled) {
+    $db->transRollback();
+}
+```
+
+:::
+
+::: {.content-visible when-profile="french"}
 
 ## Générer les routes et les droits nécessaires pour exécuter les modules
 
@@ -311,6 +575,45 @@ php vendor/equinton/ppci/migration/generateController.php app/Config/Routes.php 
 
 Le programme va lire les routes définies, puis créer les contrôleurs correspondants, en regroupant les routes par module.
 Les contrôleurs intègrent lles appels aux fonctions de la librairie correspondante (même nom).
+
+:::
+
+::: {.content-visible when-profile="english"}
+
+## Generate the routes and rights needed to run the modules
+
+Run the following command:
+
+```bash
+php vendor/equinton/ppci/migration/actionsParse.php ../app/param/actions.xml
+```
+
+The script will read the old `actions.xml` file, and prepare two contents:
+
+- the first is intended to be inserted into the `app\Config\Rights` class, and contains the list of rights required to run a module
+- the second contains a prototype of the routes for executing the modules. The content must be inserted into `app/Config/Routes.php`.
+
+
+## Rename the gestion right to ‘manage’.
+
+Use an automatic search function to replace `gestion` with `manage`.
+
+## Add controllers
+
+Run the script :
+
+```bash
+php vendor/equinton/ppci/migration/generateController.php app/Config/Routes.php app/Controllers/
+```
+
+The program will read the routes defined, then create the corresponding controllers, grouping the routes by module.
+
+The controllers include calls to functions from the corresponding library (same name).
+
+:::
+
+::: {.content-visible when-profile="french"}
+
 
 ## Ajouter un filtre pour les opérations génériques au démarrage
 
@@ -342,4 +645,35 @@ cd app/Language/locales
 - `app/Views/templates/about_fr.tpl`
 - `app/Views/templates/about_en.tpl`
 
+:::
+
+::: {.content-visible when-profile="english"}
+
+## Add a filter for generic startup operations
+
+- Add a filter to perform the operations described in `modules/common.php` ;
+- if necessary, fill in the `App\Libraries\Postlogin` class, to perform specific operations after connection.
+
+## Retrieving translations
+
+Ppci translations are provided by default. To avoid losing everything, you need to merge them with the old translations:
+
+```bash
+msgmerge app/Language/locales/lang.po ../oldapp/locales/en.po -o app/Language/locales/lang.po
+cd app/Language/locales
+./generate_po.sh
+./compile.sh
+```
+
+## Upgrade readme and About
+
+Edit the following files:
+
+- `app/Config/news.txt` for news in French
+- `app/Config/newsen.txt` for news in English
+
+Also edit the following templates:
+
+- `app/Views/templates/about_fr.tpl`
+- `app/Views/templates/about_en.tpl`
 :::
