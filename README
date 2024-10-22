@@ -1,16 +1,14 @@
-# Documentation for PPCI
+Documentation for PPCI
 
-The documentation was created using Quarto and the [https://github.com/SebastienBoutry/inrae-project-website](SebastienBoutry/inrae-project-website) template.
+The documentation was created using Quarto and the https://github.com/SebastienBoutry/inrae-project-website template.
 
 It is written in French, and translated into English mainly with Deeple.com.
 
 To compile the documentation:
 
-```
 quarto render --profile french
 quarto render --profile english
-```
 
-The compiled documentation is available here: [https://equinton.github.io/ppcidocs](https://equinton.github.io/ppcidocs)
+The compiled documentation is available here: https://equinton.github.io/ppcidocs
 
 It is available under the Creative Commons CC-BY license.
