@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.5.57">
+<meta name="generator" content="quarto-1.7.6">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -69,10 +69,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-6c21014d9765ba549c6ebad95917e4d7.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-e7ab869034b8f5c17739906ed86b8908.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -305,6 +305,7 @@ window.Quarto = {
   <li><a href="#get-the-current-date" id="toc-get-the-current-date" class="nav-link" data-scroll-target="#get-the-current-date">Get the current date</a></li>
   <li><a href="#disable-a-mandatory-field" id="toc-disable-a-mandatory-field" class="nav-link" data-scroll-target="#disable-a-mandatory-field">Disable a mandatory field</a></li>
   </ul></li>
+  <li><a href="#managing-the-connection-to-another-database" id="toc-managing-the-connection-to-another-database" class="nav-link" data-scroll-target="#managing-the-connection-to-another-database">Managing the connection to another database</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -312,7 +313,7 @@ window.Quarto = {
 <p>Made with <a href="https://github.com/SebastienBoutry/inrae-project-website"><img src="https://github.com/SebastienBoutry/inrae-project-website/blob/main/images/extension-logo.png?raw=true" class="img-fluid" width="50"></a></p>
 </div></div></div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
 
 
 
@@ -524,9 +525,56 @@ window.Quarto = {
 <h3 class="anchored" data-anchor-id="disable-a-mandatory-field">Disable a mandatory field</h3>
 <p><code>function disableMandatoryField(string $name)</code></p>
 <p>Disables the <em>mandatory field</em> value for a field. This function can be used to update a record for which it is known in advance that the value is not provided.</p>
-
-
 </section>
+</section>
+<section id="managing-the-connection-to-another-database" class="level2">
+<h2 class="anchored" data-anchor-id="managing-the-connection-to-another-database">Managing the connection to another database</h2>
+<p>Declaring the database in the file `app/Config/Database.php’ :</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>    <span class="ex">public</span> array <span class="va">$cinna</span> = [</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>        <span class="st">'DSN'</span>          =<span class="op">&gt;</span> <span class="st">''</span>,</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>        <span class="st">'hostname'</span>     =<span class="op">&gt;</span> <span class="st">'localhost'</span>,</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>        <span class="st">'username'</span>     =<span class="op">&gt;</span> <span class="st">''</span>,</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>        <span class="st">'password'</span>     =<span class="op">&gt;</span> <span class="st">''</span>,</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>        <span class="st">'database'</span>     =<span class="op">&gt;</span> <span class="st">'estuaire_phy'</span>,</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>        <span class="st">'DBDriver'</span>     =<span class="op">&gt;</span> <span class="st">'Postgre'</span>,</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>        <span class="st">'DBPrefix'</span>     =<span class="op">&gt;</span> <span class="st">''</span>,</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>        <span class="st">'pConnect'</span>     =<span class="op">&gt;</span> false,</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>        <span class="st">'DBDebug'</span>      =<span class="op">&gt;</span> true,</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>        <span class="st">'charset'</span>      =<span class="op">&gt;</span> <span class="st">'utf8'</span>,</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>        <span class="st">'DBCollat'</span>     =<span class="op">&gt;</span> <span class="st">'utf8_general_ci'</span>,</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>        <span class="st">'swapPre'</span>      =<span class="op">&gt;</span> <span class="st">''</span>,</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>        <span class="st">'encrypt'</span>      =<span class="op">&gt;</span> false,</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>        <span class="st">'compress'</span>     =<span class="op">&gt;</span> false,</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>        <span class="st">'strictOn'</span>     =<span class="op">&gt;</span> false,</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>        <span class="st">'failover'</span>     =<span class="op">&gt;</span> [],</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>        <span class="st">'port'</span>         =<span class="op">&gt;</span> 5432,</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>        <span class="st">'numberNative'</span> =<span class="op">&gt;</span> false,</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>        <span class="st">"searchpath"</span>   =<span class="op">&gt;</span> <span class="st">"cinna,public"</span>,</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>    <span class="ex">]</span><span class="kw">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Adapt the connection parameters in the <code>.env</code> file at the root of the application.</p>
+<p>To trigger the database connection, for example from a library :</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">/**</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co">* </span><span class="an">@var</span><span class="co"> </span><span class="do">\CodeIgniter\Database\BaseConnection</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="va">$db</span> <span class="op">=</span> \Config\Database::connect(<span class="st">"cinna"</span><span class="ot">,</span> <span class="kw">true</span>)<span class="ot">;</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="va">$db</span>) {</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    <span class="va">$db</span>-&gt;query(<span class="st">"set search_path = "</span> <span class="op">.</span> <span class="va">$_ENV</span>[<span class="st">"database.cinna.searchpath"</span>])<span class="ot">;</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    <span class="va">$this</span>-&gt;message-&gt;set(<span class="fu">_</span>(<span class="st">"Unable to connect to the database used to record Cinna data"</span>)<span class="ot">,</span> <span class="kw">true</span>)<span class="ot">;</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    defaultPage()<span class="ot">;</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>To attach a model to this connection, you need to declare the variable $DBGroup and assign the name of the connection to it:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Cinna <span class="kw">extends</span> PpciModel</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">protected</span> <span class="va">$DBGroup</span> <span class="op">=</span> <span class="st">'cinna'</span><span class="ot">;</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">function</span> <span class="bu">__construct</span>()</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    {</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>        <span class="va">$this</span>-&gt;table <span class="op">=</span> <span class="st">"cinna"</span><span class="ot">;</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    (...)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>CodeIgniter will then manage the connection correctly.</p>
+
+
 </section>
 </section>
 
@@ -613,8 +661,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   });
   clipboard.on('success', onCopySuccess);
   if (window.document.getElementById('quarto-embedded-source-code-modal')) {
-    // For code content inside modals, clipBoardJS needs to be initialized with a container option
-    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
     const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
       text: getTextToCopy,
       container: window.document.getElementById('quarto-embedded-source-code-modal')
@@ -725,7 +771,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       if (window.Quarto?.typesetMath) {
         window.Quarto.typesetMath(note);
       }
-      // TODO in 1.5, we should make sure this works without a callout special case
       if (note.classList.contains("callout")) {
         return note.outerHTML;
       } else {

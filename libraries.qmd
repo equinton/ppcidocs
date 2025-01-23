@@ -54,6 +54,7 @@ It manages direct access to some services:
 * `$this->log`: record traces in the _gacl.log_ table of the database.
 
 For it to work properly, it must be initialized as follows:
+
 :::
 
 ```php
@@ -124,6 +125,7 @@ Deletes the record identified by `$id`, and displays a message to inform of the 
 ## Transaction processing
 
 In the case where several concurrent writes are necessary, it is possible to activate the transactions, managed by CodeIgniter, with the following commands:
+
 :::
 
 ```php
@@ -141,5 +143,3 @@ try {
      (...)
    }
 ```
-
-:::

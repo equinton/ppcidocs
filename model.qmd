@@ -430,3 +430,129 @@ Executes a function in the database to generate a UUID.
 
 Disables the _mandatory field_ value for a field. This function can be used to update a record for which it is known in advance that the value is not provided.
 :::
+
+::: {.content-visible when-profile="french"}
+
+## Gestion de la connexion à une autre base de données
+
+Déclarer la base de données dans le fichier `app/Config/Database.php' : 
+
+```bash
+    public array $cinna = [
+        'DSN'          => '',
+        'hostname'     => 'localhost',
+        'username'     => '',
+        'password'     => '',
+        'database'     => 'estuaire_phy',
+        'DBDriver'     => 'Postgre',
+        'DBPrefix'     => '',
+        'pConnect'     => false,
+        'DBDebug'      => true,
+        'charset'      => 'utf8',
+        'DBCollat'     => 'utf8_general_ci',
+        'swapPre'      => '',
+        'encrypt'      => false,
+        'compress'     => false,
+        'strictOn'     => false,
+        'failover'     => [],
+        'port'         => 5432,
+        'numberNative' => false,
+        "searchpath"   => "cinna,public",
+    ];
+```
+Adapter les paramètres de connexion dans le fichier `.env` à la racine de l'application.
+
+Pour déclencher la connexion à la base de données, par exemple depuis une librairie :
+
+```php
+/**
+* @var \CodeIgniter\Database\BaseConnection
+*/
+$db = \Config\Database::connect("cinna", true);
+if ($db) {
+    $db->query("set search_path = " . $_ENV["database.cinna.searchpath"]);
+} else {
+    $this->message->set(_("Connexion à la base utilisée pour enregistrer les paramètres CINNA impossible"), true);
+    defaultPage();
+}
+```
+Pour rattacher un modèle à cette connexion, il faut déclarer la variable $DBGroup en lui assignant le nom de la connexion :
+
+```php
+class Cinna extends PpciModel
+{
+    protected $DBGroup = 'cinna';
+
+    function __construct()
+    {
+        $this->table = "cinna";
+    (...)
+```
+
+CodeIgniter gérera alors correctement la connexion.
+
+:::
+
+::: {.content-visible when-profile="english"}
+
+## Managing the connection to another database
+
+Declaring the database in the file `app/Config/Database.php' : 
+
+```bash
+    public array $cinna = [
+        'DSN'          => '',
+        'hostname'     => 'localhost',
+        'username'     => '',
+        'password'     => '',
+        'database'     => 'estuaire_phy',
+        'DBDriver'     => 'Postgre',
+        'DBPrefix'     => '',
+        'pConnect'     => false,
+        'DBDebug'      => true,
+        'charset'      => 'utf8',
+        'DBCollat'     => 'utf8_general_ci',
+        'swapPre'      => '',
+        'encrypt'      => false,
+        'compress'     => false,
+        'strictOn'     => false,
+        'failover'     => [],
+        'port'         => 5432,
+        'numberNative' => false,
+        "searchpath"   => "cinna,public",
+    ];
+```
+Adapt the connection parameters in the `.env` file at the root of the application.
+
+To trigger the database connection, for example from a library :
+
+```php
+/**
+* @var \CodeIgniter\Database\BaseConnection
+*/
+$db = \Config\Database::connect("cinna", true);
+if ($db) {
+    $db->query("set search_path = " . $_ENV["database.cinna.searchpath"]);
+} else {
+    $this->message->set(_("Unable to connect to the database used to record Cinna data"), true);
+    defaultPage();
+}
+```
+
+To attach a model to this connection, you need to declare the variable $DBGroup and assign the name of the connection to it:
+
+```php
+class Cinna extends PpciModel
+{
+    protected $DBGroup = 'cinna';
+
+    function __construct()
+    {
+        $this->table = "cinna";
+    (...)
+```
+
+CodeIgniter will then manage the connection correctly.
+
+:::
+
