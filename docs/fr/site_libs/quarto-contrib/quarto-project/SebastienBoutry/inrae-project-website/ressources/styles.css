@@ -126,13 +126,13 @@ a {
 }
 
 .book-summary ul.summary li.active > a {
-  color: #A4C400; !important;
+  color: #A4C400 !important;
   background: 0 0;
   text-decoration: none;
 }
 
 div.sidebar-item-container .active, div.sidebar-item-container .show > .nav-link, div.sidebar-item-container .sidebar-link > code {
-  color: #D1041D
+  color: #D1041D;
   font-weight: bold;
 }
 
