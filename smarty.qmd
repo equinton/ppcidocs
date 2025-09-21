@@ -271,6 +271,7 @@ Pour chaque entrée, il est possible d'indiquer :
 - droits : les droits dont doit disposer l'utilisateur pour que l'entrée du menu soit affichée
 - onlynoconnect="1" : l'entrée n'est affichée que si l'utilisateur n'est pas connecté (utilisé pour afficher le bouton de connexion, notamment)
 - loginrequis="1" : l'entrée n'est affichée que si l'utilisateur est connecté
+- isdoc="1" : le lien va être générer en utilisant le radical décrit dans *app.docroot* concaténé au contenu de l'attribut *module* (ajout automatique du /), et déclenchera l'affichage dans un nouvel onglet. Ce mécanisme est utilisé pour la documentation externe.
 
 Seuls les trois premiers attributs sont obligatoires.
 
@@ -291,6 +292,7 @@ For each entry, it is possible to indicate:
 - rights: the rights that the user must have for the menu entry to be displayed
 - onlynoconnect="1": the entry is only displayed if the user is not logged in (used to display the login button, in particular)
 - loginrequis="1": the entry is only displayed if the user is logged in
+- isdoc="1": the link will be generated using the root described in *app.docroot* concatenated with the content of the *module* attribute (automatic addition of /), and will trigger display in a new tab. This mechanism is used for external documentation.
 
 Only the first three attributes are mandatory.
 

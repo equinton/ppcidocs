@@ -1,78 +1,76 @@
 ::: {.content-visible when-profile="french"}
-
 # Paramètres de l'application
 
 Les paramètres sont définis dans deux fichiers : `app/Config/App.php` et `vendor/equinton/ppci/src/Config/IdentificationConfig.php`.
 
 S'ils peuvent tous être modifiés lors de chaque implémentation en utilisant le fichier `.env`, à la racine de l'application, certains ne devraient pas être modifiés par ce mécanisme.
 
-Les paramètres dans le fichier .env sont préfixés soit par `app.`, soit par `Ppci\Config\IdentificationConfig.`, en fonction de leur origine. Le fichier _env_ contient l'ensemble des variables pouvant être modifiées lors de l'implémentation d'une instance du logiciel.
+Les paramètres dans le fichier .env sont préfixés soit par `app.`, soit par `Ppci\Config\IdentificationConfig.`, en fonction de leur origine. Le fichier *env* contient l'ensemble des variables pouvant être modifiées lors de l'implémentation d'une instance du logiciel.
 :::
 
 ::: {.content-visible when-profile="english"}
 # Application parameters
 
-The parameters are defined in two files: _app/Config/App.php_ and _vendor/equinton/ppci/src/Config/IdentificationConfig.php_.
+The parameters are defined in two files: *app/Config/App.php* and *vendor/equinton/ppci/src/Config/IdentificationConfig.php*.
 
 While they can all be modified during each implementation using the `.env` file at the root of the application, some should not be modified using this mechanism.
 
-Parameters in the .env file are prefixed with either `app.` or `Ppci\Config\IdentificationConfig.`, depending on their origin. The _env_ file contains all the variables that can be modified when an instance of the software is implemented.
+Parameters in the .env file are prefixed with either `app.` or `Ppci\Config\IdentificationConfig.`, depending on their origin. The *env* file contains all the variables that can be modified when an instance of the software is implemented.
 :::
 
 ::: {.content-visible when-profile="french"}
-
-
 ## Paramètres génériques
 
 | Paramètre (avec le radical utilisé dans le fichier .env) | Description | Valeur par défaut | Modifiable dans .env |
-| --- | --- | --- | --- |
+|------------------|------------------|------------------|------------------|
 | app.baseURL | Adresse de l'instance |   | obligatoire |
-| BASE\_DIR | variable utilisée dans .env, pour indiquer le chemin d'accès à l'application | p. e. "/var/www/collec2" | obligatoire |
-| FRONT\_DIR | variable utilisée dans .env, pour indiquer le chemin d'accès au dossier public, la base des pages web | ${BASE\_DIR}/public | en principe, non |
+| BASE_DIR | variable utilisée dans .env, pour indiquer le chemin d'accès à l'application | p\. e. "/var/www/collec2" | obligatoire |
+| FRONT_DIR | variable utilisée dans .env, pour indiquer le chemin d'accès au dossier public, la base des pages web | \${BASE_DIR}/public | en principe, non |
 | app.defaultLocale | Langue par défaut dans l'instance | fr | possible |
 | app.supportedLocales | Langues gérées par l'application | \['fr','en'\] | possible, sous réserve que d'autres langues soient intégrées dans le framework |
 | app.version | Version de l'application |   | jamais |
 | app.versionDate | Date de création de la version |   | jamais |
 | app.dbversion | Version de la base de données. La version doit également exister dans la table dbversion de la base de données |   | jamais |
-| databaseSchemaFile | Chemin où est placé le png décrivant les tables de la base de données | p. e. : ROOTPATH . "documentation/collec-schema.png" | jamais |
+| databaseSchemaFile | Chemin où est placé le png décrivant les tables de la base de données | p\. e. : ROOTPATH . "documentation/collec-schema.png" | jamais |
 | app.logDuration | Durée, en jours, de conservation des logs dans la table logs | 365 | possible |
-| app.privateKey | emplacement de la clé privée utilisée pour les opérations de chiffrement ou déchiffrement | p. e., ${BASE\_DIR}/id\_collec | possible |
-| app.pubKey | emplacement de la clé publique utilisée pour les opérations de chiffrement ou déchiffrement | p. e. ${BASE\_DIR}/id\_collec.pub | possible |
+| app.privateKey | emplacement de la clé privée utilisée pour les opérations de chiffrement ou déchiffrement | p\. e., \${BASE_DIR}/id_collec | possible |
+| app.pubKey | emplacement de la clé publique utilisée pour les opérations de chiffrement ou déchiffrement | p\. e. \${BASE_DIR}/id_collec.pub | possible |
 | session.expiration | Durée de la session, en secondes | 14400 (4 heures) | possible |
-| app.APPLI\_absolute\_session | Durée maxi de la session, en secondes | 36000 (10 heures) | possible |
+| app.APPLI_absolute_session | Durée maxi de la session, en secondes | 36000 (10 heures) | possible |
 | logger.threshold | Seuil de déclenchement des erreurs | 4 | jamais |
-| app.APP\_mail | email de l'application | mail@mysociety.com | obligatoire |
-| app.MAIL\_enabled | Si à 1, l'envoi de mails est activé | 1 | possible |
-| app.MAIL\_param.from | idem APP\_mail | mail@mysociety.com | obligatoire |
-| app.MAIL\_param.mailDebug | Si à 1, affiche le contenu du mail à l'écran plutôt que de l'envoyer | 0 | en développement uniquement |
+| app.APP_mail | email de l'application | mail\@mysociety.com | obligatoire |
+| app.MAIL_enabled | Si à 1, l'envoi de mails est activé | 1 | possible |
+| app.MAIL_param.from | idem APP_mail | mail\@mysociety.com | obligatoire |
+| app.MAIL_param.mailDebug | Si à 1, affiche le contenu du mail à l'écran plutôt que de l'envoyer | 0 | en développement uniquement |
+| app.docroot | URL de base de la doc en ligne |  | cf. [la configuration du menu](smarty.html#gestion-du-menu) |
 | app.checkRelease | Si à 1, interroge le serveur GIT (Github ou Gitlab) pour connaître la dernière version disponible, et si la version est différente de celle enregistrée (app.version), affiche un message à l'écran. Les paramètres spécifiques pour l'interrogation sont décrits dans le fichier App.php | 0 | possible |
-
 :::
 
 ::: {.content-visible when-profile="english"}
 ## Generic parameters
 
 | Parameter (with the radical used in the .env file) | Description | Default value | Modifiable in .env |
-| --- | --- | --- | --- |
-| app.baseURL | Instance address | | mandatory |
-| BASE\_DIR | variable used in .env, to indicate the path to the application | e.g. "/var/www/collec2" | mandatory |
-| FRONT\_DIR | variable used in .env, to indicate the path to the public folder, the base of web pages | ${BASE\_DIR}/public | in principle, no |
+|------------------|------------------|------------------|------------------|
+| app.baseURL | Instance address |  | mandatory |
+| BASE_DIR | variable used in .env, to indicate the path to the application | e.g. "/var/www/collec2" | mandatory |
+| FRONT_DIR | variable used in .env, to indicate the path to the public folder, the base of web pages | \${BASE_DIR}/public | in principle, no |
 | app.defaultLocale | Default language in the instance | fr | possible |
 | app.supportedLocales | Languages ​​managed by the application | \['fr','en'\] | possible, provided that other languages ​​are integrated into the framework |
-| app.version | Application version |   | never |
-| app.versionDate | Version creation date |   | never |
-| app.dbversion | Database version. The version must also exist in the database dbversion table |   | never |
+| app.version | Application version |  | never |
+| app.versionDate | Version creation date |  | never |
+| app.dbversion | Database version. The version must also exist in the database dbversion table |  | never |
 | databaseSchemaFile | Path where the png describing the database tables is placed | e.g.: ROOTPATH ​​. "documentation/collec-schema.png" | never |
 | app.logDuration | Duration, in days, to keep logs in the logs table | 365 | possible |
-| app.privateKey | location of the private key used for encryption or decryption operations | e.g., ${BASE\_DIR}/id\_collec | possible |
-| app.pubKey | location of the public key used for encryption or decryption operations | e.g. ${BASE\_DIR}/id\_collec.pub | possible |
+| app.privateKey | location of the private key used for encryption or decryption operations | e.g., \${BASE_DIR}/id_collec | possible |
+| app.pubKey | location of the public key used for encryption or decryption operations | e.g. \${BASE_DIR}/id_collec.pub | possible |
 | session.expiration | Session duration, in seconds | 14400 (4 hours) | possible |
-| app.APPLI\_absolute\_session | Maximum session duration, in seconds | 36000 (10 hours) | possible |
+| app.APPLI_absolute_session | Maximum session duration, in seconds | 36000 (10 hours) | possible |
 | logger.threshold | Error trigger threshold | 4 | never |
-| app.APP\_mail | application email | mail@mysociety.com | mandatory |
-| app.MAIL\_enabled | If set to 1, sending emails is enabled | 1 | possible |
-| app.MAIL\_param.from | same as APP\_mail | mail@mysociety.com | mandatory |
-| app.MAIL\_param.mailDebug | If set to 1, display the content of the email on the screen instead of sending it | 0 | development only |
+| app.APP_mail | application email | mail\@mysociety.com | mandatory |
+| app.MAIL_enabled | If set to 1, sending emails is enabled | 1 | possible |
+| app.MAIL_param.from | same as APP_mail | mail\@mysociety.com | mandatory |
+| app.MAIL_param.mailDebug | If set to 1, display the content of the email on the screen instead of sending it | 0 | development only |
+| app.docroot | URL root of the online doc |  | cf. [the menu configuration](smarty.html#menu-management) |
 | app.checkRelease | If set to 1, queries the GIT server (Github or Gitlab) for the latest version available, and if the version is different from the one saved (app.version), displays a message on the screen. The specific parameters for querying are described in the App.php file | 0 | possible |
 :::
 
@@ -80,14 +78,14 @@ Parameters in the .env file are prefixed with either `app.` or `Ppci\Config\Iden
 ## Paramètres de connexion à la base de données
 
 | Paramètre | Description | Valeur par défaut | Modifiable dans .env |
-| --- | --- | --- | --- |
+|------------------|------------------|------------------|------------------|
 | database.default.hostname | nom ou adresse du serveur | localhost | oui |
 | database.default.database | nom de la base de données |   | oui |
 | database.default.username | nom du compte de connexion |   | oui |
 | database.default.password | mot de passe associé |   | oui |
 | database.default.DBDriver | Nom du pilote | Postgre | non |
 | database.default.port | port de connexion | 5432 | oui |
-| database.default.searchpath | liste des schémas utilisés dans la base de données, séparés par une virgule | p. e. col,gacl,public | en principe, non |
+| database.default.searchpath | liste des schémas utilisés dans la base de données, séparés par une virgule | p\. e. col,gacl,public | en principe, non |
 | database.default.charset | jeu de caractères utilisé dans la base de données | utf8 | jamais |
 
 ## Paramètres liés à l'identification des utilisateurs
@@ -96,15 +94,14 @@ Voir la page [identification](identification.qmd).
 :::
 
 ::: {.content-visible when-profile="english"}
-
 ## Database Connection Parameters
 
 | Parameter | Description | Default | Can be changed in .env |
-| --- | --- | --- | --- |
+|------------------|------------------|------------------|------------------|
 | database.default.hostname | server name or address | localhost | yes |
-| database.default.database | database name |   | yes |
-| database.default.username | login account name |   | yes |
-| database.default.password | associated password | | yes |
+| database.default.database | database name |  | yes |
+| database.default.username | login account name |  | yes |
+| database.default.password | associated password |  | yes |
 | database.default.DBDriver | driver name | Postgre | no |
 | database.default.port | connection port | 5432 | yes |
 | database.default.searchpath | comma-separated list of schemas used in the database | e.g. col,gacl,public | normally no |
