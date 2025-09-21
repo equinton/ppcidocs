@@ -61,8 +61,8 @@ website:
         menu: 
           - text: Quarto
             href: https://quarto.org
-          - text: "INRAE"
-            href: https://www.inrae.fr/
+          ##- text: "INRAE"
+          #  href: https://www.inrae.fr/
   ## Footer
   ##page-footer:
     ##left: |
