@@ -291,6 +291,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>générer le menu de l’application</li>
 <li>rajouter divers contenus génériques, comme le titre de l’application.</li>
 </ul>
+<section id="function-help" class="level4">
+<h4 class="anchored" data-anchor-id="function-help">function help()</h4>
+<p>La fonction <code>help(_("adresse"))</code> permet de générer un lien (avec une icone) qui ouvrira la page d’aide en ligne correspondant à l’adresse. Le radical de l’aide en ligne est déclaré dans la variable <code>App-&gt;docroot</code>.</p>
+<p>Dans le modèle, il suffit d’insérer la variable <code>{$help}</code> pour que le lien soit inséré.</p>
+</section>
 </section>
 <section id="envoi-dun-fichier-binaire-au-navigateur" class="level3">
 <h3 class="anchored" data-anchor-id="envoi-dun-fichier-binaire-au-navigateur">Envoi d’un fichier binaire au navigateur</h3>

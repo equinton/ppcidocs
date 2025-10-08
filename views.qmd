@@ -28,6 +28,12 @@ Au moment du déclenchement de l'affichage, la classe va :
 - générer le menu de l'application
 - rajouter divers contenus génériques, comme le titre de l'application.
 
+#### function help()
+
+La fonction `help(_("adresse"))` permet de générer un lien (avec une icone) qui ouvrira la page d'aide en ligne correspondant à l'adresse. Le radical de l'aide en ligne est déclaré dans la variable `App->docroot`.
+
+Dans le modèle, il suffit d'insérer la variable `{$help}` pour que le lien soit inséré.
+
 ### Envoi d'un fichier binaire au navigateur
 
 `$view = service ("BinaryView");`
@@ -128,6 +134,12 @@ When the display is triggered, the class will:
 - display the messages stored in the `Message` class
 - generate the application menu
 - add various generic contents, such as the application title.
+
+#### function help()
+
+The `help(_("address"))` function generates a link (with an icon) that will open the online help page corresponding to the address. The root of the online help is declared in the `App->docroot` variable.
+
+In the template, simply insert the `{$help}` variable for the link to be inserted.
 
 ### Sending a binary file to the browser
 
