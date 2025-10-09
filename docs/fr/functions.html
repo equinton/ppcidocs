@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>PPCI - PrototypePHP for CodeIgniter</title>
+<title>functions – PPCI - PrototypePHP for CodeIgniter</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -95,7 +95,7 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link active" href="./index.html" aria-current="page"> <i class="bi bi-house-door-fill" role="img">
+    <a class="nav-link" href="./index.html"> <i class="bi bi-house-door-fill" role="img">
 </i> 
 <span class="menu-text">Home</span></a>
   </li>  
@@ -204,7 +204,22 @@ ul.task-list li input[type="checkbox"] {
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Sur cette page</h2>
+   
+  <ul>
+  <li><a href="#fonctions-et-services" id="toc-fonctions-et-services" class="nav-link active" data-scroll-target="#fonctions-et-services">Fonctions et services</a>
+  <ul class="collapse">
+  <li><a href="#services" id="toc-services" class="nav-link" data-scroll-target="#services">Services</a>
+  <ul class="collapse">
+  <li><a href="#services-génériques" id="toc-services-génériques" class="nav-link" data-scroll-target="#services-génériques">Services génériques</a></li>
+  <li><a href="#configurations" id="toc-configurations" class="nav-link" data-scroll-target="#configurations">Configurations</a></li>
+  <li><a href="#vues" id="toc-vues" class="nav-link" data-scroll-target="#vues">Vues</a></li>
+  </ul></li>
+  <li><a href="#fonctions" id="toc-fonctions" class="nav-link" data-scroll-target="#fonctions">Fonctions</a></li>
+  </ul></li>
+  </ul>
+</nav>
     <div class="quarto-margin-footer"><div class="margin-footer-item">
 <p>Made with <a href="https://github.com/SebastienBoutry/inrae-project-website"><img src="https://github.com/SebastienBoutry/inrae-project-website/blob/main/images/extension-logo.png?raw=true" class="img-fluid" width="50"></a></p>
 </div></div></div>
@@ -214,15 +229,74 @@ ul.task-list li input[type="checkbox"] {
 
 
 
-<p>PrototypePHP for CodeIgniter (PPCI) est un portage du <em>framework</em> <a href="https://github.com/equinton/prototypephp">https://github.com/equinton/prototypephp</a> développé à partir des années 2000 pour écrire divers applications web, dont <a href="https://www.collec-science.org">Collec-Science</a>.</p>
-<p>Pour faciliter la maintenance des applications web, le portage vers CodeIgniter de PrototypePHP a été entrepris en 2024. Il se présente sous la forme d’un composant additionnel. Il utilise la plupart des fonctionnalités de CodeIgniter (routes, filtres, services, accès aux bases de données, gestion des paramètres, etc.), à l’exception :</p>
+<section id="fonctions-et-services" class="level1">
+<h1>Fonctions et services</h1>
+<section id="services" class="level2">
+<h2 class="anchored" data-anchor-id="services">Services</h2>
+<p>Les services permettent de conserver la même instance d’une classe tout au long de l’exécution du script. Ils sont décrits dans <code>Ppci\Config\Services</code>.</p>
+<p>Ils s’appellent de la façon suivante :</p>
+<pre><code>$monService = service ('name');</code></pre>
+<p>La première fois que le code est appelé, la classe est instanciée. Ensuite, l’instance de classe est fournie, ce qui permet de conserver les mêmes paramètres.</p>
+<p>Trois types de services sont configurés : des services génériques, les services fournissant les paramètres de configuration, et les vues.</p>
+<section id="services-génériques" class="level3">
+<h3 class="anchored" data-anchor-id="services-génériques">Services génériques</h3>
+<section id="ppciinit" class="level4">
+<h4 class="anchored" data-anchor-id="ppciinit">PpciInit</h4>
+<p>Code utilisé systématiquement à l’appel d’une page.</p>
+</section>
+<section id="messageppci" class="level4">
+<h4 class="anchored" data-anchor-id="messageppci">MessagePpci</h4>
+<p>Classe permettant de stocker des messages, puis de les restituer. Deux fonctions sont utilisables pour les enregistrer :</p>
 <ul>
-<li>de l’affichage des pages web, qui reste dévolu au moteur de templates Smarty</li>
-<li>de la gestion de l’identification et des droits, PPCI étant à cet égard bien plus riche en terme de fonctionnalités, comme le support de multiples mécanismes d’identification (en base de données, LDAP, CAS, OIDC, TOTP, etc.) ou la gestion des droits.</li>
+<li><code>function set(string $value, bool $is_error = false)</code> : stocke un message. S’il s’agit d’une erreur, le message sera ensuite affiché en rouge</li>
+<li><code>function setSyslog($message, $is_error = false)</code> : enregistre un message dans les logs du système. En mode développement, le message est affiché également à l’écran</li>
 </ul>
-<p>Le composant est distribué sous licence MIT.</p>
+</section>
+<section id="log" class="level4">
+<h4 class="anchored" data-anchor-id="log">Log</h4>
+<p>Classe permettant d’enregistrer une information dans la table <em>gacl.log</em>. Une entrée peut être créée avec la fonction <code>$col-&gt;setLog($login, $module, $commentaire = null)</code>. La valeur login peut être récupérée à partir de <code>$_SESSION["login"]</code>. <code>$module</code> représente le nom de la fonction ou de l’appel à enregistrer, et <code>$commentaire</code> un contenu particulier à noter.</p>
+</section>
+<section id="locale" class="level4">
+<h4 class="anchored" data-anchor-id="locale">Locale</h4>
+<p>Classe permettant de paramétrer la langue à utiliser. Les libellés peuvent être modifiés avec la fonction <code>setLocale($locale)</code>. Par défaut, seuls “fr” et “en” sont actuellement supportés.</p>
+</section>
+</section>
+<section id="configurations" class="level3">
+<h3 class="anchored" data-anchor-id="configurations">Configurations</h3>
+<section id="dbparam" class="level4">
+<h4 class="anchored" data-anchor-id="dbparam">Dbparam</h4>
+<p>Classe contenant l’ensemble des paramètres stockés dans la table <em>dbparam</em>. Les paramètres sont accessibles avec l’attribut <code>$dbparam-&gt;params["nom_parametre"]</code>.</p>
+<p>Les paramètres sont également disponibles dans la variable <code>$_SESSION["dbparams"]</code>.</p>
+</section>
+<section id="appconfig" class="level4">
+<h4 class="anchored" data-anchor-id="appconfig">AppConfig</h4>
+<p>Contient les paramètres généraux de l’application (<code>App\Config\App</code>).</p>
+</section>
+<section id="identificationconfig" class="level4">
+<h4 class="anchored" data-anchor-id="identificationconfig">IdentificationConfig</h4>
+<p>Contient les paramètres liés à l’identification (<code>Ppci\Config\IdentificationConfig</code>).</p>
+</section>
+</section>
+<section id="vues" class="level3">
+<h3 class="anchored" data-anchor-id="vues">Vues</h3>
+<p>La description des vues peut être consultée <a href="./views.html">ici</a>.</p>
+</section>
+</section>
+<section id="fonctions" class="level2">
+<h2 class="anchored" data-anchor-id="fonctions">Fonctions</h2>
+<p>Les fonctions sont chargées automatiquement à partir de <code>ppci/Helpers/ppci_helper.php</code>.</p>
+<ul>
+<li><code>defaultPage()</code> : affiche la page d’accueil de l’application (sans redirection)</li>
+<li><code>getLineFeed()</code> : restitue le code de retour à la ligne en fonction du contexte : serveur web ou ligne de commande</li>
+<li><code>htmlDecode($content)</code> : fonction récursive permettant de décoder les caractères html (<em>htmlspecialchars_decode()</em>)</li>
+<li><code>printA($variable)</code> : affiche le contenu d’une variable. Pour les tableaux, affiche le contenu du tableau. Utilisé pour le débogage</li>
+<li><code>setlogRequest($request)</code> : écrit dans la table gacl.log la requête demandée</li>
+<li><code>test($var = "")</code> : affiche le mot “test” et le numéro de l’occurrence où la fonction a été appelée. Si <code>$var</code> est renseigné, affiche son contenu</li>
+</ul>
 
 
+</section>
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

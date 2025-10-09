@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>PPCI - PrototypePHP for CodeIgniter</title>
+<title>multi-instance – PPCI - PrototypePHP for CodeIgniter</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -19,6 +19,41 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -95,7 +130,7 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link active" href="./index.html" aria-current="page"> <i class="bi bi-house-door-fill" role="img">
+    <a class="nav-link" href="./index.html"> <i class="bi bi-house-door-fill" role="img">
 </i> 
 <span class="menu-text">Home</span></a>
   </li>  
@@ -204,7 +239,20 @@ ul.task-list li input[type="checkbox"] {
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Sur cette page</h2>
+   
+  <ul>
+  <li><a href="#gestion-du-multi-instances" id="toc-gestion-du-multi-instances" class="nav-link active" data-scroll-target="#gestion-du-multi-instances">Gestion du multi-instances</a>
+  <ul class="collapse">
+  <li><a href="#créer-le-dossier-dédié-à-linstance" id="toc-créer-le-dossier-dédié-à-linstance" class="nav-link" data-scroll-target="#créer-le-dossier-dédié-à-linstance">Créer le dossier dédié à l’instance</a></li>
+  <li><a href="#mettre-à-niveau-du-site-virtuel-apache" id="toc-mettre-à-niveau-du-site-virtuel-apache" class="nav-link" data-scroll-target="#mettre-à-niveau-du-site-virtuel-apache">Mettre à niveau du site virtuel Apache</a></li>
+  <li><a href="#modifier-les-paramètres" id="toc-modifier-les-paramètres" class="nav-link" data-scroll-target="#modifier-les-paramètres">Modifier les paramètres</a></li>
+  <li><a href="#adapter-les-scripts-lancés-en-ligne-de-commande" id="toc-adapter-les-scripts-lancés-en-ligne-de-commande" class="nav-link" data-scroll-target="#adapter-les-scripts-lancés-en-ligne-de-commande">Adapter les scripts lancés en ligne de commande</a></li>
+  <li><a href="#technique-modifications-apportées-au-code-pour-gérer-le-multi-instances" id="toc-technique-modifications-apportées-au-code-pour-gérer-le-multi-instances" class="nav-link" data-scroll-target="#technique-modifications-apportées-au-code-pour-gérer-le-multi-instances">Technique : modifications apportées au code pour gérer le multi-instances</a></li>
+  </ul></li>
+  </ul>
+</nav>
     <div class="quarto-margin-footer"><div class="margin-footer-item">
 <p>Made with <a href="https://github.com/SebastienBoutry/inrae-project-website"><img src="https://github.com/SebastienBoutry/inrae-project-website/blob/main/images/extension-logo.png?raw=true" class="img-fluid" width="50"></a></p>
 </div></div></div>
@@ -214,15 +262,95 @@ ul.task-list li input[type="checkbox"] {
 
 
 
-<p>PrototypePHP for CodeIgniter (PPCI) est un portage du <em>framework</em> <a href="https://github.com/equinton/prototypephp">https://github.com/equinton/prototypephp</a> développé à partir des années 2000 pour écrire divers applications web, dont <a href="https://www.collec-science.org">Collec-Science</a>.</p>
-<p>Pour faciliter la maintenance des applications web, le portage vers CodeIgniter de PrototypePHP a été entrepris en 2024. Il se présente sous la forme d’un composant additionnel. Il utilise la plupart des fonctionnalités de CodeIgniter (routes, filtres, services, accès aux bases de données, gestion des paramètres, etc.), à l’exception :</p>
-<ul>
-<li>de l’affichage des pages web, qui reste dévolu au moteur de templates Smarty</li>
-<li>de la gestion de l’identification et des droits, PPCI étant à cet égard bien plus riche en terme de fonctionnalités, comme le support de multiples mécanismes d’identification (en base de données, LDAP, CAS, OIDC, TOTP, etc.) ou la gestion des droits.</li>
-</ul>
-<p>Le composant est distribué sous licence MIT.</p>
+<section id="gestion-du-multi-instances" class="level1">
+<h1>Gestion du multi-instances</h1>
+<section id="créer-le-dossier-dédié-à-linstance" class="level2">
+<h2 class="anchored" data-anchor-id="créer-le-dossier-dédié-à-linstance">Créer le dossier dédié à l’instance</h2>
+<p>Créez un dossier dédié à l’instance dans l’arborescence du serveur, par exemple <code>/var/www/app/instancename</code>, puis créez les fichiers nécessaires pour assurer la séparation des instances :</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Dossier contenant le code de l'application</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="va">APP</span><span class="op">=</span>/var/www/app</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Dossier comprenant les paramètres spécifiques de l'instance</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="va">FOLDER</span><span class="op">=</span><span class="st">"/var/www/instances/instancename"</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-P</span> <span class="va">$FOLDER</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">chmod</span> g+r <span class="va">$FOLDER</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> <span class="va">$FOLDER</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> temp</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Nouvelles cles cryptographiques</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="ex">openssl</span> genpkey <span class="at">-algorithm</span> rsa <span class="at">-out</span> id_app <span class="at">-pkeyopt</span> rsa_keygen_bits:2048</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="ex">openssl</span> rsa <span class="at">-in</span> id_app <span class="at">-pubout</span> <span class="at">-out</span> id_app.pub</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Recopie du fichier de parametrage</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="fu">cp</span> <span class="va">$APP</span>/env .env</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Mise à niveau des droits</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="fu">chmod</span> <span class="at">-R</span> g+r .</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="fu">chmod</span> g+w temp</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="fu">chown</span> www-data id_app</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<p>le dossier <em>temp</em> est le dossier dans lequel l’application va générer tous les fichiers avant leur envoi au navigateur. Pour éviter les risques de collision entre deux instances, il est vivement recommandé que chacune dispose de son propre espace.</p>
+</section>
+<section id="mettre-à-niveau-du-site-virtuel-apache" class="level2">
+<h2 class="anchored" data-anchor-id="mettre-à-niveau-du-site-virtuel-apache">Mettre à niveau du site virtuel Apache</h2>
+<p>Rajoutez, dans la description du site virtuel (fichier <code>moninstance.conf</code>, dans <code>/etc/apache2/sites-available</code>) :</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode apache code-with-copy"><code class="sourceCode apache"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">&lt;VirtualHost</span><span class="at"> *:443</span><span class="fu">&gt;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    (...)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    DocumentRoot<span class="st"> /var/www/app</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    setenv<span class="st"> envPath /var/www/instances/instancename</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    (...)  </span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="modifier-les-paramètres" class="level2">
+<h2 class="anchored" data-anchor-id="modifier-les-paramètres">Modifier les paramètres</h2>
+<p>Éditez le fichier <code>/var/www/instances/instancename/.env</code> :</p>
+<pre class="env"><code>app.baseURL = 'https://myinstance.mysociety.com'
+BASE_DIR = "/var/www/instances/instancename"
+app.privateKey = ${BASE_DIR}/id_app
+app.pubKey = ${BASE_DIR}/id_app.pub
+app.APP_temp = ${BASE_DIR}/temp
+database.default.hostname = localhost
+database.default.database = dbname_instance
+database.default.username = login_instance
+database.default.password = password_instance</code></pre>
+<p>Vérifiez également le mode d’identification par défaut, et adaptez-le le cas échéant.</p>
+</section>
+<section id="adapter-les-scripts-lancés-en-ligne-de-commande" class="level2">
+<h2 class="anchored" data-anchor-id="adapter-les-scripts-lancés-en-ligne-de-commande">Adapter les scripts lancés en ligne de commande</h2>
+<p>Si vous utilisez des scripts qui sont exécutés en ligne de commande, par exemple programmés à horaires réguliers (crontab), vous devrez modifier le script de lancement :</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">envPath</span><span class="op">=</span>/var/www/instances/instancename</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> <span class="va">$envPath</span>/public</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="ex">php</span> index.php monscript</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<p>où <em>monscript</em> correspond à la route à appeler.</p>
+<p>La variable <code>envPath</code> est disponible dans <code>$_SERVER</code>.</p>
+</section>
+<section id="technique-modifications-apportées-au-code-pour-gérer-le-multi-instances" class="level2">
+<h2 class="anchored" data-anchor-id="technique-modifications-apportées-au-code-pour-gérer-le-multi-instances">Technique : modifications apportées au code pour gérer le multi-instances</h2>
+<p>La fin du fichier index.php est modifié ainsi :</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">//exit(CodeIgniter\Boot::bootWeb($paths));</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="kw">require</span> <span class="cn">FCPATH</span><span class="op">.</span> <span class="st">'../vendor/equinton/ppci/src/BootApp.php'</span><span class="ot">;</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="cf">exit</span> (CodeIgniter\BootApp::bootweb(<span class="va">$paths</span>))<span class="ot">;</span></span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Et la classe <code>BootApp</code> contient ce code :</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;?php</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="kw">namespace</span> CodeIgniter<span class="ot">;</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> CodeIgniter\Boot<span class="ot">;</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> Config\Paths<span class="ot">;</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> CodeIgniter\Config\DotEnv<span class="ot">;</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> BootApp <span class="kw">extends</span> Boot {</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    <span class="kw">protected</span> <span class="kw">static</span> <span class="kw">function</span> loadDotEnv(Paths <span class="va">$paths</span>)<span class="ot">:</span> <span class="dt">void</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    {</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>        <span class="kw">require_once</span> <span class="va">$paths</span>-&gt;systemDirectory <span class="op">.</span> <span class="st">'/Config/DotEnv.php'</span><span class="ot">;</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (<span class="fu">is_file</span>(<span class="va">$file</span> <span class="op">=</span> <span class="va">$_SERVER</span>[<span class="st">"envPath"</span>] <span class="op">.</span> <span class="cn">DIRECTORY_SEPARATOR</span> <span class="op">.</span> <span class="st">".env"</span>) <span class="op">&amp;&amp;</span> <span class="fu">is_readable</span>(<span class="va">$file</span>)) {</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>            (<span class="kw">new</span> DotEnv(<span class="va">$_SERVER</span>[<span class="st">"envPath"</span>]<span class="ot">,</span><span class="st">".env"</span>))-&gt;load()<span class="ot">;</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>        } <span class="cf">else</span> {</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>            (<span class="kw">new</span> DotEnv(<span class="va">$paths</span>-&gt;appDirectory <span class="op">.</span> <span class="st">'/../'</span>))-&gt;load()<span class="ot">;</span></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>Attention :</strong> l’utilisation d’un fichier .env placé ailleurs qu’à la racine de l’application empêche le fonctionnement des outils de débogage de CodeIgniter (mode développement).</p>
 
 
+</section>
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

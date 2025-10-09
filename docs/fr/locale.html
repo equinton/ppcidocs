@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>PPCI - PrototypePHP for CodeIgniter</title>
+<title>locale – PPCI - PrototypePHP for CodeIgniter</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -19,6 +19,41 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -95,7 +130,7 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link active" href="./index.html" aria-current="page"> <i class="bi bi-house-door-fill" role="img">
+    <a class="nav-link" href="./index.html"> <i class="bi bi-house-door-fill" role="img">
 </i> 
 <span class="menu-text">Home</span></a>
   </li>  
@@ -204,7 +239,16 @@ ul.task-list li input[type="checkbox"] {
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Sur cette page</h2>
+   
+  <ul>
+  <li><a href="#support-des-langues" id="toc-support-des-langues" class="nav-link active" data-scroll-target="#support-des-langues">Support des langues</a>
+  <ul class="collapse">
+  <li><a href="#mettre-en-place-les-traductions" id="toc-mettre-en-place-les-traductions" class="nav-link" data-scroll-target="#mettre-en-place-les-traductions">Mettre en place les traductions</a></li>
+  </ul></li>
+  </ul>
+</nav>
     <div class="quarto-margin-footer"><div class="margin-footer-item">
 <p>Made with <a href="https://github.com/SebastienBoutry/inrae-project-website"><img src="https://github.com/SebastienBoutry/inrae-project-website/blob/main/images/extension-logo.png?raw=true" class="img-fluid" width="50"></a></p>
 </div></div></div>
@@ -214,15 +258,40 @@ ul.task-list li input[type="checkbox"] {
 
 
 
-<p>PrototypePHP for CodeIgniter (PPCI) est un portage du <em>framework</em> <a href="https://github.com/equinton/prototypephp">https://github.com/equinton/prototypephp</a> développé à partir des années 2000 pour écrire divers applications web, dont <a href="https://www.collec-science.org">Collec-Science</a>.</p>
-<p>Pour faciliter la maintenance des applications web, le portage vers CodeIgniter de PrototypePHP a été entrepris en 2024. Il se présente sous la forme d’un composant additionnel. Il utilise la plupart des fonctionnalités de CodeIgniter (routes, filtres, services, accès aux bases de données, gestion des paramètres, etc.), à l’exception :</p>
+<section id="support-des-langues" class="level1">
+<h1>Support des langues</h1>
+<p>Actuellement, le moteur ne gère que le français (langue par défaut) et l’anglais.</p>
+<p>Les traductions sont réalisées avec <em>gettext</em>. Elles sont stockées dans <code>app/Language/locales</code>, avec :</p>
 <ul>
-<li>de l’affichage des pages web, qui reste dévolu au moteur de templates Smarty</li>
-<li>de la gestion de l’identification et des droits, PPCI étant à cet égard bien plus riche en terme de fonctionnalités, comme le support de multiples mécanismes d’identification (en base de données, LDAP, CAS, OIDC, TOTP, etc.) ou la gestion des droits.</li>
+<li>à la racine :
+<ul>
+<li><em>lang.po</em> : fichier brut contenant les traductions</li>
+<li><em>generate_po.sh</em> : script récupérant les libellés à traduire dans les fichiers php, les templates Smarty et dans le menu (fichier xml) et créant le fichier <em>lang.po</em></li>
+<li>compile.sh : script créant le fichier lang.mo (compilé) à partir des traductions présentes dans <em>lang.po</em>, et recopiant ce fichier dans le sous-dossier suivant</li>
+</ul></li>
+<li><em>en/LC_MESSAGES</em> : dossier correspondant à la langue à afficher, qui contient le fichier <em>lang.mo</em>.</li>
 </ul>
-<p>Le composant est distribué sous licence MIT.</p>
+<section id="mettre-en-place-les-traductions" class="level2">
+<h2 class="anchored" data-anchor-id="mettre-en-place-les-traductions">Mettre en place les traductions</h2>
+<p>Le serveur doit être configuré pour supporter la langue à afficher. Pour cela :</p>
+<ul>
+<li>éditez le fichier <code>/etc/locale.gen</code></li>
+<li>décommentez la ligne <code>en_GB.UTF-8</code></li>
+<li>lancez ces commandes :</li>
+</ul>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">locale-gen</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">systemctl</span> restart apache2</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Cette opération n’est à réaliser qu’une seule fois.</p>
+<p>Pour créer les traductions :</p>
+<ul>
+<li>lancez le script <code>generate_po.sh</code> pour créer le fichier <em>lang.po</em>. Les anciennes traductions sont conservées.</li>
+<li>éditez le fichier <em>lang.po</em> avec le programme <em>poedit</em></li>
+<li>compilez le fichier avec le script <code>compile.sh</code>. Le script va générer le fichier <em>lang.mo</em>, puis le recopier dans le dossier <em>en/LC_MESSAGES</em></li>
+</ul>
 
 
+</section>
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

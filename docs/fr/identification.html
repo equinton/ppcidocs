@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>PPCI - PrototypePHP for CodeIgniter</title>
+<title>identification – PPCI - PrototypePHP for CodeIgniter</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -95,7 +95,7 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link active" href="./index.html" aria-current="page"> <i class="bi bi-house-door-fill" role="img">
+    <a class="nav-link" href="./index.html"> <i class="bi bi-house-door-fill" role="img">
 </i> 
 <span class="menu-text">Home</span></a>
   </li>  
@@ -204,7 +204,28 @@ ul.task-list li input[type="checkbox"] {
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Sur cette page</h2>
+   
+  <ul>
+  <li><a href="#gestion-de-lidentification" id="toc-gestion-de-lidentification" class="nav-link active" data-scroll-target="#gestion-de-lidentification">Gestion de l’identification</a>
+  <ul class="collapse">
+  <li><a href="#paramètres-spécifiques-pour-chaque-type-didentification" id="toc-paramètres-spécifiques-pour-chaque-type-didentification" class="nav-link" data-scroll-target="#paramètres-spécifiques-pour-chaque-type-didentification">Paramètres spécifiques pour chaque type d’identification</a>
+  <ul class="collapse">
+  <li><a href="#identification-en-base-de-données" id="toc-identification-en-base-de-données" class="nav-link" data-scroll-target="#identification-en-base-de-données">Identification en base de données</a></li>
+  <li><a href="#identification-ldap" id="toc-identification-ldap" class="nav-link" data-scroll-target="#identification-ldap">Identification LDAP</a></li>
+  <li><a href="#icône-pour-le-bouton-didentification-cas-bdd-ou-oidc-bdd" id="toc-icône-pour-le-bouton-didentification-cas-bdd-ou-oidc-bdd" class="nav-link" data-scroll-target="#icône-pour-le-bouton-didentification-cas-bdd-ou-oidc-bdd">Icône pour le bouton d’identification (CAS-BDD ou OIDC-BDD)</a></li>
+  </ul></li>
+  <li><a href="#identification-auprès-de-serveurs-dédiés-header-cas-oidc" id="toc-identification-auprès-de-serveurs-dédiés-header-cas-oidc" class="nav-link" data-scroll-target="#identification-auprès-de-serveurs-dédiés-header-cas-oidc">Identification auprès de serveurs dédiés (HEADER, CAS, OIDC)</a>
+  <ul class="collapse">
+  <li><a href="#paramètres-spécifiques-de-lidentification-cas" id="toc-paramètres-spécifiques-de-lidentification-cas" class="nav-link" data-scroll-target="#paramètres-spécifiques-de-lidentification-cas">Paramètres spécifiques de l’identification CAS</a></li>
+  <li><a href="#identification-oidc" id="toc-identification-oidc" class="nav-link" data-scroll-target="#identification-oidc">Identification OIDC</a></li>
+  <li><a href="#identification-header" id="toc-identification-header" class="nav-link" data-scroll-target="#identification-header">Identification HEADER</a></li>
+  </ul></li>
+  <li><a href="#gestion-de-laccès-aux-modules-dadministration" id="toc-gestion-de-laccès-aux-modules-dadministration" class="nav-link" data-scroll-target="#gestion-de-laccès-aux-modules-dadministration">Gestion de l’accès aux modules d’administration</a></li>
+  </ul></li>
+  </ul>
+</nav>
     <div class="quarto-margin-footer"><div class="margin-footer-item">
 <p>Made with <a href="https://github.com/SebastienBoutry/inrae-project-website"><img src="https://github.com/SebastienBoutry/inrae-project-website/blob/main/images/extension-logo.png?raw=true" class="img-fluid" width="50"></a></p>
 </div></div></div>
@@ -214,15 +235,122 @@ ul.task-list li input[type="checkbox"] {
 
 
 
-<p>PrototypePHP for CodeIgniter (PPCI) est un portage du <em>framework</em> <a href="https://github.com/equinton/prototypephp">https://github.com/equinton/prototypephp</a> développé à partir des années 2000 pour écrire divers applications web, dont <a href="https://www.collec-science.org">Collec-Science</a>.</p>
-<p>Pour faciliter la maintenance des applications web, le portage vers CodeIgniter de PrototypePHP a été entrepris en 2024. Il se présente sous la forme d’un composant additionnel. Il utilise la plupart des fonctionnalités de CodeIgniter (routes, filtres, services, accès aux bases de données, gestion des paramètres, etc.), à l’exception :</p>
+<section id="gestion-de-lidentification" class="level1">
+<h1>Gestion de l’identification</h1>
+<p>PPCI propose plusieurs mécanismes pour gérer l’identification des utilisateurs :</p>
 <ul>
-<li>de l’affichage des pages web, qui reste dévolu au moteur de templates Smarty</li>
-<li>de la gestion de l’identification et des droits, PPCI étant à cet égard bien plus riche en terme de fonctionnalités, comme le support de multiples mécanismes d’identification (en base de données, LDAP, CAS, OIDC, TOTP, etc.) ou la gestion des droits.</li>
+<li>stockage des comptes dans la base de données (BDD)</li>
+<li>identification auprès d’un serveur LDAP (LDAP)</li>
+<li>identification auprès d’un serveur <em>Common Access Service</em> (CAS)</li>
+<li>identification auprès d’un serveur <em>OpenID Connect</em> (OIDC)</li>
+<li>identification fournie par le serveur web, pour utiliser des mécanismes Shibboleth (mode <em>Mellon</em> d’Apache par exemple) (HEADER)</li>
+<li>des mécanismes mixtes, avec utilisation de serveurs tiers et stockage en base de données pour les comptes non gérés autrement :
+<ul>
+<li>LDAP-BDD : test de l’identification auprès de l’annuaire LDAP, et en cas d’échec, auprès de la base de données</li>
+<li>CAS-BDD et OIDC-BDD : un bouton permet de sélectionner l’identification auprès du serveur considéré</li>
+</ul></li>
 </ul>
-<p>Le composant est distribué sous licence MIT.</p>
+<p>En outre, les utilisateurs peuvent activer une double identification TOTP. Celle-ci est d’ailleurs obligatoire pour accéder aux modules d’administration.</p>
+<p>À noter que <strong>l’identification LDAP est aujourd’hui considérée comme obsolète</strong>. Il vaut mieux se tourner vers des services OIDC ou CAS, quand ceux-ci sont disponibles.</p>
+<section id="paramètres-spécifiques-pour-chaque-type-didentification" class="level2">
+<h2 class="anchored" data-anchor-id="paramètres-spécifiques-pour-chaque-type-didentification">Paramètres spécifiques pour chaque type d’identification</h2>
+<section id="identification-en-base-de-données" class="level3">
+<h3 class="anchored" data-anchor-id="identification-en-base-de-données">Identification en base de données</h3>
+<p>Les paramètres sont définis dans <code>Ppci\Config\IdentificationConfig</code>.</p>
+<ul>
+<li>CONNECTION_max_attempts : en cas d’échec de connexion (par défaut 5), le compte sera bloqué pendant la durée spécifiée dans :
+<ul>
+<li><em>CONNECTION_blocking_duration</em> (par défaut, 600 secondes). À noter que la tentative de connexion pendant cette durée réinitialise le compteur à zéro</li>
+</ul></li>
+<li><em>APP_passwordMinLength</em> : longueur minimum du mot de passe</li>
+<li><em>APPLI_lostPassword</em> : si positionné par 1 (défaut), l’utilisateur pourra demander à réinitialiser son mot de passe, sous réserve que son email soit renseigné</li>
+<li><em>tokenIdentityValidity</em> : durée de validité du jeton généré lors de la connexion BDD ou LDAP, pour éviter d’avoir à se réidentifier pendant la journée. Par défaut, 10 heures.</li>
+</ul>
+</section>
+<section id="identification-ldap" class="level3">
+<h3 class="anchored" data-anchor-id="identification-ldap">Identification LDAP</h3>
+<p>Les variables sont définies dans <code>Ppci\Config\IdentificationConfig.LDAP</code>.</p>
+<ul>
+<li><em>address</em> : adresse du serveur LDAP</li>
+<li><em>port</em> : port de connexion</li>
+<li><em>rdn</em> : compte de connexion pour interroger l’annuaire, si nécessaire</li>
+<li><em>basedn</em> : base de recherche des comptes</li>
+<li><em>user_attrib</em> : attribut contenant l’identifiant de l’utilisateur (uid)</li>
+<li><em>v3</em> : version 3 de l’annuaire, positionné par défaut <em>true</em></li>
+<li><em>tls</em> : mettre à <em>true</em> pour activer la connexion <em>tls</em></li>
+<li><em>upn_suffix</em> : suffixe upn, nécessaire dans certains cas pour Active Directory</li>
+<li><em>groupSupport</em> : si positionné à <em>true</em>, les groupes seront récupérés depuis l’annuaire pour alimenter le module de gestion des droits</li>
+<li><em>groupAttrib</em> : nom de l’attribut comprenant les groupes de l’utilisateurs</li>
+<li><em>commonNameAttrib</em> : nom de l’attribut comprenant le nom complet de l’utilisateur</li>
+<li><em>mailAttrib</em> : nom de l’attribut comprenant l’email de l’utilisateur</li>
+<li><em>attributgroupname</em> : nom de l’attribut comprenant le nom du groupe</li>
+<li><em>attributloginname</em> : nom de l’attribut comprenant l’uid du membre</li>
+<li><em>basedngroup</em> : chemin de recherche des groupes</li>
+<li><em>timeout</em> : time-out de recherche dans l’annuaire (positionné à 2 secondes par défaut)</li>
+<li><em>ldapnoanonymous</em> : si positionné à <em>true</em>, l’interrogation de l’annuaire pour récupérer les groupes impose une connexion
+<ul>
+<li><em>ldaplogin</em> : login de connexion</li>
+<li><em>ldappassword</em> : mot de passe associé</li>
+</ul></li>
+</ul>
+</section>
+<section id="icône-pour-le-bouton-didentification-cas-bdd-ou-oidc-bdd" class="level3">
+<h3 class="anchored" data-anchor-id="icône-pour-le-bouton-didentification-cas-bdd-ou-oidc-bdd">Icône pour le bouton d’identification (CAS-BDD ou OIDC-BDD)</h3>
+<p>Une icône est rajoutée sur le bouton permettant d’activer l’identification auprès du serveur CAS ou OIDC : <code>Ppci\Config\IdentificationConfig.identificationLogo = "${FRONT_DIR}/favicon.png"</code></p>
+</section>
+</section>
+<section id="identification-auprès-de-serveurs-dédiés-header-cas-oidc" class="level2">
+<h2 class="anchored" data-anchor-id="identification-auprès-de-serveurs-dédiés-header-cas-oidc">Identification auprès de serveurs dédiés (HEADER, CAS, OIDC)</h2>
+<p>Les paramètres sont définis dans <code>Ppci\Config\IdentificationConfig.XX</code>, où XX doit être remplacé par CAS, OIDC ou HEADER.</p>
+<p>Paramètres généraux :</p>
+<ul>
+<li><em>mail</em> : attribut comprenant l’email</li>
+<li><em>firstname</em> : attribut comprenant le prénom</li>
+<li><em>lastname</em> : attribut comprenant le nom de famille</li>
+<li><em>name</em> : attribut comprenant le nom complet</li>
+<li><em>groups</em> : attribut comprenant les groupes d’appartenance des utilisateurs</li>
+<li><em>getGroups</em> : si positionné à 1 (défaut), les groupes de l’utilisateur fournis par le serveur d’identification sont traités</li>
+</ul>
+<section id="paramètres-spécifiques-de-lidentification-cas" class="level3">
+<h3 class="anchored" data-anchor-id="paramètres-spécifiques-de-lidentification-cas">Paramètres spécifiques de l’identification CAS</h3>
+<ul>
+<li><em>address</em> : adresse du serveur CAS, par exemple : <em>monserveur.society.com</em></li>
+<li><em>uri</em> : dossier d’accès à l’identification. Par défaut : <em>/cas</em></li>
+<li><em>port</em> : par défaut, 443</li>
+<li><em>debug</em> : si positionné à <em>true</em> ou <em>1</em>, les traces sont stockées dans le fichier <code>writable/logs/cas.log</code></li>
+<li><em>CApath</em> : chemin d’accès au certificat permettant de valider le serveur CAS. S’il n’est pas renseigné, le serveur CAS ne sera pas vérifié (déconseillé en production)</li>
+</ul>
+</section>
+<section id="identification-oidc" class="level3">
+<h3 class="anchored" data-anchor-id="identification-oidc">Identification OIDC</h3>
+<ul>
+<li><em>name</em> : code du provider</li>
+<li><em>provider</em> : adresse web du provider (doit commencer par <em>https://</em>)</li>
+<li><em>clientId</em> : code fourni par le provider</li>
+<li><em>clientSecret</em> : clé secrète fournie par le provider</li>
+<li><em>scopeGroup</em> : nom du <em>scope</em> OIDC qui contient les attributs secondaires (par défaut : <em>affectation</em>)</li>
+</ul>
+</section>
+<section id="identification-header" class="level3">
+<h3 class="anchored" data-anchor-id="identification-header">Identification HEADER</h3>
+<ul>
+<li><em>login</em> : nom de l’attribut de <code>$_SERVER</code> contenant le login, renvoyé par le serveur Apache</li>
+<li><em>organizationGranted</em> : tableau contenant le code ou le nom des organismes autorisés. Si ce tableau est renseigné, et si un nouvel utilisateur n’appartient pas à une des organisations indiquées (attribut <em>organization</em>), la création de son compte ne sera pas effectuée</li>
+<li><em>groupsGranted</em> : tableau contenant la liste des groupes autorisés. Si un utilisateur se connecte pour la première fois et que son groupe (ou un de ses groupes) appartient à la liste des groupes autorisés, son compte sera activé automatiquement. Dans le cas contraire, son compte sera désactivé, et un email est envoyé aux administrateurs pour les inviter à activer le compte.</li>
+</ul>
+</section>
+</section>
+<section id="gestion-de-laccès-aux-modules-dadministration" class="level2">
+<h2 class="anchored" data-anchor-id="gestion-de-laccès-aux-modules-dadministration">Gestion de l’accès aux modules d’administration</h2>
+<p>Les paramètres sont accessibles depuis <code>Ppci\Config\IdentificationConfig</code>.</p>
+<ul>
+<li><em>adminSessionDuration</em> : durée pendant laquelle l’identification reste valide pour accéder aux modules d’administration. Par défaut, 10’.</li>
+<li><em>disableTotpToAdmin</em> : si positionné à 1, désactive la double-identification pour accéder aux modules d’administration. Ne devrait pas être utilisé en production !</li>
+</ul>
 
 
+</section>
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

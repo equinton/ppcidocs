@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>PPCI - PrototypePHP for CodeIgniter</title>
+<title>parameters – PPCI - PrototypePHP for CodeIgniter</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -95,7 +95,7 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link active" href="./index.html" aria-current="page"> <i class="bi bi-house-door-fill" role="img">
+    <a class="nav-link" href="./index.html"> <i class="bi bi-house-door-fill" role="img">
 </i> 
 <span class="menu-text">Home</span></a>
   </li>  
@@ -204,7 +204,18 @@ ul.task-list li input[type="checkbox"] {
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Sur cette page</h2>
+   
+  <ul>
+  <li><a href="#paramètres-de-lapplication" id="toc-paramètres-de-lapplication" class="nav-link active" data-scroll-target="#paramètres-de-lapplication">Paramètres de l’application</a>
+  <ul class="collapse">
+  <li><a href="#paramètres-génériques" id="toc-paramètres-génériques" class="nav-link" data-scroll-target="#paramètres-génériques">Paramètres génériques</a></li>
+  <li><a href="#paramètres-de-connexion-à-la-base-de-données" id="toc-paramètres-de-connexion-à-la-base-de-données" class="nav-link" data-scroll-target="#paramètres-de-connexion-à-la-base-de-données">Paramètres de connexion à la base de données</a></li>
+  <li><a href="#paramètres-liés-à-lidentification-des-utilisateurs" id="toc-paramètres-liés-à-lidentification-des-utilisateurs" class="nav-link" data-scroll-target="#paramètres-liés-à-lidentification-des-utilisateurs">Paramètres liés à l’identification des utilisateurs</a></li>
+  </ul></li>
+  </ul>
+</nav>
     <div class="quarto-margin-footer"><div class="margin-footer-item">
 <p>Made with <a href="https://github.com/SebastienBoutry/inrae-project-website"><img src="https://github.com/SebastienBoutry/inrae-project-website/blob/main/images/extension-logo.png?raw=true" class="img-fluid" width="50"></a></p>
 </div></div></div>
@@ -214,15 +225,228 @@ ul.task-list li input[type="checkbox"] {
 
 
 
-<p>PrototypePHP for CodeIgniter (PPCI) est un portage du <em>framework</em> <a href="https://github.com/equinton/prototypephp">https://github.com/equinton/prototypephp</a> développé à partir des années 2000 pour écrire divers applications web, dont <a href="https://www.collec-science.org">Collec-Science</a>.</p>
-<p>Pour faciliter la maintenance des applications web, le portage vers CodeIgniter de PrototypePHP a été entrepris en 2024. Il se présente sous la forme d’un composant additionnel. Il utilise la plupart des fonctionnalités de CodeIgniter (routes, filtres, services, accès aux bases de données, gestion des paramètres, etc.), à l’exception :</p>
-<ul>
-<li>de l’affichage des pages web, qui reste dévolu au moteur de templates Smarty</li>
-<li>de la gestion de l’identification et des droits, PPCI étant à cet égard bien plus riche en terme de fonctionnalités, comme le support de multiples mécanismes d’identification (en base de données, LDAP, CAS, OIDC, TOTP, etc.) ou la gestion des droits.</li>
-</ul>
-<p>Le composant est distribué sous licence MIT.</p>
+<section id="paramètres-de-lapplication" class="level1">
+<h1>Paramètres de l’application</h1>
+<p>Les paramètres sont définis dans deux fichiers : <code>app/Config/App.php</code> et <code>vendor/equinton/ppci/src/Config/IdentificationConfig.php</code>.</p>
+<p>S’ils peuvent tous être modifiés lors de chaque implémentation en utilisant le fichier <code>.env</code>, à la racine de l’application, certains ne devraient pas être modifiés par ce mécanisme.</p>
+<p>Les paramètres dans le fichier .env sont préfixés soit par <code>app.</code>, soit par <code>Ppci\Config\IdentificationConfig.</code>, en fonction de leur origine. Le fichier <em>env</em> contient l’ensemble des variables pouvant être modifiées lors de l’implémentation d’une instance du logiciel.</p>
+<section id="paramètres-génériques" class="level2">
+<h2 class="anchored" data-anchor-id="paramètres-génériques">Paramètres génériques</h2>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Paramètre (avec le radical utilisé dans le fichier .env)</th>
+<th>Description</th>
+<th>Valeur par défaut</th>
+<th>Modifiable dans .env</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>app.baseURL</td>
+<td>Adresse de l’instance</td>
+<td>&nbsp;</td>
+<td>obligatoire</td>
+</tr>
+<tr class="even">
+<td>BASE_DIR</td>
+<td>variable utilisée dans .env, pour indiquer le chemin d’accès à l’application</td>
+<td>p. e. “/var/www/collec2”</td>
+<td>obligatoire</td>
+</tr>
+<tr class="odd">
+<td>FRONT_DIR</td>
+<td>variable utilisée dans .env, pour indiquer le chemin d’accès au dossier public, la base des pages web</td>
+<td>${BASE_DIR}/public</td>
+<td>en principe, non</td>
+</tr>
+<tr class="even">
+<td>app.defaultLocale</td>
+<td>Langue par défaut dans l’instance</td>
+<td>fr</td>
+<td>possible</td>
+</tr>
+<tr class="odd">
+<td>app.supportedLocales</td>
+<td>Langues gérées par l’application</td>
+<td>[‘fr’,‘en’]</td>
+<td>possible, sous réserve que d’autres langues soient intégrées dans le framework</td>
+</tr>
+<tr class="even">
+<td>app.version</td>
+<td>Version de l’application</td>
+<td>&nbsp;</td>
+<td>jamais</td>
+</tr>
+<tr class="odd">
+<td>app.versionDate</td>
+<td>Date de création de la version</td>
+<td>&nbsp;</td>
+<td>jamais</td>
+</tr>
+<tr class="even">
+<td>app.dbversion</td>
+<td>Version de la base de données. La version doit également exister dans la table dbversion de la base de données</td>
+<td>&nbsp;</td>
+<td>jamais</td>
+</tr>
+<tr class="odd">
+<td>databaseSchemaFile</td>
+<td>Chemin où est placé le png décrivant les tables de la base de données</td>
+<td>p. e. : ROOTPATH . “documentation/collec-schema.png”</td>
+<td>jamais</td>
+</tr>
+<tr class="even">
+<td>app.logDuration</td>
+<td>Durée, en jours, de conservation des logs dans la table logs</td>
+<td>365</td>
+<td>possible</td>
+</tr>
+<tr class="odd">
+<td>app.privateKey</td>
+<td>emplacement de la clé privée utilisée pour les opérations de chiffrement ou déchiffrement</td>
+<td>p. e., ${BASE_DIR}/id_collec</td>
+<td>possible</td>
+</tr>
+<tr class="even">
+<td>app.pubKey</td>
+<td>emplacement de la clé publique utilisée pour les opérations de chiffrement ou déchiffrement</td>
+<td>p. e. ${BASE_DIR}/id_collec.pub</td>
+<td>possible</td>
+</tr>
+<tr class="odd">
+<td>session.expiration</td>
+<td>Durée de la session, en secondes</td>
+<td>14400 (4 heures)</td>
+<td>possible</td>
+</tr>
+<tr class="even">
+<td>app.APPLI_absolute_session</td>
+<td>Durée maxi de la session, en secondes</td>
+<td>36000 (10 heures)</td>
+<td>possible</td>
+</tr>
+<tr class="odd">
+<td>logger.threshold</td>
+<td>Seuil de déclenchement des erreurs</td>
+<td>4</td>
+<td>jamais</td>
+</tr>
+<tr class="even">
+<td>app.APP_mail</td>
+<td>email de l’application</td>
+<td>mail@mysociety.com</td>
+<td>obligatoire</td>
+</tr>
+<tr class="odd">
+<td>app.MAIL_enabled</td>
+<td>Si à 1, l’envoi de mails est activé</td>
+<td>1</td>
+<td>possible</td>
+</tr>
+<tr class="even">
+<td>app.MAIL_param.from</td>
+<td>idem APP_mail</td>
+<td>mail@mysociety.com</td>
+<td>obligatoire</td>
+</tr>
+<tr class="odd">
+<td>app.MAIL_param.mailDebug</td>
+<td>Si à 1, affiche le contenu du mail à l’écran plutôt que de l’envoyer</td>
+<td>0</td>
+<td>en développement uniquement</td>
+</tr>
+<tr class="even">
+<td>app.docroot</td>
+<td>URL de base de la doc en ligne</td>
+<td></td>
+<td>cf.&nbsp;<a href="smarty.html#gestion-du-menu">la configuration du menu</a></td>
+</tr>
+<tr class="odd">
+<td>app.checkRelease</td>
+<td>Si à 1, interroge le serveur GIT (Github ou Gitlab) pour connaître la dernière version disponible, et si la version est différente de celle enregistrée (app.version), affiche un message à l’écran. Les paramètres spécifiques pour l’interrogation sont décrits dans le fichier App.php</td>
+<td>0</td>
+<td>possible</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="paramètres-de-connexion-à-la-base-de-données" class="level2">
+<h2 class="anchored" data-anchor-id="paramètres-de-connexion-à-la-base-de-données">Paramètres de connexion à la base de données</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Paramètre</th>
+<th>Description</th>
+<th>Valeur par défaut</th>
+<th>Modifiable dans .env</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>database.default.hostname</td>
+<td>nom ou adresse du serveur</td>
+<td>localhost</td>
+<td>oui</td>
+</tr>
+<tr class="even">
+<td>database.default.database</td>
+<td>nom de la base de données</td>
+<td>&nbsp;</td>
+<td>oui</td>
+</tr>
+<tr class="odd">
+<td>database.default.username</td>
+<td>nom du compte de connexion</td>
+<td>&nbsp;</td>
+<td>oui</td>
+</tr>
+<tr class="even">
+<td>database.default.password</td>
+<td>mot de passe associé</td>
+<td>&nbsp;</td>
+<td>oui</td>
+</tr>
+<tr class="odd">
+<td>database.default.DBDriver</td>
+<td>Nom du pilote</td>
+<td>Postgre</td>
+<td>non</td>
+</tr>
+<tr class="even">
+<td>database.default.port</td>
+<td>port de connexion</td>
+<td>5432</td>
+<td>oui</td>
+</tr>
+<tr class="odd">
+<td>database.default.searchpath</td>
+<td>liste des schémas utilisés dans la base de données, séparés par une virgule</td>
+<td>p. e. col,gacl,public</td>
+<td>en principe, non</td>
+</tr>
+<tr class="even">
+<td>database.default.charset</td>
+<td>jeu de caractères utilisé dans la base de données</td>
+<td>utf8</td>
+<td>jamais</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="paramètres-liés-à-lidentification-des-utilisateurs" class="level2">
+<h2 class="anchored" data-anchor-id="paramètres-liés-à-lidentification-des-utilisateurs">Paramètres liés à l’identification des utilisateurs</h2>
+<p>Voir la page <a href="./identification.html">identification</a>.</p>
 
 
+</section>
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
