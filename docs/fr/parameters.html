@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="fr" xml:lang="fr"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.24">
+<meta name="generator" content="quarto-1.8.27">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -37,7 +37,7 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-dc55a5b9e770e841cd82e46aadbfb9b0.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="site_libs/bootstrap/bootstrap-c2162276683bab39c8a89f64fc3c08ec.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
@@ -213,6 +213,8 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#paramètres-génériques" id="toc-paramètres-génériques" class="nav-link" data-scroll-target="#paramètres-génériques">Paramètres génériques</a></li>
   <li><a href="#paramètres-de-connexion-à-la-base-de-données" id="toc-paramètres-de-connexion-à-la-base-de-données" class="nav-link" data-scroll-target="#paramètres-de-connexion-à-la-base-de-données">Paramètres de connexion à la base de données</a></li>
   <li><a href="#paramètres-liés-à-lidentification-des-utilisateurs" id="toc-paramètres-liés-à-lidentification-des-utilisateurs" class="nav-link" data-scroll-target="#paramètres-liés-à-lidentification-des-utilisateurs">Paramètres liés à l’identification des utilisateurs</a></li>
+  <li><a href="#paramètres-de-sécurité" id="toc-paramètres-de-sécurité" class="nav-link" data-scroll-target="#paramètres-de-sécurité">Paramètres de sécurité</a></li>
+  <li><a href="#affichage-des-cartes-géographiques" id="toc-affichage-des-cartes-géographiques" class="nav-link" data-scroll-target="#affichage-des-cartes-géographiques">Affichage des cartes géographiques</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -227,9 +229,9 @@ ul.task-list li input[type="checkbox"] {
 
 <section id="paramètres-de-lapplication" class="level1">
 <h1>Paramètres de l’application</h1>
-<p>Les paramètres sont définis dans deux fichiers : <code>app/Config/App.php</code> et <code>vendor/equinton/ppci/src/Config/IdentificationConfig.php</code>.</p>
+<p>Les paramètres sont définis dans plusieurs fichiers : <code>app/Config/App.php</code> et ceux présents dans le dossier <code>vendor/equinton/ppci/src/Config</code>.</p>
 <p>S’ils peuvent tous être modifiés lors de chaque implémentation en utilisant le fichier <code>.env</code>, à la racine de l’application, certains ne devraient pas être modifiés par ce mécanisme.</p>
-<p>Les paramètres dans le fichier .env sont préfixés soit par <code>app.</code>, soit par <code>Ppci\Config\IdentificationConfig.</code>, en fonction de leur origine. Le fichier <em>env</em> contient l’ensemble des variables pouvant être modifiées lors de l’implémentation d’une instance du logiciel.</p>
+<p>Les paramètres dans le fichier .env sont préfixés soit par <code>app.</code>, soit par <code>Ppci\Config\Class.</code>, en fonction de leur origine. Le fichier <em>env</em> contient l’ensemble des variables pouvant être modifiées lors de l’implémentation d’une instance du logiciel.</p>
 <section id="paramètres-génériques" class="level2">
 <h2 class="anchored" data-anchor-id="paramètres-génériques">Paramètres génériques</h2>
 <table class="caption-top table">
@@ -245,7 +247,7 @@ ul.task-list li input[type="checkbox"] {
 <tr class="odd">
 <td>app.baseURL</td>
 <td>Adresse de l’instance</td>
-<td>&nbsp;</td>
+<td></td>
 <td>obligatoire</td>
 </tr>
 <tr class="even">
@@ -275,19 +277,19 @@ ul.task-list li input[type="checkbox"] {
 <tr class="even">
 <td>app.version</td>
 <td>Version de l’application</td>
-<td>&nbsp;</td>
+<td></td>
 <td>jamais</td>
 </tr>
 <tr class="odd">
 <td>app.versionDate</td>
 <td>Date de création de la version</td>
-<td>&nbsp;</td>
+<td></td>
 <td>jamais</td>
 </tr>
 <tr class="even">
 <td>app.dbversion</td>
 <td>Version de la base de données. La version doit également exister dans la table dbversion de la base de données</td>
-<td>&nbsp;</td>
+<td></td>
 <td>jamais</td>
 </tr>
 <tr class="odd">
@@ -375,10 +377,10 @@ ul.task-list li input[type="checkbox"] {
 <h2 class="anchored" data-anchor-id="paramètres-de-connexion-à-la-base-de-données">Paramètres de connexion à la base de données</h2>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 25%">
-<col style="width: 25%">
-<col style="width: 25%">
-<col style="width: 25%">
+<col style="width: 18%">
+<col style="width: 49%">
+<col style="width: 15%">
+<col style="width: 14%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -398,19 +400,19 @@ ul.task-list li input[type="checkbox"] {
 <tr class="even">
 <td>database.default.database</td>
 <td>nom de la base de données</td>
-<td>&nbsp;</td>
+<td></td>
 <td>oui</td>
 </tr>
 <tr class="odd">
 <td>database.default.username</td>
 <td>nom du compte de connexion</td>
-<td>&nbsp;</td>
+<td></td>
 <td>oui</td>
 </tr>
 <tr class="even">
 <td>database.default.password</td>
 <td>mot de passe associé</td>
-<td>&nbsp;</td>
+<td></td>
 <td>oui</td>
 </tr>
 <tr class="odd">
@@ -443,6 +445,116 @@ ul.task-list li input[type="checkbox"] {
 <section id="paramètres-liés-à-lidentification-des-utilisateurs" class="level2">
 <h2 class="anchored" data-anchor-id="paramètres-liés-à-lidentification-des-utilisateurs">Paramètres liés à l’identification des utilisateurs</h2>
 <p>Voir la page <a href="./identification.html">identification</a>.</p>
+</section>
+<section id="paramètres-de-sécurité" class="level2">
+<h2 class="anchored" data-anchor-id="paramètres-de-sécurité">Paramètres de sécurité</h2>
+<p>Ces paramètres influent sur le fonctionnement général de l’application, et ne devraient être modifiés qu’en toute connaissance de cause.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 15%">
+<col style="width: 45%">
+<col style="width: 4%">
+<col style="width: 34%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Paramètre</th>
+<th>Description</th>
+<th>Valeur par défaut</th>
+<th>Modifiable dans .env</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Ppci.CONNECTION_max_attempts</td>
+<td>Nombre d’essais de mots de passe avant blocage du compte</td>
+<td>5</td>
+<td>Non recommandé</td>
+</tr>
+<tr class="even">
+<td>Ppci.CONNECTION_blocking_duration</td>
+<td>Durée en secondes de blocage du compte. La durée est réinitialisée à chaque tentative. Est utilisé uniquement pour l’identification BDD ou LDAP</td>
+<td>600</td>
+<td>Non recommandé</td>
+</tr>
+<tr class="odd">
+<td>Ppci.APP_passwordMinLength</td>
+<td>Longueur minimale du mot de passe, pour l’identification BDD</td>
+<td>12</td>
+<td>Valeur à adapter selon les recommandations CNIL</td>
+</tr>
+<tr class="even">
+<td>Ppci.APPLI_lostPassword</td>
+<td>Si à 1, l’application autorise l’utilisateur à réinitialiser son mot de passe en cas de perte (identification BDD)</td>
+<td>1</td>
+<td>Nécessite l’activation de l’envoi des mails</td>
+</tr>
+<tr class="odd">
+<td>Ppci.tokenIdentityValidity</td>
+<td>Durée de validité du jeton généré automatiquement lors de l’identification (hors HEADER). Le jeton permet à l’utilisateur de se reconnecter automatiquement tant que le jeton est valide</td>
+<td>36000 (10 heures)</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>Ppci.adminSessionDuration</td>
+<td><p>Durée en secondes de validité de la session “admin”. Une fois que la durée est expirée, le code TOTP est redemandé.</p>
+<p>Le compteur se réinitialise à chaque accès à un module “admin”</p></td>
+<td>600 (10 minutes)</td>
+<td>Non recommandé</td>
+</tr>
+<tr class="odd">
+<td>Ppci.GACL_disable_new_right</td>
+<td>Si à 1, la création d’un nouveau droit est inhibée</td>
+<td>1</td>
+<td>Jamais. Les droits sont définis au moment du développement de l’application, toucher à ce paramètre peut entraîner des effets indésirables</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="affichage-des-cartes-géographiques" class="level2">
+<h2 class="anchored" data-anchor-id="affichage-des-cartes-géographiques">Affichage des cartes géographiques</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 26%">
+<col style="width: 38%">
+<col style="width: 17%">
+<col style="width: 15%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Paramètre</th>
+<th>Description</th>
+<th>Valeur par défaut</th>
+<th>Modifiable dans .env</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Ppci\Config\OsmMap.mapSeedMinZoom</td>
+<td>Niveau minimal d’affichage du zoom</td>
+<td>12</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>Ppci\Config\OsmMap.mapSeedMaxZoom</td>
+<td>Niveau maximal d’affichage du zoom</td>
+<td>16</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>Ppci\Config\OsmMap.mapSeedMaxAge</td>
+<td>Ancienneté maximale d’une tuile de la carte, en jours</td>
+<td>7</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>Ppci\Config\OsmMap.mapCacheMaxAge</td>
+<td>Durée maximale du cache des tuiles</td>
+<td>7 * 24 * 3600 * 1000</td>
+<td></td>
+</tr>
+</tbody>
+</table>
 
 
 </section>
