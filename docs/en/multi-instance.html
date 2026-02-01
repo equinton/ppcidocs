@@ -302,11 +302,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 BASE_DIR = ‘/var/www/instances/instancename
 app.privateKey = ${BASE_DIR}/id_app
 app.pubKey = ${BASE_DIR}/id_app.pub
-app.APP_temp = ${BASE_DIR}/temp
+# directory to store temp files and sessions
+TEMP = "${BASE_DIR}/temp"
+#TEMP for multinstance
+app.APP_temp = "${TEMP}"
+session.savePath = "{$TEMP}/sessions"
 database.default.hostname = localhost
 database.default.database = dbname_instance
 database.default.username = login_instance
 database.default.password = password_instance</code></pre>
+<p>PHP sessions are now stored in a subfolder of temp, to limit the risk of session theft in multi-instance mode.</p>
 <p>Also check the default login mode, and adapt it if necessary.</p>
 </section>
 <section id="adapt-scripts-run-on-the-command-line" class="level2">
