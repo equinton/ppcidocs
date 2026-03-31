@@ -350,6 +350,41 @@
     "text": "Éditez les fichiers suivants :\n\napp/Config/news.txt pour les nouveautés en français\napp/Config/newsen.txt pour les nouveautés en anglais\n\nÉditez également les templates suivants :\n\napp/Views/templates/about_fr.tpl\napp/Views/templates/about_en.tpl"
   },
   {
+    "objectID": "checklist.html",
+    "href": "checklist.html",
+    "title": "Checklist pour la mise en production d’une nouvelle version",
+    "section": "",
+    "text": "Recherchez la date de la dernière version de PPCI depuis https://github.com/equinton/ppci/releases/latest, puis calculez le nombre de jours depuis cette version :\nnbdays=$((($(date +%s) - $(date -d \"2026-03-01\" +%s))/86400))  \nRecherchez si des fichiers ont été modifiés depuis cette date :\ncd vendor/equinton/ppci\nfind . -type f -mtime -$nbdays -ls\nSi la commande vous ramène des fichiers, vous devrez publier une nouvelle version dans github.\n\n\n\ncomposer upgrade\n\n\n\ncd public/display\nnpm update\n\n\n\n\n\ngénérez un nouveau script de création de la base de données, après avoir vérifié que le numéro de version de la base de données dans votre outil de génération a été mis à jour\ngénérez ou vérifiez le script de mise à jour, en vérifiant que le numéro de version soit bien mis à jour\nadaptez les scripts bash de mise à jour de la base de données, dans le dossier install/. Les fichiers sont nommés sous la forme upgrade-from-26.1.sh\n\n\n\n\n\nprocédez à la traduction des libellés :\n\ncd app/Language/locales\n./generate_po.sh\n./compile.sh\n\néditez le fichier app/Config/App.php, et vérifiez les variables :\n\n$version\n$versionDate\n$dbversion\n\nmettez à jour les nouveautés de la version dans les fichiers :\n\napp/Config/news.txt\napp/config/newsen.txt\n\n\n\n\n\n\nréalisez un commit de vos modifications, poussez-les dans la branche develop\nbasculez sur la branche main, puis fusionnez les modifications depuis la branche develop\npoussez la branche main, pour vous assurer qu’il n’y a pas un souci quelconque au niveau du dépôt\ncréez l’étiquette de version, sous la forme v26.1.0, puis poussez-la vers le dépôt\ndans le dépôt, créez une nouvelle version à partir de l’étiquette générée, en indiquant :\n\ncomme titre : le numéro de version\ncomme description : le contenu correspondant à la version issu du fichier newsen.txt"
+  },
+  {
+    "objectID": "checklist.html#bibliothèques-tierces",
+    "href": "checklist.html#bibliothèques-tierces",
+    "title": "Checklist pour la mise en production d’une nouvelle version",
+    "section": "",
+    "text": "Recherchez la date de la dernière version de PPCI depuis https://github.com/equinton/ppci/releases/latest, puis calculez le nombre de jours depuis cette version :\nnbdays=$((($(date +%s) - $(date -d \"2026-03-01\" +%s))/86400))  \nRecherchez si des fichiers ont été modifiés depuis cette date :\ncd vendor/equinton/ppci\nfind . -type f -mtime -$nbdays -ls\nSi la commande vous ramène des fichiers, vous devrez publier une nouvelle version dans github.\n\n\n\ncomposer upgrade\n\n\n\ncd public/display\nnpm update"
+  },
+  {
+    "objectID": "checklist.html#base-de-données",
+    "href": "checklist.html#base-de-données",
+    "title": "Checklist pour la mise en production d’une nouvelle version",
+    "section": "",
+    "text": "générez un nouveau script de création de la base de données, après avoir vérifié que le numéro de version de la base de données dans votre outil de génération a été mis à jour\ngénérez ou vérifiez le script de mise à jour, en vérifiant que le numéro de version soit bien mis à jour\nadaptez les scripts bash de mise à jour de la base de données, dans le dossier install/. Les fichiers sont nommés sous la forme upgrade-from-26.1.sh"
+  },
+  {
+    "objectID": "checklist.html#mettre-à-niveau-lapplication",
+    "href": "checklist.html#mettre-à-niveau-lapplication",
+    "title": "Checklist pour la mise en production d’une nouvelle version",
+    "section": "",
+    "text": "procédez à la traduction des libellés :\n\ncd app/Language/locales\n./generate_po.sh\n./compile.sh\n\néditez le fichier app/Config/App.php, et vérifiez les variables :\n\n$version\n$versionDate\n$dbversion\n\nmettez à jour les nouveautés de la version dans les fichiers :\n\napp/Config/news.txt\napp/config/newsen.txt"
+  },
+  {
+    "objectID": "checklist.html#créer-la-nouvelle-version",
+    "href": "checklist.html#créer-la-nouvelle-version",
+    "title": "Checklist pour la mise en production d’une nouvelle version",
+    "section": "",
+    "text": "réalisez un commit de vos modifications, poussez-les dans la branche develop\nbasculez sur la branche main, puis fusionnez les modifications depuis la branche develop\npoussez la branche main, pour vous assurer qu’il n’y a pas un souci quelconque au niveau du dépôt\ncréez l’étiquette de version, sous la forme v26.1.0, puis poussez-la vers le dépôt\ndans le dépôt, créez une nouvelle version à partir de l’étiquette générée, en indiquant :\n\ncomme titre : le numéro de version\ncomme description : le contenu correspondant à la version issu du fichier newsen.txt"
+  },
+  {
     "objectID": "parameters.html",
     "href": "parameters.html",
     "title": "Paramètres de l’application",

@@ -1,0 +1,69 @@
+# Checklist pour la mise en production d'une nouvelle version
+
+## Bibliothèques tierces
+
+### Vérifier si la bibliothèque PPCI a été modifiée
+
+Recherchez la date de la dernière version de PPCI depuis [https://github.com/equinton/ppci/releases/latest](https://github.com/equinton/ppci/releases/latest), puis calculez le nombre de jours depuis cette version :
+
+``` bash
+nbdays=$((($(date +%s) - $(date -d "2026-03-01" +%s))/86400))  
+```
+
+Recherchez si des fichiers ont été modifiés depuis cette date :
+
+~~~bash
+cd vendor/equinton/ppci
+find . -type f -mtime -$nbdays -ls
+~~~
+
+Si la commande vous ramène des fichiers, vous devrez publier une nouvelle version dans github.
+
+
+### Lancer la mise à jour des bibliothèques PHP
+
+``` bash
+composer upgrade
+```
+
+### Lancer la mise à jour des bibliothèques Javascript
+
+``` bash
+cd public/display
+npm update
+```
+
+## Base de données
+
+- générez un nouveau script de création de la base de données, après avoir vérifié que le numéro de version de la base de données dans votre outil de génération a été mis à jour
+- générez ou vérifiez le script de mise à jour, en vérifiant que le numéro de version soit bien mis à jour
+- adaptez les scripts bash de mise à jour de la base de données, dans le dossier *install/*. Les fichiers sont nommés sous la forme *upgrade-from-26.1.sh*
+
+## Mettre à niveau l'application
+
+- procédez à la traduction des libellés :
+
+~~~bash
+cd app/Language/locales
+./generate_po.sh
+./compile.sh
+~~~
+
+- éditez le fichier *app/Config/App.php*, et vérifiez les variables :
+  - $version
+  - $versionDate
+  - $dbversion
+- mettez à jour les nouveautés de la version dans les fichiers :
+  - *app/Config/news.txt*
+  - *app/config/newsen.txt*
+
+## Créer la nouvelle version
+
+- réalisez un commit de vos modifications, poussez-les dans la branche *develop*
+- basculez sur la branche *main*, puis fusionnez les modifications depuis la branche *develop*
+- poussez la branche *main*, pour vous assurer qu'il n'y a pas un souci quelconque au niveau du dépôt
+- créez l'étiquette de version, sous la forme *v26.1.0*, puis poussez-la vers le dépôt
+- dans le dépôt, créez une nouvelle version à partir de l'étiquette générée, en indiquant :
+  - comme titre : le numéro de version
+  - comme description : le contenu correspondant à la version issu du fichier *newsen.txt*
+

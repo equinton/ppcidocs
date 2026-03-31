@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>locale – PPCI - PrototypePHP for CodeIgniter</title>
+<title>checklist – PPCI - PrototypePHP for CodeIgniter</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -249,9 +249,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Sur cette page</h2>
    
   <ul>
-  <li><a href="#support-des-langues" id="toc-support-des-langues" class="nav-link active" data-scroll-target="#support-des-langues">Support des langues</a>
+  <li><a href="#checklist-pour-la-mise-en-production-dune-nouvelle-version" id="toc-checklist-pour-la-mise-en-production-dune-nouvelle-version" class="nav-link active" data-scroll-target="#checklist-pour-la-mise-en-production-dune-nouvelle-version">Checklist pour la mise en production d’une nouvelle version</a>
   <ul class="collapse">
-  <li><a href="#mettre-en-place-les-traductions" id="toc-mettre-en-place-les-traductions" class="nav-link" data-scroll-target="#mettre-en-place-les-traductions">Mettre en place les traductions</a></li>
+  <li><a href="#bibliothèques-tierces" id="toc-bibliothèques-tierces" class="nav-link" data-scroll-target="#bibliothèques-tierces">Bibliothèques tierces</a>
+  <ul class="collapse">
+  <li><a href="#vérifier-si-la-bibliothèque-ppci-a-été-modifiée" id="toc-vérifier-si-la-bibliothèque-ppci-a-été-modifiée" class="nav-link" data-scroll-target="#vérifier-si-la-bibliothèque-ppci-a-été-modifiée">Vérifier si la bibliothèque PPCI a été modifiée</a></li>
+  <li><a href="#lancer-la-mise-à-jour-des-bibliothèques-php" id="toc-lancer-la-mise-à-jour-des-bibliothèques-php" class="nav-link" data-scroll-target="#lancer-la-mise-à-jour-des-bibliothèques-php">Lancer la mise à jour des bibliothèques PHP</a></li>
+  <li><a href="#lancer-la-mise-à-jour-des-bibliothèques-javascript" id="toc-lancer-la-mise-à-jour-des-bibliothèques-javascript" class="nav-link" data-scroll-target="#lancer-la-mise-à-jour-des-bibliothèques-javascript">Lancer la mise à jour des bibliothèques Javascript</a></li>
+  </ul></li>
+  <li><a href="#base-de-données" id="toc-base-de-données" class="nav-link" data-scroll-target="#base-de-données">Base de données</a></li>
+  <li><a href="#mettre-à-niveau-lapplication" id="toc-mettre-à-niveau-lapplication" class="nav-link" data-scroll-target="#mettre-à-niveau-lapplication">Mettre à niveau l’application</a></li>
+  <li><a href="#créer-la-nouvelle-version" id="toc-créer-la-nouvelle-version" class="nav-link" data-scroll-target="#créer-la-nouvelle-version">Créer la nouvelle version</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -264,35 +272,71 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 
-<section id="support-des-langues" class="level1">
-<h1>Support des langues</h1>
-<p>Actuellement, le moteur ne gère que le français (langue par défaut) et l’anglais.</p>
-<p>Les traductions sont réalisées avec <em>gettext</em>. Elles sont stockées dans <code>app/Language/locales</code>, avec :</p>
+<section id="checklist-pour-la-mise-en-production-dune-nouvelle-version" class="level1">
+<h1>Checklist pour la mise en production d’une nouvelle version</h1>
+<section id="bibliothèques-tierces" class="level2">
+<h2 class="anchored" data-anchor-id="bibliothèques-tierces">Bibliothèques tierces</h2>
+<section id="vérifier-si-la-bibliothèque-ppci-a-été-modifiée" class="level3">
+<h3 class="anchored" data-anchor-id="vérifier-si-la-bibliothèque-ppci-a-été-modifiée">Vérifier si la bibliothèque PPCI a été modifiée</h3>
+<p>Recherchez la date de la dernière version de PPCI depuis <a href="https://github.com/equinton/ppci/releases/latest">https://github.com/equinton/ppci/releases/latest</a>, puis calculez le nombre de jours depuis cette version :</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="va">nbdays</span><span class="op">=</span><span class="va">$((</span>(<span class="va">$(</span><span class="fu">date</span> +%s<span class="va">)</span> <span class="op">-</span> <span class="va">$(</span><span class="fu">date</span> <span class="at">-d</span> <span class="st">"2026-03-01"</span> +%s<span class="va">)</span>)<span class="op">/</span><span class="dv">86400</span><span class="va">))</span>  </span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Recherchez si des fichiers ont été modifiés depuis cette date :</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> vendor/equinton/ppci</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">find</span> . <span class="at">-type</span> f <span class="at">-mtime</span> <span class="at">-</span><span class="va">$nbdays</span> <span class="at">-ls</span></span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Si la commande vous ramène des fichiers, vous devrez publier une nouvelle version dans github.</p>
+</section>
+<section id="lancer-la-mise-à-jour-des-bibliothèques-php" class="level3">
+<h3 class="anchored" data-anchor-id="lancer-la-mise-à-jour-des-bibliothèques-php">Lancer la mise à jour des bibliothèques PHP</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">composer</span> upgrade</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="lancer-la-mise-à-jour-des-bibliothèques-javascript" class="level3">
+<h3 class="anchored" data-anchor-id="lancer-la-mise-à-jour-des-bibliothèques-javascript">Lancer la mise à jour des bibliothèques Javascript</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> public/display</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ex">npm</span> update</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+</section>
+<section id="base-de-données" class="level2">
+<h2 class="anchored" data-anchor-id="base-de-données">Base de données</h2>
 <ul>
-<li>à la racine :
+<li>générez un nouveau script de création de la base de données, après avoir vérifié que le numéro de version de la base de données dans votre outil de génération a été mis à jour</li>
+<li>générez ou vérifiez le script de mise à jour, en vérifiant que le numéro de version soit bien mis à jour</li>
+<li>adaptez les scripts bash de mise à jour de la base de données, dans le dossier <em>install/</em>. Les fichiers sont nommés sous la forme <em>upgrade-from-26.1.sh</em></li>
+</ul>
+</section>
+<section id="mettre-à-niveau-lapplication" class="level2">
+<h2 class="anchored" data-anchor-id="mettre-à-niveau-lapplication">Mettre à niveau l’application</h2>
 <ul>
-<li><em>lang.po</em> : fichier brut contenant les traductions</li>
-<li><em>generate_po.sh</em> : script récupérant les libellés à traduire dans les fichiers php, les templates Smarty et dans le menu (fichier xml) et créant le fichier <em>lang.po</em></li>
-<li>compile.sh : script créant le fichier lang.mo (compilé) à partir des traductions présentes dans <em>lang.po</em>, et recopiant ce fichier dans le sous-dossier suivant</li>
+<li>procédez à la traduction des libellés :</li>
+</ul>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> app/Language/locales</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">./generate_po.sh</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="ex">./compile.sh</span></span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<ul>
+<li>éditez le fichier <em>app/Config/App.php</em>, et vérifiez les variables :
+<ul>
+<li>$version</li>
+<li>$versionDate</li>
+<li>$dbversion</li>
 </ul></li>
-<li><em>en/LC_MESSAGES</em> : dossier correspondant à la langue à afficher, qui contient le fichier <em>lang.mo</em>.</li>
-</ul>
-<section id="mettre-en-place-les-traductions" class="level2">
-<h2 class="anchored" data-anchor-id="mettre-en-place-les-traductions">Mettre en place les traductions</h2>
-<p>Le serveur doit être configuré pour supporter la langue à afficher. Pour cela :</p>
+<li>mettez à jour les nouveautés de la version dans les fichiers :
 <ul>
-<li>éditez le fichier <code>/etc/locale.gen</code></li>
-<li>décommentez la ligne <code>en_GB.UTF-8</code></li>
-<li>lancez ces commandes :</li>
+<li><em>app/Config/news.txt</em></li>
+<li><em>app/config/newsen.txt</em></li>
+</ul></li>
 </ul>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">locale-gen</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">systemctl</span> restart apache2</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Cette opération n’est à réaliser qu’une seule fois.</p>
-<p>Pour créer les traductions :</p>
+</section>
+<section id="créer-la-nouvelle-version" class="level2">
+<h2 class="anchored" data-anchor-id="créer-la-nouvelle-version">Créer la nouvelle version</h2>
 <ul>
-<li>lancez le script <code>generate_po.sh</code> pour créer le fichier <em>lang.po</em>. Les anciennes traductions sont conservées.</li>
-<li>éditez le fichier <em>lang.po</em> avec le programme <em>poedit</em></li>
-<li>compilez le fichier avec le script <code>compile.sh</code>. Le script va générer le fichier <em>lang.mo</em>, puis le recopier dans le dossier <em>en/LC_MESSAGES</em></li>
+<li>réalisez un commit de vos modifications, poussez-les dans la branche <em>develop</em></li>
+<li>basculez sur la branche <em>main</em>, puis fusionnez les modifications depuis la branche <em>develop</em></li>
+<li>poussez la branche <em>main</em>, pour vous assurer qu’il n’y a pas un souci quelconque au niveau du dépôt</li>
+<li>créez l’étiquette de version, sous la forme <em>v26.1.0</em>, puis poussez-la vers le dépôt</li>
+<li>dans le dépôt, créez une nouvelle version à partir de l’étiquette générée, en indiquant :
+<ul>
+<li>comme titre : le numéro de version</li>
+<li>comme description : le contenu correspondant à la version issu du fichier <em>newsen.txt</em></li>
+</ul></li>
 </ul>
 
 

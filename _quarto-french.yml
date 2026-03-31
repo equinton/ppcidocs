@@ -53,6 +53,8 @@ website:
             href: locale.qmd
           - text: Ligne de commande
             href: command-line.qmd
+          - text: Checklist de mise en production d'une nouvelle version basée sur PPCI
+            href: checklist.qmd
     right:
       - href: ../en
         text: English
